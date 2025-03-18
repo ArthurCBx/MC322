@@ -35,6 +35,11 @@ public class RoboAereo extends Robo{
         }
     }
 
+    @Override
+    public void exibirPosicao() {
+        System.out.println("O robo aereo esta na posição: ( "+ getPosX()+ ", "+getPosY() + ", " + getAltitude() + " )");
+    }
+
     public void descer(int deltaAltitude){
         int newAltitude = getAltitude() - deltaAltitude;
         if (newAltitude >= 0){
