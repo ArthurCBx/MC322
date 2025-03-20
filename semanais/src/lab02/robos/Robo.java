@@ -6,7 +6,7 @@ public class Robo {
     private int posY;
 
     // No classroom nao e definido se e pra criar um atributo velocidade
-    private int velocidade;
+    // private int velocidade;
 
     private String direcao;
 
@@ -15,9 +15,9 @@ public class Robo {
         this.posX = posX;
         this.posY = posY;
         this.direcao = direcao;
-        this.velocidade = 0;
+        //this.velocidade = 0;
     }
-
+/*
     public int getVelocidade() {
         return velocidade;
     }
@@ -25,6 +25,7 @@ public class Robo {
     public void setVelocidade(int velocidade) {
         this.velocidade = velocidade;
     }
+*/
 
     public String getNome() {
         return nome;
@@ -63,7 +64,7 @@ public class Robo {
     }
 
     public void exibirPosicao(){
-        System.out.println("O robô " + getNome() + " está na posição (" + getPosX() + ", " + getPosY() + ")");
+        System.out.printf("O robô %s está na posição (%d, %d)\n", getNome(), getPosX(), getPosY());
     }
 }
 

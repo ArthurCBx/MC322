@@ -16,8 +16,16 @@ public class RoboTerrestre extends Robo{
 
     @Override
     public void mover(int deltaX, int deltaY) {
+        deltaX = Math.min(deltaX, getVelocidadeMaxima());
+        deltaY = Math.min(deltaY, getVelocidadeMaxima());
+        super.mover(deltaX,deltaY);
+
+
+    /*
         if(getVelocidade() < velocidadeMaxima){
             super.mover(deltaX, deltaY);
         }
+     */
+
     }
 }

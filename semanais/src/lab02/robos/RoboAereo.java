@@ -27,25 +27,36 @@ public class RoboAereo extends Robo{
     }
 
     public void subir(int deltaAltitude){
-        int newAltitude = getAltitude() + deltaAltitude;
+        int newAltitude = getAltitude() + Math.abs(deltaAltitude);
+
+        setAltitude(Math.min(newAltitude,altitudeMaxima));
+    /*
         if (newAltitude <= altitudeMaxima){
             setAltitude(newAltitude);
         }else{
             setAltitude(getAltitudeMaxima());
         }
+    */
     }
+
 
     @Override
     public void exibirPosicao() {
-        System.out.println("O robo aereo esta na posição: ( "+ getPosX()+ ", "+getPosY() + ", " + getAltitude() + " )");
+        System.out.printf("O robo aereo %s está na posição: (%d, %d, %d)\n", getNome(), getPosX(), getPosY(), getAltitude());
+
     }
 
     public void descer(int deltaAltitude){
-        int newAltitude = getAltitude() - deltaAltitude;
+        int newAltitude = getAltitude() - Math.abs(deltaAltitude);
+
+        setAltitude(Math.max(newAltitude,0));
+    /*
         if (newAltitude >= 0){
             setAltitude(newAltitude);
         }else{
             setAltitude(0);
         }
+    */
     }
+
 }
