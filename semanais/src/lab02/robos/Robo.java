@@ -8,15 +8,22 @@ public class Robo {
 
     public Robo(String nome, int posX, int posY, String direcao) {
         this.nome = nome;
-        this.posX = Math.max(posX,0);
+        this.posX = posX;
         this.posY = Math.max(posY,0);;
         this.direcao = direcao;
 
-        if(posX < 0 || posY < 0)
-            System.out.println("Coordenadas negativas de "+ nome +" foram realocadas para 0");
-
+        validarEntradas();
     }
 
+    protected void validarEntradas(){
+
+        if(posX < 0 || posY < 0)
+            System.out.println("Coordenadas negativas de "+ getNome() +" foram realocadas para 0");
+
+        if(posX < 0)    this.posX = 0;
+        if(posY < 0)    this.posY = 0;
+
+    }
 
     public String getNome() {
         return nome;
