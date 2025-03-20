@@ -4,10 +4,20 @@ public class RoboAereo extends Robo{
     private int altitudeMaxima;
     private int altitude;
 
+
+
     public RoboAereo(String nome, int posX, int posY, String direcao, int altitudeMaxima, int altitude) {
-        super(nome, posX, posY, direcao);
+        this.nome = nome;
+        this.posX = Math.max(posX,0);
+        this.posY = Math.max(posY,0);;
+        this.direcao = direcao;
         this.altitudeMaxima = altitudeMaxima;
         this.altitude = altitude;
+
+        if(posX < 0 || posY < 0)
+            System.out.println("Coordenadas negativas de "+ nome +" foram realocadas para 0");
+
+
     }
 
     public int getAltitudeMaxima() {

@@ -4,28 +4,19 @@ public class Robo {
     private final String nome;
     private int posX;
     private int posY;
-
-    // No classroom nao e definido se e pra criar um atributo velocidade
-    // private int velocidade;
-
     private String direcao;
 
     public Robo(String nome, int posX, int posY, String direcao) {
         this.nome = nome;
-        this.posX = posX;
-        this.posY = posY;
+        this.posX = Math.max(posX,0);
+        this.posY = Math.max(posY,0);;
         this.direcao = direcao;
-        //this.velocidade = 0;
-    }
-/*
-    public int getVelocidade() {
-        return velocidade;
+
+        if(posX < 0 || posY < 0)
+            System.out.println("Coordenadas negativas de "+ nome +" foram realocadas para 0");
+
     }
 
-    public void setVelocidade(int velocidade) {
-        this.velocidade = velocidade;
-    }
-*/
 
     public String getNome() {
         return nome;
