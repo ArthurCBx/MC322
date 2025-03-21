@@ -34,13 +34,13 @@ public class Ambiente {
     }
 
 
-    public boolean dentroDosLimites(int x, int y, int z){
+    public boolean dentroDosLimites(int x, int y, int z) {
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
 
 
-    public void adicionarRobo(Robo robo){
-        if (listaRobos == null){
+    public void adicionarRobo(Robo robo) {
+        if (listaRobos == null) {
             listaRobos = new ArrayList<>();
         }
         listaRobos.add(robo);
