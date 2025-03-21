@@ -67,7 +67,7 @@ public class RoboAereo extends Robo {
     }
 
     @Override
-    public void IdentificarObstaculos(Ambiente ambiente) {
+    public void identificarObstaculos(Ambiente ambiente) {
 
         List<Robo> listaRobos = ambiente.getListaRobos();
 

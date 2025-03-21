@@ -74,7 +74,7 @@ public class Robo {
         System.out.printf("O robô %s está na posição (%d, %d)\n", getNome(), getPosX(), getPosY());
     }
 
-    public void IdentificarObstaculos(Ambiente ambiente) {
+    public void identificarObstaculos(Ambiente ambiente) {
 
         List<Robo> listaRobos = ambiente.getListaRobos();
 

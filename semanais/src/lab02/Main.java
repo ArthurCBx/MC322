@@ -34,7 +34,10 @@ public class Main {
 
         System.out.println(sus);
         System.out.println(sus2);
-        System.out.println( sus==sus2 );
+
+        System.out.println( listaRobos );
+        ambiente.removerRobo(Robson);
+//      System.out.println( sus==sus2 );
 
         System.out.println( listaRobos );
 
