@@ -4,30 +4,15 @@ public class RoboAereo extends Robo{
     private int altitude;
     private int altitudeMaxima;
 
-    public RoboAereo(String nome, int posX, int posY, String direcao, int altitude, int altitudeMaxima) {
+    public RoboAereo(String nome,  int posX, int posY, String direcao, int altitude, int altitudeMaxima) {
         super(nome, posX, posY, direcao);
-        this.altitude = altitude;
-        this.altitudeMaxima = altitudeMaxima;
+        this.altitude = Math.max(Math.min(altitude,altitudeMaxima),0);
+        this.altitudeMaxima = Math.abs(altitudeMaxima);
 
-
-        setAltitude(10);
         if(posX < 0 || posY < 0)
-            System.out.println("Coordenadas222 negativas de "+ nome +" foram realocadas para 0");
+            System.out.println("Altitude de "+ nome +" era maior que maxima e foi realocada para a maxima");
 
 
-    }
-
-    @Override
-    protected void validarEntradas(){
-
-        if(getPosX() < 0 || getPosY() < 0 || getAltitude() < 0 || getAltitude() > getAltitudeMaxima())
-            System.out.println("Coordenadas negativas de "+ getNome() +" foram realocadas para 0, ou altitude era maior que maxima e foi realocada para a maxima");
-
-        if(getPosX() < 0)    setPosX(0);
-        if(getPosY() < 0)    setPosY(0);
-
-        if(getAltitude() < 0)                       setAltitude(0);
-        if(getAltitude() > getAltitudeMaxima())     setAltitude(getAltitudeMaxima());
     }
 
 
