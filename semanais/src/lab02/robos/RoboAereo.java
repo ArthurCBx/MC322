@@ -12,7 +12,6 @@ public class RoboAereo extends Robo{
         if(posX < 0 || posY < 0)
             System.out.println("Altitude de "+ nome +" era maior que maxima e foi realocada para a maxima");
 
-
     }
 
 
@@ -33,18 +32,25 @@ public class RoboAereo extends Robo{
     }
 
     public void subir(int deltaAltitude){
-        int newAltitude = getAltitude() + Math.abs(deltaAltitude);
+        int newAltitude = getAltitude() + Math.max(deltaAltitude,0);
 
         setAltitude(Math.min(newAltitude,altitudeMaxima));
-    /*
-        if (newAltitude <= altitudeMaxima){
-            setAltitude(newAltitude);
-        }else{
-            setAltitude(getAltitudeMaxima());
-        }
-    */
+
+        if(altitude < 0)
+            System.out.println("deltaAltitude de "+ getAltitude() +" era negativa e virou 0");
+
     }
 
+    public void descer(int deltaAltitude){
+        int newAltitude = getAltitude() - Math.max(deltaAltitude,0);
+
+        setAltitude(Math.max(newAltitude,0));
+
+        if(altitude < 0)
+            System.out.println("deltaAltitude de "+ getAltitude() +" era negativa e virou 0");
+
+
+    }
 
     @Override
     public void exibirPosicao() {
@@ -52,17 +58,6 @@ public class RoboAereo extends Robo{
 
     }
 
-    public void descer(int deltaAltitude){
-        int newAltitude = getAltitude() - Math.abs(deltaAltitude);
-
-        setAltitude(Math.max(newAltitude,0));
-    /*
-        if (newAltitude >= 0){
-            setAltitude(newAltitude);
-        }else{
-            setAltitude(0);
-        }
-    */
-    }
-
 }
+
+
