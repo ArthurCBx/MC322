@@ -1,9 +1,13 @@
 package lab02.robos;
 
-public class RoboTerrestre extends Robo{
+import lab02.Ambiente;
+
+public class RoboTerrestre extends Robo {
     private int velocidadeMaxima;
-    public RoboTerrestre(String nome, int posX, int posY, String direcao) {
-        super(nome, posX, posY, direcao);
+
+    public RoboTerrestre(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima) {
+        super(nome, posX, posY, direcao, raioSensor);
+        this.velocidadeMaxima = Math.abs(velocidadeMaxima);
     }
 
     public int getVelocidadeMaxima() {
@@ -15,11 +19,21 @@ public class RoboTerrestre extends Robo{
     }
 
     @Override
-    public void mover(int deltaX, int deltaY) {             // Velocidade maxima unidimencional
-        deltaX = Math.min(deltaX, getVelocidadeMaxima());
-        deltaY = Math.min(deltaY, getVelocidadeMaxima());
-        super.mover(deltaX,deltaY);
+    public void mover(int deltaX, int deltaY, Ambiente ambiente) {             // Velocidade maxima unidimencional
 
+        if (deltaX > 0) {
+            deltaX = Math.min(deltaX, getVelocidadeMaxima());
+        } else {
+            deltaX = Math.max(deltaX, -getVelocidadeMaxima());
+        }
+
+        if (deltaY < 0) {
+            deltaY = Math.min(deltaY, getVelocidadeMaxima());
+        } else {
+            deltaY = Math.max(deltaY, -getVelocidadeMaxima());
+        }
+
+        super.mover(deltaX, deltaY, ambiente);
 
     }
 }

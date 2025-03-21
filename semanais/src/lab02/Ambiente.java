@@ -11,20 +11,14 @@ public class Ambiente {
     private ArrayList<Robo> listaRobos;
 
     public Ambiente(int comprimento, int largura, int altura) {
+        this.comprimento = comprimento;
         this.largura = largura;
         this.altura = altura;
-        this.comprimento = comprimento;
+
     }
 
     public int getComprimento() {
         return comprimento;
-    }
-
-    public void adicionarRobo(Robo robo){
-        if (listaRobos == null){
-            listaRobos = new ArrayList<>();
-        }
-        listaRobos.add(robo);
     }
 
     public int getLargura() {
@@ -35,7 +29,22 @@ public class Ambiente {
         return altura;
     }
 
+    public ArrayList<Robo> getListaRobos() {
+        return listaRobos;
+    }
+
+
     public boolean dentroDosLimites(int x, int y, int z){
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
+
+
+    public void adicionarRobo(Robo robo){
+        if (listaRobos == null){
+            listaRobos = new ArrayList<>();
+        }
+        listaRobos.add(robo);
+    }
+
+
 }
