@@ -23,18 +23,18 @@ public class Main {
         RoboCombustivel Combustivel = new RoboCombustivel("Combustivel", 30, 50, "Leste", 5, 15, 8);
         RoboSolar Solar = new RoboSolar("Solar", 500, 500, "Oeste", 50, 30, 50);
         RoboAereo Aereo = new RoboAereo("Aereo", 0, 0, "Norte", 25, 50, 10);
-        RoboExplosivo Explosivo = new RoboExplosivo("Explosivo", 50, 25, "Oeste", 3, 2, 8, 5);
         RoboBombardeiro Bombardeiro = new RoboBombardeiro("Bombardeiro", 25, 25, "Leste", 20, 20, 20, 5);
+        RoboExplosivo Explosivo = new RoboExplosivo("Explosivo", 50, 25, "Oeste", 3, 2, 8, 10);
 
         ambiente.adicionarRobo(Robson);
         ambiente.adicionarRobo(Terrestre);
         ambiente.adicionarRobo(Combustivel);
         ambiente.adicionarRobo(Solar);
         ambiente.adicionarRobo(Aereo);
-        ambiente.adicionarRobo(Explosivo);
         ambiente.adicionarRobo(Bombardeiro);
+        ambiente.adicionarRobo(Explosivo);
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 14; i++) {
             System.out.printf("\n%d - %d - %d - %d - %d - %d\n",i,i,i,i,i,i);
             for (Robo robo : ambiente.getListaRobos()) {
                 switch (i) {
@@ -125,7 +125,7 @@ public class Main {
 
                     case 12:
                         if (robo instanceof RoboAereo)
-                            ((RoboAereo) robo).descer(5,ambiente);
+                            ((RoboAereo) robo).descer(7,ambiente);
 
                         break;
 
@@ -135,17 +135,42 @@ public class Main {
 
                         break;
 
-                    case 14:
-                        if (robo instanceof RoboExplosivo)
-                            ((RoboExplosivo) robo).explodir(ambiente);
-
-                        break;
-
-
                 }
             }
-
         }
+
+        System.out.println("\n--------------\n");
+
+        for(Robo robo : ambiente.getListaRobos())
+            robo.exibirPosicao();
+
+        System.out.println("\n--------------\n");
+
+        Explosivo.mover(Terrestre.getPosX() - Explosivo.getPosX(), Terrestre.getPosY() - Explosivo.getPosY(), ambiente);
+        Explosivo.subir(8, ambiente);
+        Explosivo.explodir(ambiente);
+
+        System.out.println("\n--------------\n");
+
+        Bombardeiro.bombardear(ambiente);
+        Bombardeiro.carregarBombas(1);
+        Bombardeiro.bombardear(ambiente);
+        Bombardeiro.bombardear(ambiente);
+        Bombardeiro.carregarBombas(1);
+
+        System.out.println("\n--------------\n");
+
+        Solar.exibirPosicao();
+        Bombardeiro.mover(Solar.getPosX() - Bombardeiro.getPosX(),Solar.getPosY() - Bombardeiro.getPosY(),ambiente);
+        Bombardeiro.exibirPosicao();
+        Bombardeiro.descer(Bombardeiro.getAltitude(),ambiente);
+        Bombardeiro.bombardear(ambiente);
+
+        System.out.println("\n--------------\n");
+
+        for(Robo robo : ambiente.getListaRobos())
+            robo.exibirPosicao();
+
 
     }
 

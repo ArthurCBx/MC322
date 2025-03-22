@@ -4,6 +4,7 @@ import lab02.Ambiente;
 import lab02.robos.Robo;
 import lab02.robos.RoboAereo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoboBombardeiro extends RoboAereo {
@@ -29,7 +30,7 @@ public class RoboBombardeiro extends RoboAereo {
         this.bombas = bombas;
     }
 
-    private void carregarBombas(int bombas) {
+    public void carregarBombas(int bombas) {
         if (bombas >= 0)
             setBombas(Math.min(getBombas() + bombas, getCapacidadeBombas()));
         else
@@ -37,7 +38,7 @@ public class RoboBombardeiro extends RoboAereo {
 
     }
 
-    private void bombardear(Ambiente ambiente) {
+    public void bombardear(Ambiente ambiente) {
 
         if (getBombas() <= 0) {
             System.out.printf("O robo %s não tem bombas\n", getNome());
@@ -47,6 +48,7 @@ public class RoboBombardeiro extends RoboAereo {
         setBombas(getBombas() - 1);
 
         List<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> robosAtingidos = new ArrayList<>();
 
         int altitude;
         int vitimas = 0;
@@ -57,9 +59,15 @@ public class RoboBombardeiro extends RoboAereo {
 
             if (getPosX() == robo.getPosX() && getPosY() == robo.getPosY() && altitude <= getAltitude()) {
                 vitimas++;
-                System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
-                ambiente.removerRobo(robo);
+                robosAtingidos.add(robo);
             }
+        }
+
+        robosAtingidos.remove(this);
+
+        for (Robo robo : robosAtingidos) {
+            System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
+            ambiente.removerRobo(robo);
         }
 
         System.out.printf("O robo bombardeiro %s destruiu %d robos\n", getNome(), vitimas);
