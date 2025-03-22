@@ -14,6 +14,7 @@ public class RoboExplosivo extends RoboAereo {
     public RoboExplosivo(String nome, int posX, int posY, String direcao, int raioSensor, int altitude, int altitudeMaxima, int raioExplosao) {
         super(nome, posX, posY, direcao, raioSensor, altitude, altitudeMaxima);
         this.raioExplosao = Math.abs(raioExplosao);
+
     }
 
     public int getRaioExplosao() {

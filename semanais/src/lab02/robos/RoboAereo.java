@@ -19,21 +19,20 @@ public class RoboAereo extends Robo {
 
     }
 
+    public int getAltitude() {
+        return altitude;
+    }
 
     public int getAltitudeMaxima() {
         return altitudeMaxima;
     }
 
-    public void setAltitudeMaxima(int altitudeMaxima) {
-        this.altitudeMaxima = altitudeMaxima;
-    }
-
-    public int getAltitude() {
-        return altitude;
-    }
-
     public void setAltitude(int altitude) {
         this.altitude = altitude;
+    }
+
+    public void setAltitudeMaxima(int altitudeMaxima) {
+        this.altitudeMaxima = altitudeMaxima;
     }
 
     public void subir(int deltaAltitude, Ambiente ambiente) {
@@ -41,14 +40,13 @@ public class RoboAereo extends Robo {
 
         newAltitude = Math.min(newAltitude, getAltitudeMaxima());
 
-        if (ambiente.dentroDosLimites(getPosX(), getPosY(), newAltitude)) {
+        if (ambiente.dentroDosLimites(getPosX(), getPosY(), newAltitude))
             setAltitude(newAltitude);
-
-        } else {
+        else
             System.out.printf("O robo %s está saindo do ambiente, operação cancelada", getNome());
-        }
 
-        if (altitude < 0) System.out.println("deltaAltitude de " + getAltitude() + " era negativa e virou 0");
+        if (altitude < 0)
+            System.out.println("deltaAltitude de " + getAltitude() + " era negativa e virou 0");
 
     }
 
@@ -57,14 +55,14 @@ public class RoboAereo extends Robo {
 
         setAltitude(Math.max(newAltitude, 0));
 
-        if (altitude < 0) System.out.printf("deltaAltitude de %s era negativa e virou 0\n", getNome());
+        if (altitude < 0)
+            System.out.printf("deltaAltitude de %s era negativa e virou 0\n", getNome());
 
     }
 
     @Override
     public void exibirPosicao() {
         System.out.printf("O robo aereo %s está na posição: (%d, %d, %d)\n", getNome(), getPosX(), getPosY(), getAltitude());
-
     }
 
     @Override
@@ -72,6 +70,7 @@ public class RoboAereo extends Robo {
 
         List<Robo> listaRobos = super.identificarRedondezas(raio, ambiente);
         List<Robo> robosEncontrados = new ArrayList<>();
+
         int altitude;
 
         for (Robo robo : listaRobos) {
@@ -91,6 +90,7 @@ public class RoboAereo extends Robo {
     public void identificarObstaculos(Ambiente ambiente) {
 
         List<Robo> listaRobos = identificarRedondezas(getRaioSensor(), ambiente);
+
         int altitude;
 
         for (Robo robo : listaRobos) {

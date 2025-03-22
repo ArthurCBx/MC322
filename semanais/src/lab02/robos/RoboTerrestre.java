@@ -8,6 +8,7 @@ public class RoboTerrestre extends Robo {
     public RoboTerrestre(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima) {
         super(nome, posX, posY, direcao, raioSensor);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima);
+
     }
 
     public int getVelocidadeMaxima() {
@@ -25,7 +26,6 @@ public class RoboTerrestre extends Robo {
             deltaX = Math.min(deltaX, getVelocidadeMaxima());
         else
             deltaX = Math.max(deltaX, -getVelocidadeMaxima());
-
 
         if (deltaY < 0)
             deltaY = Math.min(deltaY, getVelocidadeMaxima());

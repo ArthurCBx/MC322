@@ -41,16 +41,15 @@ public class Ambiente {
         return listaRobos;
     }
 
-
-    /**
-     * Args = "Dia", "Noite"
-     */
     public void setSol(String sol) {
         this.sol = sol;
     }
 
-    public void mudarTempo(String tempo){
-        if(Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")){
+    /**
+     * Args = "Dia", "Noite"
+     */
+    public void mudarTempo(String tempo) {
+        if (Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")) {
             setSol(tempo);
         }
 
@@ -68,7 +67,7 @@ public class Ambiente {
         listaRobos.add(robo);
     }
 
-    public void removerRobo(Robo robo){
+    public void removerRobo(Robo robo) {
         listaRobos.remove(robo);
         robo = null;
     }

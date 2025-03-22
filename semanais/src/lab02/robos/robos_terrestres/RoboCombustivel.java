@@ -21,11 +21,10 @@ public class RoboCombustivel extends RoboTerrestre {
     }
 
     public void abastecer(int gasolina) {
-        if (gasolina >= 0) {
+        if (gasolina >= 0)
             setCombustivel(getCombustivel() + gasolina);
-        } else {
+        else
             System.out.printf("Gasolina de %s precisa ser maior que 0\n", getNome());
-        }
 
     }
 

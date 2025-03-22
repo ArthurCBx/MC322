@@ -21,12 +21,12 @@ public class RoboSolar extends RoboTerrestre {
         return bateria;
     }
 
-    public void setBateria(int bateria) {
-        this.bateria = bateria;
-    }
-
     public int getPotenciaPainelSolar() {
         return potenciaPainelSolar;
+    }
+
+    public void setBateria(int bateria) {
+        this.bateria = bateria;
     }
 
     public void setPotenciaPainelSolar(int potenciaPainelSolar) {
@@ -35,7 +35,6 @@ public class RoboSolar extends RoboTerrestre {
 
 
     private void carregar(Ambiente ambiente) {
-
         if (Objects.equals(ambiente.getSol(), "Dia"))
             setBateria(getBateria() + getPotenciaPainelSolar());
 
@@ -56,5 +55,6 @@ public class RoboSolar extends RoboTerrestre {
                 System.out.printf("O robo %s não tem carga suficiente na bateria para a locomoção, carregue a bateria\n", getNome());
             }
         }
+
     }
 }

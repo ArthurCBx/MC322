@@ -14,26 +14,26 @@ public class RoboBombardeiro extends RoboAereo {
         super(nome, posX, posY, direcao, raioSensor, altitude, altitudeMaxima);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
+
     }
 
     public int getBombas() {
         return bombas;
     }
 
-    public void setBombas(int bombas) {
-        this.bombas = bombas;
-    }
-
     public int getCapacidadeBombas() {
         return capacidadeBombas;
     }
 
+    public void setBombas(int bombas) {
+        this.bombas = bombas;
+    }
+
     private void carregarBombas(int bombas) {
-        if (bombas >= 0) {
+        if (bombas >= 0)
             setBombas(Math.min(getBombas() + bombas, getCapacidadeBombas()));
-        } else {
+        else
             System.out.printf("Quantia de bombas de %s precisa ser maior que 0\n", getNome());
-        }
 
     }
 
@@ -56,7 +56,6 @@ public class RoboBombardeiro extends RoboAereo {
                 System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
                 ambiente.removerRobo(robo);
             }
-
 
         System.out.printf("O robo explosivo %s destruiu %d robos\n", getNome(), vitimas);
 
