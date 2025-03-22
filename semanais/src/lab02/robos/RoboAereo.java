@@ -15,7 +15,7 @@ public class RoboAereo extends Robo {
         this.altitudeMaxima = Math.abs(altitudeMaxima);
 
         if (posX < 0 || posY < 0)
-            System.out.printf("Altitude de %s era maior que maxima e foi realocada para a maxima", nome);
+            System.out.printf("Altitude de %s era maior que maxima e foi realocada para a maxima\n", nome);
 
     }
 
@@ -43,20 +43,14 @@ public class RoboAereo extends Robo {
         if (ambiente.dentroDosLimites(getPosX(), getPosY(), newAltitude))
             setAltitude(newAltitude);
         else
-            System.out.printf("O robo %s está saindo do ambiente, operação cancelada", getNome());
-
-        if (altitude < 0)
-            System.out.println("deltaAltitude de " + getAltitude() + " era negativa e virou 0");
+            System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
 
     }
 
-    public void descer(int deltaAltitude) {
+    public void descer(int deltaAltitude, Ambiente ambiente) {
         int newAltitude = getAltitude() - Math.max(deltaAltitude, 0);
 
         setAltitude(Math.max(newAltitude, 0));
-
-        if (altitude < 0)
-            System.out.printf("deltaAltitude de %s era negativa e virou 0\n", getNome());
 
     }
 
@@ -75,7 +69,7 @@ public class RoboAereo extends Robo {
 
         for (Robo robo : listaRobos) {
 
-            altitude = robo.getClass() == RoboAereo.class ? ((RoboAereo) robo).getAltitude() : 0;
+            altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
 
             if (Math.abs(getAltitude() - altitude) <= raio)
                 robosEncontrados.add(robo);
@@ -95,7 +89,7 @@ public class RoboAereo extends Robo {
 
         for (Robo robo : listaRobos) {
 
-            altitude = robo.getClass() == RoboAereo.class ? ((RoboAereo) robo).getAltitude() : 0;
+            altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
 
             System.out.printf("Há um obstaculo, %s, em (%d, %d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY(), altitude);
 

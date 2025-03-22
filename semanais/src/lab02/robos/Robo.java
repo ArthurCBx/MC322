@@ -19,7 +19,7 @@ public class Robo {
         this.direcao = direcao;
         this.raioSensor = Math.abs(raioSensor);
 
-        if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0", getNome());
+        if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
 
     }
 
@@ -67,7 +67,7 @@ public class Robo {
             setPosX(newPosX);
             setPosY(newPosY);
         } else {
-            System.out.printf("O robo %s está saindo do ambiente, operação cancelada", getNome());
+            System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
         }
     }
 
@@ -83,12 +83,14 @@ public class Robo {
         for (Robo robo : listaRobos)
             if (Math.abs(getPosX() - robo.getPosX()) <= raio)
                 if (Math.abs(getPosY() - robo.getPosY()) <= raio)
-                    if (getClass() != RoboAereo.class && robo.getClass() == RoboAereo.class) {
+                    if (!(this instanceof RoboAereo) && robo instanceof RoboAereo) {
                         if (((RoboAereo) robo).getAltitude() <= raio)
                             robosEncontrados.add(robo);
                     } else {
                         robosEncontrados.add(robo);
                     }
+
+        robosEncontrados.remove(this);
 
         return robosEncontrados;
 
@@ -99,7 +101,7 @@ public class Robo {
         List<Robo> listaRobos = identificarRedondezas(getRaioSensor(), ambiente);
 
         for (Robo robo : listaRobos)
-            if (robo.getClass() != RoboAereo.class || ((RoboAereo) robo).getAltitude() == 0)
+            if (!(robo instanceof RoboAereo) || ((RoboAereo) robo).getAltitude() == 0)
                 System.out.printf("Há um obstaculo, %s, em (%d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY());
 
     }

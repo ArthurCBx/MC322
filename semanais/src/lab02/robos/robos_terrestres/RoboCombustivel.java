@@ -31,9 +31,10 @@ public class RoboCombustivel extends RoboTerrestre {
     @Override
     public void mover(int deltaX, int deltaY, Ambiente ambiente) {
 
-        if (Math.abs(deltaX) + Math.abs(deltaY) < getCombustivel()) {
+        if ((Math.abs(deltaX) + Math.abs(deltaY)) < getCombustivel()) {
             setCombustivel(getCombustivel() - Math.abs(deltaX) - Math.abs(deltaY));
             super.mover(deltaX, deltaY, ambiente);
+
         } else {
             System.out.printf("O robo %s não tem combustivel suficiente para a locomoção\n", getNome());
         }

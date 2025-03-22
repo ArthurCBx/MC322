@@ -33,10 +33,11 @@ public class RoboSolar extends RoboTerrestre {
         this.potenciaPainelSolar = potenciaPainelSolar;
     }
 
-
-    private void carregar(Ambiente ambiente) {
+    public void carregar(Ambiente ambiente) {
         if (Objects.equals(ambiente.getSol(), "Dia"))
             setBateria(getBateria() + getPotenciaPainelSolar());
+        else
+            System.out.printf("O painel solar de %s so funciona durante o dia\n",getNome());
 
     }
 

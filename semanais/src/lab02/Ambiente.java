@@ -1,6 +1,7 @@
 package lab02;
 
 import lab02.robos.Robo;
+import lab02.robos.RoboAereo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,15 @@ public class Ambiente {
             listaRobos = new ArrayList<>();
         }
         listaRobos.add(robo);
+
+        int altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
+
+        if(!dentroDosLimites(robo.getPosX(), robo.getPosY(),altitude)) {     // Robos fora do limite do ambiente vao para (0,0,0)
+            robo.setPosX(0);
+            robo.setPosY(0);
+            if (robo instanceof RoboAereo)  ((RoboAereo) robo).setAltitude(0);
+        }
+
     }
 
     public void removerRobo(Robo robo) {
