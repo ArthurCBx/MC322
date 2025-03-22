@@ -5,6 +5,7 @@ import lab02.robos.Robo;
 import lab02.robos.RoboAereo;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RoboExplosivo extends RoboAereo {
     private final int raioExplosao;
@@ -21,31 +22,14 @@ public class RoboExplosivo extends RoboAereo {
 
     public void explodir(Ambiente ambiente) {
 
-        List<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> robosAtingidos = identificarRedondezas(getRaioExplosao(), ambiente);
 
-        int vitimas = 0;
+        for (Robo robo : robosAtingidos) {
+            System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
+            ambiente.removerRobo(robo);
+        }
 
-        for (Robo robo : listaRobos)
-
-            if (robo.getClass() == RoboAereo.class) {
-                if (Math.abs(getAltitude() - ((RoboAereo) robo).getAltitude()) <= getRaioExplosao())
-                    if (Math.abs(getPosX() - robo.getPosX()) <= getRaioExplosao())
-                        if (Math.abs(getPosY() - robo.getPosY()) <= getRaioExplosao()) {
-                            vitimas++;
-                            ambiente.removerRobo(robo);
-                            System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
-                        }
-            } else {
-                if (getAltitude() <= getRaioExplosao()) if (Math.abs(getPosX() - robo.getPosX()) <= getRaioExplosao())
-                    if (Math.abs(getPosY() - robo.getPosY()) <= getRaioExplosao()) {
-                        vitimas++;
-                        ambiente.removerRobo(robo);
-                        System.out.printf("\"O robo, %s, foi atingido\n", robo.getNome());
-                    }
-
-            }
-
-        System.out.printf("O robo explosivo %s destruiu %d robos\n", getNome(), vitimas);
+        System.out.printf("O robo explosivo %s destruiu %d robos\n", getNome(), robosAtingidos.size());
 
         ambiente.removerRobo(this);
 

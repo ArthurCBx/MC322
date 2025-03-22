@@ -35,20 +35,26 @@ public class RoboSolar extends RoboTerrestre {
 
 
     private void carregar(Ambiente ambiente) {
-        if (Objects.equals(ambiente.getSol(), "Dia")) {
+
+        if (Objects.equals(ambiente.getSol(), "Dia"))
             setBateria(getBateria() + getPotenciaPainelSolar());
-        }
+
     }
 
     @Override
     public void mover(int deltaX, int deltaY, Ambiente ambiente) {
+
         if (Objects.equals(ambiente.getSol(), "Dia")) {
             super.mover(deltaX, deltaY, ambiente);
-        } else if (Math.abs(deltaX) + Math.abs(deltaY) < getBateria()) {
-            setBateria(getBateria() - Math.abs(deltaX) - Math.abs(deltaY));
-            super.mover(deltaX, deltaY, ambiente);
+
         } else {
-            System.out.printf("O robo %s não tem carga suficiente na bateria para a locomoção, carregue a bateria\n", getNome());
+            if (Math.abs(deltaX) + Math.abs(deltaY) <= getBateria()) {
+                setBateria(getBateria() - Math.abs(deltaX) - Math.abs(deltaY));
+                super.mover(deltaX, deltaY, ambiente);
+
+            } else {
+                System.out.printf("O robo %s não tem carga suficiente na bateria para a locomoção, carregue a bateria\n", getNome());
+            }
         }
     }
 }

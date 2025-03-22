@@ -2,6 +2,7 @@ package lab02.robos;
 
 import lab02.Ambiente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoboAereo extends Robo {
@@ -67,23 +68,38 @@ public class RoboAereo extends Robo {
     }
 
     @Override
+    public List<Robo> identificarRedondezas(int raio, Ambiente ambiente) {
+
+        List<Robo> listaRobos = super.identificarRedondezas(raio, ambiente);
+        List<Robo> robosEncontrados = new ArrayList<>();
+        int altitude;
+
+        for (Robo robo : listaRobos) {
+
+            altitude = robo.getClass() == RoboAereo.class ? ((RoboAereo) robo).getAltitude() : 0;
+
+            if (Math.abs(getAltitude() - altitude) <= raio)
+                robosEncontrados.add(robo);
+
+        }
+
+        return robosEncontrados;
+
+    }
+
+    @Override
     public void identificarObstaculos(Ambiente ambiente) {
 
-        List<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> listaRobos = identificarRedondezas(getRaioSensor(), ambiente);
+        int altitude;
 
-        for (Robo robo : listaRobos)
+        for (Robo robo : listaRobos) {
 
-            if (robo.getClass() == RoboAereo.class) {
-                if (Math.abs(getAltitude() - ((RoboAereo) robo).getAltitude()) <= getRaioSensor())
-                    if (Math.abs(getPosX() - robo.getPosX()) <= getRaioSensor())
-                        if (Math.abs(getPosY() - robo.getPosY()) <= getRaioSensor())
-                            System.out.printf("Há um obstaculo, %s, em (%d, %d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY(), ((RoboAereo) robo).getAltitude());
-            } else {
-                if (getAltitude() <= getRaioSensor()) if (Math.abs(getPosX() - robo.getPosX()) <= getRaioSensor())
-                    if (Math.abs(getPosY() - robo.getPosY()) <= getRaioSensor())
-                        System.out.printf("Há um obstaculo, %s, em (%d, %d, 0)\n", robo.getNome(), robo.getPosX(), robo.getPosY());
+            altitude = robo.getClass() == RoboAereo.class ? ((RoboAereo) robo).getAltitude() : 0;
 
-            }
+            System.out.printf("Há um obstaculo, %s, em (%d, %d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY(), altitude);
+
+        }
 
     }
 }

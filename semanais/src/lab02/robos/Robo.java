@@ -2,6 +2,7 @@ package lab02.robos;
 
 import lab02.Ambiente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Robo {
@@ -34,6 +35,14 @@ public class Robo {
         return posY;
     }
 
+    public String getDirecao() {
+        return direcao;
+    }
+
+    public int getRaioSensor() {
+        return raioSensor;
+    }
+
     public void setPosX(int posX) {
         this.posX = posX;
     }
@@ -42,16 +51,8 @@ public class Robo {
         this.posY = posY;
     }
 
-    public String getDirecao() {
-        return direcao;
-    }
-
     public void setDirecao(String direcao) {
         this.direcao = direcao;
-    }
-
-    public int getRaioSensor() {
-        return raioSensor;
     }
 
     public void setRaioSensor(int raioSensor) {
@@ -74,15 +75,32 @@ public class Robo {
         System.out.printf("O robô %s está na posição (%d, %d)\n", getNome(), getPosX(), getPosY());
     }
 
-    public void identificarObstaculos(Ambiente ambiente) {
+    public List<Robo> identificarRedondezas(int raio, Ambiente ambiente) {       // Raio unidimensional
 
         List<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> robosEncontrados = new ArrayList<>();
+
+        for (Robo robo : listaRobos)
+            if (Math.abs(getPosX() - robo.getPosX()) <= raio)
+                if (Math.abs(getPosY() - robo.getPosY()) <= raio)
+                    if (getClass() != RoboAereo.class && robo.getClass() == RoboAereo.class) {
+                        if (((RoboAereo) robo).getAltitude() <= raio)
+                            robosEncontrados.add(robo);
+                    } else {
+                        robosEncontrados.add(robo);
+                    }
+
+        return robosEncontrados;
+
+    }
+
+    public void identificarObstaculos(Ambiente ambiente) {
+
+        List<Robo> listaRobos = identificarRedondezas(getRaioSensor(), ambiente);
 
         for (Robo robo : listaRobos)
             if (robo.getClass() != RoboAereo.class || ((RoboAereo) robo).getAltitude() == 0)
-                if (Math.abs(getPosX() - robo.getPosX()) <= getRaioSensor())
-                    if (Math.abs(getPosY() - robo.getPosY()) <= getRaioSensor())
-                        System.out.printf("Há um obstaculo, %s, em (%d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY());
+                System.out.printf("Há um obstaculo, %s, em (%d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY());
 
     }
 

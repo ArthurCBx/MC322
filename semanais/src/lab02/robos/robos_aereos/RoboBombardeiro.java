@@ -38,10 +38,13 @@ public class RoboBombardeiro extends RoboAereo {
     }
 
     private void bombardear(Ambiente ambiente) {
+
         if (getBombas() <= 0) {
             System.out.printf("O robo %s não tem bombas\n", getNome());
             return;
         }
+
+        setBombas(getBombas() - 1);
 
         List<Robo> listaRobos = ambiente.getListaRobos();
 
@@ -50,8 +53,8 @@ public class RoboBombardeiro extends RoboAereo {
         for (Robo robo : listaRobos)
             if (getPosX() == robo.getPosX() && getPosY() == robo.getPosY()) {
                 vitimas++;
-                ambiente.removerRobo(robo);
                 System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
+                ambiente.removerRobo(robo);
             }
 
 
@@ -61,7 +64,6 @@ public class RoboBombardeiro extends RoboAereo {
             System.out.printf("O robo %s não sobreviveu\n", getNome());
             ambiente.removerRobo(this);
         }
-
 
     }
 }
