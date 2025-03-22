@@ -21,19 +21,10 @@ public class RoboTerrestre extends Robo {
 
     @Override
     public void mover(int deltaX, int deltaY, Ambiente ambiente) {             // Velocidade maxima unidimencional
-
-        if (deltaX > 0)
-            deltaX = Math.min(deltaX, getVelocidadeMaxima());
+        if (Math.abs(deltaX) > getVelocidadeMaxima() || Math.abs(deltaY) > getVelocidadeMaxima())
+            System.out.printf("O movimento de %s excede a velocidade maxima, operação cancelada",getNome());
         else
-            deltaX = Math.max(deltaX, -getVelocidadeMaxima());
-
-        if (deltaY < 0)
-            deltaY = Math.min(deltaY, getVelocidadeMaxima());
-        else
-            deltaY = Math.max(deltaY, -getVelocidadeMaxima());
-
-
-        super.mover(deltaX, deltaY, ambiente);
+            super.mover(deltaX, deltaY, ambiente);
 
     }
 }
