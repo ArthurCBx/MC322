@@ -64,6 +64,7 @@ public class RoboBombardeiro extends RoboAereo {
         }
 
         robosAtingidos.remove(this);
+        vitimas--;
 
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());

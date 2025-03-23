@@ -34,141 +34,176 @@ public class Main {
         ambiente.adicionarRobo(Bombardeiro);
         ambiente.adicionarRobo(Explosivo);
 
-        for (int i = 0; i < 14; i++) {
-            System.out.printf("\n%d - %d - %d - %d - %d - %d\n",i,i,i,i,i,i);
-            for (Robo robo : ambiente.getListaRobos()) {
-                switch (i) {
+        System.out.printf("\n------- Posição de todos os robos:\n\n");
 
-                    case 0:
-                        robo.exibirPosicao();
-                        break;
-
-                    case 1:
-                        System.out.printf("%s:\n",robo.getNome());
-                        robo.identificarObstaculos(ambiente);
-                        System.out.println();
-                        break;
-
-                    case 2:
-                        if (robo instanceof RoboTerrestre) {
-                            ((RoboTerrestre) robo).mover(2, 5, ambiente);
-                            ((RoboTerrestre) robo).mover(2, -1, ambiente);
-                        }
-                        break;
-
-                    case 3:
-                        if (robo instanceof RoboTerrestre)
-                            robo.exibirPosicao();
-
-                        break;
-
-                    case 4:
-                        if (robo instanceof RoboTerrestre)
-                            ((RoboTerrestre) robo).mover(15,22,ambiente);
-
-                        break;
-
-                    case 5:
-                        if (robo instanceof RoboTerrestre)
-                            robo.exibirPosicao();
-
-                        break;
-
-                    case 6:
-                        if (robo instanceof RoboCombustivel) {
-                            ((RoboCombustivel) robo).abastecer(50);
-                            ((RoboCombustivel) robo).mover(10, 10, ambiente);
-                            robo.exibirPosicao();
-                        }
-
-                        break;
-
-                    case 7:
-                        if (robo instanceof RoboSolar) {
-                            ((RoboSolar) robo).carregar(ambiente);
-                            ambiente.mudarTempo("Noite");
-                            ((RoboSolar) robo).mover(30,19,ambiente);
-                            robo.exibirPosicao();
-                            ((RoboSolar) robo).mover(5,5,ambiente);
-                            robo.exibirPosicao();
-                            ((RoboSolar) robo).carregar(ambiente);
-                            }
-
-                        break;
-
-                    case 8:
-                        if (robo instanceof RoboAereo){
-                            robo.exibirPosicao();
-                            ((RoboAereo) robo).subir(10,ambiente);
-                            }
-
-                        break;
-
-                    case 9:
-                        if (robo instanceof RoboAereo)
-                            robo.exibirPosicao();
-
-                        break;
-
-                    case 10:
-                        if (robo instanceof RoboAereo) {
-                            ((RoboAereo) robo).descer(-5, ambiente);
-                            ((RoboAereo) robo).descer(2,ambiente);
-                        }
-                        break;
-
-                    case 11:
-                        if (robo instanceof RoboAereo)
-                            robo.exibirPosicao();
-
-                        break;
-
-                    case 12:
-                        if (robo instanceof RoboAereo)
-                            ((RoboAereo) robo).descer(7,ambiente);
-
-                        break;
-
-                    case 13:
-                        if (robo instanceof RoboAereo)
-                            robo.exibirPosicao();
-
-                        break;
-
-                }
-            }
-        }
-
-        System.out.println("\n--------------\n");
-
-        for(Robo robo : ambiente.getListaRobos())
+        for (Robo robo : ambiente.getListaRobos())
             robo.exibirPosicao();
 
-        System.out.println("\n--------------\n");
 
+        System.out.printf("\n------- Metodo identifica obstaculos de todos os robos:\n\n");
+
+        for (Robo robo : ambiente.getListaRobos()) {
+            System.out.printf("%s:\n", robo.getNome());
+            robo.identificarObstaculos(ambiente);
+            System.out.println();
+        }
+
+
+        System.out.printf("\n------- Move os robos terrestres:\n\n");
+
+        System.out.println("\nPosições iniciais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboTerrestre) {
+                robo.exibirPosicao();
+                ((RoboTerrestre) robo).mover(2, 5, ambiente);
+                ((RoboTerrestre) robo).mover(2, -1, ambiente);
+
+            }
+        System.out.println("\nPosições finais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboTerrestre)
+                robo.exibirPosicao();
+
+
+        System.out.printf("\n------- Move os robos terrestres acima de algumas velocidades maximas:\n\n");
+
+        System.out.println("\nPosições iniciais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboTerrestre)
+                robo.exibirPosicao();
+
+        System.out.println();
+
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboTerrestre)
+                ((RoboTerrestre) robo).mover(15, 22, ambiente);
+
+
+        System.out.println("\nPosições finais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboTerrestre)
+                robo.exibirPosicao();
+
+
+        System.out.printf("\n------- Move o robo Combustivel após o metodo abastecer:\n\n");
+
+        System.out.println("\nPosição inicial:");
+        Combustivel.exibirPosicao();
+
+        Combustivel.abastecer(50);
+
+        System.out.println("\nPosição final:");
+        Combustivel.mover(10, 10, ambiente);
+        Combustivel.exibirPosicao();
+
+
+        System.out.printf("\n------- Move o robo Solar durante o dia, carrega a bateria, tenta mover durante a noite e tenta carregar:\n\n");
+
+        System.out.printf("Bateria: %d\n", Solar.getBateria());
+        Solar.carregar(ambiente);
+        System.out.printf("Bateria após carregamento: %d\n", Solar.getBateria());
+
+        ambiente.mudarTempo("Noite");
+
+        System.out.println("\nPosição inicial:");
+        Solar.exibirPosicao();
+
+        System.out.println("\nPosição após primeiro movimento:");
+        Solar.mover(30, 19, ambiente);
+        Solar.exibirPosicao();
+
+        System.out.println("\nPosição final:");
+        Solar.mover(5, 5, ambiente);
+        Solar.exibirPosicao();
+
+        Solar.carregar(ambiente);
+
+
+        System.out.printf("\n------- Sobe os robos aereos e tenta ir alem de algumas alturas maximas:\n\n");
+
+        System.out.println("\nPosições iniciais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboAereo) {
+                robo.exibirPosicao();
+                ((RoboAereo) robo).subir(10, ambiente);
+            }
+
+        System.out.println("\nPosições finais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboAereo)
+                robo.exibirPosicao();
+
+
+        System.out.printf("\n------- Desce os robos aereos:\n\n");
+
+        System.out.println("\nPosições iniciais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboAereo) {
+                robo.exibirPosicao();
+                ((RoboAereo) robo).descer(-5, ambiente);
+                ((RoboAereo) robo).descer(2, ambiente);
+            }
+
+        System.out.println("\nPosições intermediarias:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboAereo)
+                robo.exibirPosicao();
+
+        System.out.println("\nPosições finais:");
+        for (Robo robo : ambiente.getListaRobos())
+            if (robo instanceof RoboAereo) {
+                ((RoboAereo) robo).descer(7, ambiente);
+                robo.exibirPosicao();
+            }
+
+
+        System.out.printf("\n------- Posições de todos os robos antes de remoção por metodos:\n\n");
+
+        for (Robo robo : ambiente.getListaRobos())
+            robo.exibirPosicao();
+
+
+        System.out.printf("\n------- Robo explosivo vai ate o robo terrestre e explode na altura maxima:\n\n");
+
+        System.out.println("\nPosição inicial:");
+        Explosivo.exibirPosicao();
         Explosivo.mover(Terrestre.getPosX() - Explosivo.getPosX(), Terrestre.getPosY() - Explosivo.getPosY(), ambiente);
         Explosivo.subir(8, ambiente);
+
+        System.out.println("\nPosições final:");
+        Explosivo.exibirPosicao();
+
+        System.out.println();
+
         Explosivo.explodir(ambiente);
 
-        System.out.println("\n--------------\n");
+
+        System.out.printf("\n------- Robo bobardeiro tenta bombardear sem bombas, carrega bombas e tenta novamente:\n\n");
 
         Bombardeiro.bombardear(ambiente);
         Bombardeiro.carregarBombas(1);
         Bombardeiro.bombardear(ambiente);
-        Bombardeiro.bombardear(ambiente);
-        Bombardeiro.carregarBombas(1);
 
-        System.out.println("\n--------------\n");
 
+        System.out.printf("\n------- Robo bobardeiro vai bombardear o robo Solar no chão:\n\n");
+
+        System.out.println("\nPosições iniciais:");
         Solar.exibirPosicao();
-        Bombardeiro.mover(Solar.getPosX() - Bombardeiro.getPosX(),Solar.getPosY() - Bombardeiro.getPosY(),ambiente);
         Bombardeiro.exibirPosicao();
-        Bombardeiro.descer(Bombardeiro.getAltitude(),ambiente);
+
+        Bombardeiro.carregarBombas(1);
+        Bombardeiro.mover(Solar.getPosX() - Bombardeiro.getPosX(), Solar.getPosY() - Bombardeiro.getPosY(), ambiente);
+        Bombardeiro.descer(Bombardeiro.getAltitude(), ambiente);
+
+        System.out.println("\nPosição final:");
+        Bombardeiro.exibirPosicao();
+
         Bombardeiro.bombardear(ambiente);
 
-        System.out.println("\n--------------\n");
 
-        for(Robo robo : ambiente.getListaRobos())
+        System.out.printf("\n------- Posições de todos os robos após as remoções:\n\n");
+
+        for (Robo robo : ambiente.getListaRobos())
             robo.exibirPosicao();
 
 

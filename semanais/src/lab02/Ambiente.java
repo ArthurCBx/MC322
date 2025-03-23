@@ -69,10 +69,10 @@ public class Ambiente {
 
         int altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
 
-        if(!dentroDosLimites(robo.getPosX(), robo.getPosY(),altitude)) {     // Robos fora do limite do ambiente vao para (0,0,0)
+        if (!dentroDosLimites(robo.getPosX(), robo.getPosY(), altitude)) {     // Robos fora do limite do ambiente vao para (0,0,0)
             robo.setPosX(0);
             robo.setPosY(0);
-            if (robo instanceof RoboAereo)  ((RoboAereo) robo).setAltitude(0);
+            if (robo instanceof RoboAereo) ((RoboAereo) robo).setAltitude(0);
         }
 
     }
