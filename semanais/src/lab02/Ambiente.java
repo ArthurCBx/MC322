@@ -59,7 +59,7 @@ public class Ambiente {
         this.periodo = periodo;
     }
 
-    /** metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
+    /** Metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
      * Args = "Dia", "Noite"
      */
     public void mudarTempo(String tempo) {
@@ -71,12 +71,17 @@ public class Ambiente {
 
     }
 
+
+    // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
+
     public boolean dentroDosLimites(int x, int y, int z) {
         // Verifica se as coordenadas passadas são positivas e menores ou iguais as dimensões do ambiente
 
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
 
+
+    // Metodo para adiconar robo à lista de robos do ambiente:
 
     public void adicionarRobo(Robo robo) {
         // Inicializa lista vazia, se necessário, e adiciona robo a lista
@@ -98,6 +103,9 @@ public class Ambiente {
         }
 
     }
+
+    
+    // Metodo para remover um robo do ambiente:
 
     public void removerRobo(Robo robo) {
         // Remove robo da lista e apaga seu apontador. Criado para operar com subclasses de RoboAereo
