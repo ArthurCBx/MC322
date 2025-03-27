@@ -34,7 +34,7 @@ public class RoboSolar extends RoboTerrestre {
     }
 
     public void carregar(Ambiente ambiente) {
-        if (Objects.equals(ambiente.getSol(), "Dia"))
+        if (Objects.equals(ambiente.getPeriodo(), "Dia"))
             setBateria(getBateria() + getPotenciaPainelSolar());
         else
             System.out.printf("O painel solar de %s so funciona durante o dia\n", getNome());
@@ -44,7 +44,7 @@ public class RoboSolar extends RoboTerrestre {
     @Override
     public void mover(int deltaX, int deltaY, Ambiente ambiente) {
 
-        if (Objects.equals(ambiente.getSol(), "Dia")) {
+        if (Objects.equals(ambiente.getPeriodo(), "Dia")) {
             super.mover(deltaX, deltaY, ambiente);
 
         } else {
