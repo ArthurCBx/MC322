@@ -24,7 +24,7 @@ public class RoboTerrestre extends Robo {
         return velocidadeMaxima;
     }
 
-    public void setVelocidadeMaxima(int velocidadeMaxima) {
+    protected void setVelocidadeMaxima(int velocidadeMaxima) {
         this.velocidadeMaxima = velocidadeMaxima;
     }
 
