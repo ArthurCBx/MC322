@@ -7,27 +7,31 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Ambiente {
-    // Criando classe ambiente com variaveis especificadas no enunciado e altura para atender a classe RoboAereo e periodo para atender roboSolar, subclasse de RoboTerrestre
+
+    // Criando classe ambiente com variaveis especificadas no enunciado,
+    // altura para atender a classe RoboAereo, e periodo para atender roboSolar, subclasse de RoboTerrestre
 
     private final int comprimento;
     private final int largura;
-    private final int altura; // Atributo altura será da classe Ambiente e irá impor restrição de altura maxima para robos aereos
-    private String periodo; // Dia ou Noite. Atributo para atender a subclasse criada RoboSolar
+    private final int altura;   // Atributo altura será da classe Ambiente e irá impor restrição de altura maxima para robos aereos
+    private String periodo;     // Dia ou Noite. Atributo para atender a subclasse criada RoboSolar
     private ArrayList<Robo> listaRobos;
 
-    public Ambiente(int comprimento, int largura, int altura) {
-        // Construtor de ambiente com comprimento, largura e altura
-        // Atributo periodo iniciado como "Dia" por padrao e alterado em metodo mudarTempo
 
+    // Construtor de ambiente com comprimento, largura e altura:
+
+    public Ambiente(int comprimento, int largura, int altura) {
         // Dimensões do ambiente não podem ser negativas. Caso seja negativa, atribui 0.
         this.comprimento = Math.max(comprimento,0);
         this.largura = Math.max(largura,0);
         this.altura = Math.max(altura,0);
-        this.periodo = "Dia";
+        this.periodo = "Dia";       // Atributo periodo iniciado como "Dia" por padrao e alterado em metodo mudarTempo
 
     }
 
-    // Getters e Setters
+
+    // Getters e Setters:
+
     public int getComprimento() {
         return comprimento;
     }
@@ -48,7 +52,9 @@ public class Ambiente {
         return listaRobos;
     }
 
+
     // Metodo setPeriodo só pode ser acessado por metodos de classe (mudaTempo) que ira verificar se o argumento foi passado corretamente
+
     private void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
@@ -57,7 +63,7 @@ public class Ambiente {
      * Args = "Dia", "Noite"
      */
     public void mudarTempo(String tempo) {
-        if (Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")) {
+        if (Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")) {   // So aceita "Dia" e "Noite"
             setPeriodo(tempo);
         }else{
             System.out.println("Argumentos válidos são 'Dia' ou 'Noite'. Tente chamar o método novamente com um argumento válido.");
@@ -67,12 +73,14 @@ public class Ambiente {
 
     public boolean dentroDosLimites(int x, int y, int z) {
         // Verifica se as coordenadas passadas são positivas e menores ou iguais as dimensões do ambiente
+
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
 
 
     public void adicionarRobo(Robo robo) {
         // Inicializa lista vazia, se necessário, e adiciona robo a lista
+
         if (listaRobos == null) {
             listaRobos = new ArrayList<>();
         }
@@ -93,6 +101,7 @@ public class Ambiente {
 
     public void removerRobo(Robo robo) {
         // Remove robo da lista e apaga seu apontador. Criado para operar com subclasses de RoboAereo
+
         listaRobos.remove(robo);
         robo = null;
     }
