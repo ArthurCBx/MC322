@@ -25,7 +25,7 @@ public class RoboCombustivel extends RoboTerrestre {
         return combustivel;
     }
 
-    public void setCombustivel(int combustivel) {
+    protected void setCombustivel(int combustivel) {
         this.combustivel = combustivel;
     }
 
