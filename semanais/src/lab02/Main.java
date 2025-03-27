@@ -14,6 +14,9 @@ import java.util.List;
 
 public class Main {
 
+    // Um tipo de cada robo é criado em conjunção com um ambiente
+    // São testadas todas as funcionalidades de todos os robos
+
     public static void main(String[] args) {
 
         Ambiente ambiente = new Ambiente(100, 50, 25);
