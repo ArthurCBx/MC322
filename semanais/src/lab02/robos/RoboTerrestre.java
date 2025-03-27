@@ -9,7 +9,7 @@ public class RoboTerrestre extends Robo {
     private int velocidadeMaxima;
 
 
-    // Metodo construtor para o robo Terrestre que considera a velocidade maxima (em modulo)
+    // Metodo construtor para o robo Terrestre, considera a velocidade maxima (em modulo)
 
     public RoboTerrestre(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima) {
         super(nome, posX, posY, direcao, raioSensor);
