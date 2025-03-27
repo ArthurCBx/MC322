@@ -97,7 +97,7 @@ public class Robo {
     // Metodo auxiliar para retornar lista de robos em um raio especifico:
     // É util na medida que há distintos raios de efeito para subclasses de robo.
 
-    private List<Robo> identificarRedondezas(int raio, Ambiente ambiente) {
+    protected List<Robo> identificarRedondezas(int raio, Ambiente ambiente) {
         // Identificar robos em um raio e retorna uma lista com os robos dentro do raio.
         // O robo identificando as redondezas verifica as coordenadas de todos os robos, os que estiverem
         // dentro do raio sao adicionados na lista de robos encontrados.
