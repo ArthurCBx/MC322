@@ -34,13 +34,13 @@ public class RoboBombardeiro extends RoboAereo {
         return capacidadeBombas;
     }
 
-    // Set como protected porque nao deve ser acessado fora desta classe ou subclasse.
-    // Há metodo específico para definir bombas.
+    // Set como protected porque nao deve ser acessado fora desta classe ou subclasses.
+    // Há metodo específico para mudar numero de bombas.
     protected void setBombas(int bombas) {
         this.bombas = bombas;
     }
 
-    // Adiciona bombas ao RoboBombardeiro, verificando se a capacidade limite foi atingida. Não pode ser negativo.
+    // Adiciona bombas ao RoboBombardeiro, verificando se a capacidade limite foi atingida. Não carrega valores negatgivos negativo.
     public void carregarBombas(int bombas) {
         if (bombas >= 0)
             setBombas(Math.min(getBombas() + bombas, getCapacidadeBombas()));
@@ -67,7 +67,7 @@ public class RoboBombardeiro extends RoboAereo {
         int vitimas = 0;
 
         for (Robo robo : listaRobos) {
-
+            // Para cada robo da lista do ambiente, verifica primeiro se é aereo (para pegar altitude) ou terrestre (altitude 0).
             altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
 
             if (getPosX() == robo.getPosX() && getPosY() == robo.getPosY() && altitude <= getAltitude()) {
@@ -75,10 +75,11 @@ public class RoboBombardeiro extends RoboAereo {
                 robosAtingidos.add(robo);
             }
         }
-
+        // Remove ele mesmo da lista de robos atingidos.
         robosAtingidos.remove(this);
         vitimas--;
 
+        // Remove os robos atingidos do ambiente.
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
             ambiente.removerRobo(robo);
@@ -86,6 +87,7 @@ public class RoboBombardeiro extends RoboAereo {
 
         System.out.printf("O robo bombardeiro %s destruiu %d robos\n", getNome(), vitimas);
 
+        // Se autodestroi se estava no solo.
         if (getAltitude() == 0) {
             System.out.printf("O robo %s não sobreviveu\n", getNome());
             ambiente.removerRobo(this);
