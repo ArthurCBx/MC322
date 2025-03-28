@@ -7,6 +7,11 @@ import lab02.robos.RoboAereo;
 import java.util.List;
 import java.util.Objects;
 
+/*
+Subclasse de RoboAereo possui a habilidade de se autodestruir, levando consigo os robos num raio de explosão (raio deve ser indicado no construtor).
+ Para isso, ele possui o metodo explodir, que recebe o ambiente em que está inserido como atributo.
+ */
+
 public class RoboExplosivo extends RoboAereo {
     private final int raioExplosao;
 
@@ -21,10 +26,13 @@ public class RoboExplosivo extends RoboAereo {
         return raioExplosao;
     }
 
+    // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
     public void explodir(Ambiente ambiente) {
 
+        // Metodo identificarRedondezas retorna uma lista de robos que estão no raio de explosao.
         List<Robo> robosAtingidos = identificarRedondezas(getRaioExplosao(), ambiente);
 
+        // Para cada robo dentro do raio de explosão, remove-o do ambiente e faz o seu apontador ser nulo.
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
             ambiente.removerRobo(robo);
@@ -32,6 +40,7 @@ public class RoboExplosivo extends RoboAereo {
 
         System.out.printf("O robo explosivo %s destruiu %d robos\n", getNome(), robosAtingidos.size());
 
+        // Por fim, remove o robo explosivo do ambiente e torna o seu apontador nulo.
         ambiente.removerRobo(this);
 
     }
