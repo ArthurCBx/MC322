@@ -1,5 +1,6 @@
 package lab03;
 
+import lab03.obstaculos.Obstaculo;
 import lab03.robos.Robo;
 import lab03.robos.RoboAereo;
 
@@ -16,7 +17,7 @@ public class Ambiente {
     private final int altura;   // Atributo altura será da classe Ambiente e irá impor restrição de altura maxima para robos aereos
     private String periodo;     // Dia ou Noite. Atributo para atender a subclasse criada RoboSolar
     private ArrayList<Robo> listaRobos;
-
+    private ArrayList<Obstaculo> listaObstaculos;
 
     // Construtor de ambiente com comprimento, largura e altura:
 
@@ -52,6 +53,9 @@ public class Ambiente {
         return listaRobos;
     }
 
+    public ArrayList<Obstaculo> getListObstaculos() {
+        return listaObstaculos;
+    }
 
     // Metodo setPeriodo só pode ser acessado por metodos de classe (mudaTempo) que ira verificar se o argumento foi passado corretamente
 
@@ -91,15 +95,12 @@ public class Ambiente {
         }
         listaRobos.add(robo);
 
-        // Variável altura recebe altura do robo se for RoboAereo, senão recebe 0
-        int altura = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
-
         // Robos fora do limite do ambiente vao para (0,0,0).
-        if (!dentroDosLimites(robo.getPosX(), robo.getPosY(), altura)) {
+        if (!dentroDosLimites(robo.getPosX(), robo.getPosY(), robo.getAltitude())) {
             System.out.println("Uma das coordenadas do robo não respeita os limites de ambiente. Posicionando-o em (0,0,0).");
             robo.setPosX(0);
             robo.setPosY(0);
-            if (robo instanceof RoboAereo) ((RoboAereo) robo).setAltitude(0);
+            robo.setAltitude(0);
         }
 
     }
@@ -113,5 +114,19 @@ public class Ambiente {
         listaRobos.remove(robo);
         robo = null;
     }
+
+    public void adicionarObstaculo(Obstaculo obstaculo){
+
+        if (listaObstaculos == null) {
+            listaObstaculos = new ArrayList<>();
+        }
+        listaObstaculos.add(obstaculo);
+
+
+
+    }
+
+
+
 
 }

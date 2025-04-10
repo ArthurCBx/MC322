@@ -9,22 +9,40 @@ public class Robo {
 
     // Criando classe Robo com atributos especificados no enunciado e raioSensor para identificar obstaculos.
 
+    private Ambiente ambiente;
     private final String nome;
+    private String direcao;
     private int posX;
     private int posY;
-    private String direcao;
+    protected int altitude;
     private int raioSensor;
 
 
-    // Construtor para robo:
+    // Construtores para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
+    // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
 
-    public Robo(String nome, int posX, int posY, String direcao, int raioSensor) {
+
+    public Robo(String nome, String direcao, int posX, int posY, int raioSensor) {
+        this.nome = nome;
+        this.direcao = direcao;
+        this.posX = Math.max(posX, 0);
+        this.posY = Math.max(posY, 0);
+        this.raioSensor = Math.abs(raioSensor); // Raio não pode ser negativo.
+
+        if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
+
+    }
+
+    public Robo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int raioSensor) {
+        this.ambiente = ambiente;
+        this.direcao = direcao;
         this.nome = nome;
         this.posX = Math.max(posX, 0);
         this.posY = Math.max(posY, 0);
-        this.direcao = direcao;
         this.raioSensor = Math.abs(raioSensor); // Raio não pode ser negativo.
+
+        ambiente.adicionarRobo(this);
 
         if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
 
@@ -32,6 +50,14 @@ public class Robo {
 
 
     // Getters e Setters:
+
+    public Ambiente getAmbiente() {
+        return ambiente;
+    }
+
+    public String getDirecao() {
+        return direcao;
+    }
 
     public String getNome() {
         return nome;
@@ -45,12 +71,21 @@ public class Robo {
         return posY;
     }
 
-    public String getDirecao() {
-        return direcao;
+    public int getAltitude() {
+        return altitude;
     }
 
     public int getRaioSensor() {
         return raioSensor;
+    }
+
+
+    public void setAmbiente(Ambiente ambiente) {
+        this.ambiente = ambiente;
+    }
+
+    public void setDirecao(String direcao) {
+        this.direcao = direcao;
     }
 
     public void setPosX(int posX) {
@@ -61,8 +96,8 @@ public class Robo {
         this.posY = posY;
     }
 
-    public void setDirecao(String direcao) {
-        this.direcao = direcao;
+    public void setAltitude(int altitude) {
+        this.altitude = altitude;
     }
 
     public void setRaioSensor(int raioSensor) {
@@ -72,13 +107,15 @@ public class Robo {
 
     // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido.
 
-    public void mover(int deltaX, int deltaY, Ambiente ambiente) {
+    public void mover(int deltaX, int deltaY) {
+
+        // VERIFICAR SE AMBIENTE != NULL
 
         int newPosX = getPosX() + deltaX;
         int newPosY = getPosY() + deltaY;
 
         // Assume-se que os robos sempre estarão em um ambiente, logo é preciso verificar se o movimento leva o robô para fora do ambiente.
-        if (ambiente.dentroDosLimites(newPosX, newPosY, 0)) {
+        if (getAmbiente().dentroDosLimites(newPosX, newPosY, getAltitude())) {
             setPosX(newPosX);
             setPosY(newPosY);
         } else {
@@ -90,7 +127,9 @@ public class Robo {
     // Metodo para exibiar a posição do robo:
 
     public void exibirPosicao() {
-        System.out.printf("O robô %s está na posição (%d, %d) e observando %s\n", getNome(), getPosX(), getPosY(), getDirecao());
+        // VERIFICAR SE AMBIENTE != NULL
+
+        System.out.printf("O robô %s está no ambiente %s na posição (%d, %d, %d) e observando %s\n", getNome(), getAmbiente(), getPosX(), getPosY(), getAltitude(), getDirecao());
     }
 
 

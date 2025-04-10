@@ -9,14 +9,19 @@ public class RoboTerrestre extends Robo {
     private int velocidadeMaxima;
 
 
-    // Metodo construtor para o robo Terrestre, considera a velocidade maxima (em modulo)
+    // Metodos construtores para o robo Terrestre, considera a velocidade maxima (em modulo)
+    // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
 
-    public RoboTerrestre(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima) {
-        super(nome, posX, posY, direcao, raioSensor);
+    public RoboTerrestre(String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor) {
+        super(nome, direcao, posX, posY, raioSensor);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
 
     }
 
+    public RoboTerrestre(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor) {
+        super(ambiente, nome, direcao, posX, posY, raioSensor);
+        this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
+    }
 
     // Setters e Getters:
 
@@ -33,11 +38,11 @@ public class RoboTerrestre extends Robo {
     // A velocidade maxima é considerada unidimensional, ou seja, pode se mover uma velocidade maxima para cada direção
 
     @Override
-    public void mover(int deltaX, int deltaY, Ambiente ambiente) {
+    public void mover(int deltaX, int deltaY) {
         if (Math.abs(deltaX) > getVelocidadeMaxima() || Math.abs(deltaY) > getVelocidadeMaxima())
             System.out.printf("O movimento de %s excede a velocidade maxima, operação cancelada\n", getNome());
         else
-            super.mover(deltaX, deltaY, ambiente);
+            super.mover(deltaX, deltaY);
 
     }
 }
