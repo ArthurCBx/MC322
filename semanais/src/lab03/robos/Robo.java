@@ -1,6 +1,7 @@
 package lab03.robos;
 
 import lab03.Ambiente;
+import lab03.sensores.Sensor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Robo {
     private int posX;
     private int posY;
     protected int altitude;
-    private int raioSensor;
+    private Sensor sensor;
 
 
     // Construtores para robo:
@@ -23,24 +24,23 @@ public class Robo {
     // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
 
 
-    public Robo(String nome, String direcao, int posX, int posY, int raioSensor) {
+    public Robo(String nome, String direcao, int posX, int posY, Sensor sensor) {
         this.nome = nome;
         this.direcao = direcao;
         this.posX = Math.max(posX, 0);
         this.posY = Math.max(posY, 0);
-        this.raioSensor = Math.abs(raioSensor); // Raio não pode ser negativo.
-
+        this.sensor = sensor;
         if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
 
     }
 
-    public Robo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int raioSensor) {
+    public Robo(Ambiente ambiente, String nome, String direcao, int posX, int posY, Sensor sensor) {
         this.ambiente = ambiente;
         this.direcao = direcao;
         this.nome = nome;
         this.posX = Math.max(posX, 0);
         this.posY = Math.max(posY, 0);
-        this.raioSensor = Math.abs(raioSensor); // Raio não pode ser negativo.
+        this.sensor = Math.abs(sensor); // Raio não pode ser negativo.
 
         ambiente.adicionarRobo(this);
 
