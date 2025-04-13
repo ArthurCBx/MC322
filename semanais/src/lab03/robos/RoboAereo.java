@@ -14,8 +14,8 @@ public class RoboAereo extends Robo {
     // Metodos contrutores para Robo Aereo
     // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
 
-    public RoboAereo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioSensor) {
-        super(nome, direcao, posX, posY, raioSensor);
+    public RoboAereo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
+        super(nome, direcao, posX, posY);
 
         // A altitude é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);
@@ -26,8 +26,8 @@ public class RoboAereo extends Robo {
 
     }
 
-    public RoboAereo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioSensor) {
-        super(ambiente, nome, direcao, posX, posY, raioSensor);
+    public RoboAereo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
+        super(ambiente, nome, direcao, posX, posY);
 
         // A altitude é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);
@@ -78,45 +78,9 @@ public class RoboAereo extends Robo {
         setAltitude(Math.max(newAltitude, 0));
     }
 
-    @Override
-    public List<Robo> identificarRedondezas(int raio, Ambiente ambiente) {
-        // Override para considerar agora, além do que já era considerado, a altitude dos robos.
-        // Isso porque este robo também pode estar voando e isso deve ser considerado para verificar o seu raio sensor.
-        List<Robo> listaRobos = super.identificarRedondezas(raio, ambiente);
-        List<Robo> robosEncontrados = new ArrayList<>();
 
-        int altitude;
 
-        for (Robo robo : listaRobos) {
 
-            // Se o robo da iteração for aereo, pega a sua altitude, senão, ele é terrestre e a sua altitude é 0.
-            altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
-
-            if (Math.abs(getAltitude() - altitude) <= raio)
-                robosEncontrados.add(robo);
-
-        }
-
-        return robosEncontrados;
-
-    }
-
-    @Override
-    public void identificarObstaculos(Ambiente ambiente) {
-    // Override para considerar a altitude dos robos.
-        List<Robo> listaRobos = identificarRedondezas(getRaioSensor(), ambiente);
-
-        int altitude;
-
-        for (Robo robo : listaRobos) {
-
-            altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
-
-            System.out.printf("Há um obstaculo, %s, em (%d, %d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY(), altitude);
-
-        }
-
-    }
 }
 
 

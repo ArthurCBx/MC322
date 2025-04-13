@@ -19,8 +19,8 @@ public class RoboBombardeiro extends RoboAereo {
     private int bombas;
     private final int capacidadeBombas;
 
-    public RoboBombardeiro(String nome, int posX, int posY, String direcao, int raioSensor, int altitude, int altitudeMaxima, int capacidadeBombas) {
-        super(nome, posX, posY, direcao, raioSensor, altitude, altitudeMaxima);
+    public RoboBombardeiro(String nome, int posX, int posY, String direcao, int altitude, int altitudeMaxima, int capacidadeBombas) {
+        super(nome,direcao, posX, posY, altitude, altitudeMaxima);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
 

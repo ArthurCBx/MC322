@@ -1,20 +1,25 @@
 package lab03.obstaculos;
 
 public class Obstaculo {
-    private final int posX1;
-    private final int posY1;
-    private final int posX2;
-    private final int posY2;
+    private int posX1;
+    private int posY1;
+    private int posX2;
+    private int posY2;
     private int altura;
+    private int base;
+    private final TipoObstaculo tipo;
 
 
-    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura) {
-        this.posX1 = posX1;
-        this.posY1 = posY1;
-        this.posX2 = posX2;
-        this.posY2 = posY2;
+    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura,int base, TipoObstaculo tipo) {
+        this.posX1 = Math.min(posX1,posX2);
+        this.posY1 = Math.min(posY1,posY2);
+
+        this.posX2 = Math.max(posX1,posX2);
+        this.posY2 = Math.max(posY1,posY2);
+
         this.altura = altura;
-
+        this.tipo = tipo;
+        this.base = base;
     }
 
     public int getPosX1() {
@@ -33,8 +38,36 @@ public class Obstaculo {
         return posY2;
     }
 
+    public TipoObstaculo getTipo() {
+        return tipo;
+    }
+
     public int getAltura() {
         return altura;
+    }
+
+    public int getBase() {
+        return base;
+    }
+
+    public void setBase(int base) {
+        this.base = base;
+    }
+
+    public void setPosX1(int posX1) {
+        this.posX1 = posX1;
+    }
+
+    public void setPosY1(int posY1) {
+        this.posY1 = posY1;
+    }
+
+    public void setPosX2(int posX2) {
+        this.posX2 = posX2;
+    }
+
+    public void setPosY2(int posY2) {
+        this.posY2 = posY2;
     }
 
     public void setAltura(int altura) {
@@ -44,7 +77,7 @@ public class Obstaculo {
 
 
 
-// FALTA ENUM e o resto
+// FALTA o resto
 
 
 

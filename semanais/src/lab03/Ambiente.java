@@ -26,11 +26,18 @@ public class Ambiente {
         this.comprimento = Math.max(comprimento,0);
         this.largura = Math.max(largura,0);
         this.altura = Math.max(altura,0);
-        this.periodo = "Dia";       // Atributo periodo iniciado como "Dia" por padrao e alterado em metodo mudarTempo
+        this.periodo = "Dia";       // Atributo período iniciado como "Dia" por padrão e alterado em metodo mudarTempo
 
     }
 
-
+    public Ambiente(int comprimento, int largura, int altura, ArrayList<Robo> listaRobos, ArrayList<Obstaculo> listaObstaculos) {
+        this.comprimento = comprimento;
+        this.largura = largura;
+        this.altura = altura;
+        this.periodo = "Dia";
+        this.listaRobos = listaRobos;
+        this.listaObstaculos = listaObstaculos;
+    }
     // Getters e Setters:
 
     public int getComprimento() {
@@ -53,7 +60,7 @@ public class Ambiente {
         return listaRobos;
     }
 
-    public ArrayList<Obstaculo> getListObstaculos() {
+    public ArrayList<Obstaculo> getListaObstaculos() {
         return listaObstaculos;
     }
 
@@ -79,7 +86,7 @@ public class Ambiente {
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
 
     public boolean dentroDosLimites(int x, int y, int z) {
-        // Verifica se as coordenadas passadas são positivas e menores ou iguais as dimensões do ambiente
+        // Verifica se as coordenadas passadas são positivas e menores ou iguais às dimensões do ambiente
 
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
@@ -88,7 +95,7 @@ public class Ambiente {
     // Metodo para adiconar robo à lista de robos do ambiente:
 
     public void adicionarRobo(Robo robo) {
-        // Inicializa lista vazia, se necessário, e adiciona robo a lista
+        // Inicializa lista vazia, se necessário, e adiciona robô a lista
 
         if (listaRobos == null) {
             listaRobos = new ArrayList<>();
@@ -122,11 +129,9 @@ public class Ambiente {
         }
         listaObstaculos.add(obstaculo);
 
-
-
     }
 
+    public void detectarColisoes(){
 
-
-
+    }
 }
