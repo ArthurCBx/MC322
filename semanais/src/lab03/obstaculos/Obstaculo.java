@@ -11,17 +11,30 @@ public class Obstaculo {
 
 
     public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura,int base, TipoObstaculo tipo) {
-        this.posX1 = Math.min(posX1,posX2);
-        this.posY1 = Math.min(posY1,posY2);
+        this.posX1 = Math.abs(Math.min(posX1,posX2));
+        this.posY1 = Math.abs(Math.min(posY1,posY2));
 
-        this.posX2 = Math.max(posX1,posX2);
-        this.posY2 = Math.max(posY1,posY2);
+        this.posX2 = Math.abs(Math.max(posX1,posX2));
+        this.posY2 = Math.abs(Math.max(posY1,posY2));
 
-        this.altura = altura;
+        this.altura = Math.abs(altura);
+        this.base = Math.abs(base);
         this.tipo = tipo;
-        this.base = base;
     }
 
+    // Sobrecarga de construtor porque obstáculos possuem altura padrão
+    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int base, TipoObstaculo tipo) {
+        this.posX1 = Math.abs(Math.min(posX1,posX2));
+        this.posY1 = Math.abs(Math.min(posY1,posY2));
+
+        this.posX2 = Math.abs(Math.max(posX1,posX2));
+        this.posY2 = Math.abs(Math.max(posY1,posY2));
+
+        this.base = Math.abs(base);
+        this.tipo = tipo;
+    }
+
+    // Getters e setters
     public int getPosX1() {
         return posX1;
     }

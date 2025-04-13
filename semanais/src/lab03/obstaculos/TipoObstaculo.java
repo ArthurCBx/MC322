@@ -7,7 +7,7 @@ public enum TipoObstaculo {
     ANIMAL("Animal", 0, true),
     NUVEM("Nuvem", 80, false);
 
-    private final int alturaPadrao;
+    private final int alturaPadrao; //
     private final boolean bloqueia;
     private final String nome;
 

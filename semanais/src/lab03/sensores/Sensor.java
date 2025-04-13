@@ -31,20 +31,18 @@ public class Sensor {
             }
         }
 
+        // Verifica se algum obstáculo está dentro do raio do sensor ou se o robô está dentro do obstáculo
         ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
         for (Obstaculo obstaculo : obstaculos) {
-            int deltaX1 = obstaculo.getPosX1() - mestre.getPosX(); int deltaX2 = obstaculo.getPosX2() - mestre.getPosX();
-            int deltaY1 = obstaculo.getPosY1() - mestre.getPosY(); int deltaY2 = obstaculo.getPosY2() - mestre.getPosY();
+            int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getPosX(), obstaculo.getPosX2()));
+            int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));
 
-            if ((deltaX1 < 0 && deltaX2 > 0) || deltaX1 == 0 || deltaX2 == 0){
-                if((deltaY1 < 0 && deltaY2 > 0) || deltaY1 == 0 || deltaY2 == 0){
-                    System.out.printf("Robo está dentro do obstáculo %s.\n",obstaculo.getTipo().getNome());
-                }
-            }
-            else{
-                double distancia = Math.sqrt(Math.pow(Math.min(deltaX1,deltaX2) - mestre.getPosX(), 2) + Math.pow(Math.min(deltaY1,deltaY2) - mestre.getPosY(), 2));
-                if (distancia <= raio) {
-                    System.out.printf("Obstáculo %s encontrado a %d metros em X e %d metros em Y.\n",obstaculo.getTipo().getNome(), Math.min(deltaX1,deltaX2), Math.min(deltaY1,deltaY2));
+            double distancia = Math.sqrt(Math.pow(mestre.getPosX() - cX,2) + Math.pow(mestre.getPosY() - cY,2));
+            if ((mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= obstaculo.getBase() + obstaculo.getAltura())){
+                if (distancia == 0) {
+                    System.out.printf("Robo está dentro do obstáculo %s\n", obstaculo.getTipo().getNome());
+                } else if (distancia <= raio) {
+                    System.out.printf("Obstáculo %s encontrado a %.2f metros\n", obstaculo.getTipo().getNome(), distancia);
                 }
             }
         }

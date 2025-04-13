@@ -17,7 +17,7 @@ public class Robo {
     private int posX;
     private int posY;
     protected int altitude = 0;
-    private ArrayList<Sensor> sensores = new ArrayList<>();
+    private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
 
 
     // Construtores para robo:
@@ -141,6 +141,7 @@ public class Robo {
         System.out.printf("O robô %s está no ambiente %s na posição (%d, %d, %d) e observando %s\n", getNome(), getAmbiente(), getPosX(), getPosY(), getAltitude(), getDirecao());
     }
 
+    //DA UMA OLHADA NESSA AQUI, MAS ACHO Q TA CERTA
     public ArrayList<Robo> identificarRedondezas(){
         ambiente = getAmbiente();
         sensores = getSensores();
@@ -150,7 +151,7 @@ public class Robo {
         }
         ArrayList<Robo> robosProximos = new ArrayList<>();
         for (Sensor sensor : sensores){
-            ArrayList<Robo> identificados = sensor.monitorar(ambiente);
+            ArrayList<Robo> identificados = sensor.listaRobosEncontrados(getAmbiente(),this);
             for (Robo robo : identificados){
                 if (!robosProximos.contains(robo)){
                     robosProximos.add(robo);
@@ -170,19 +171,9 @@ public class Robo {
         sensores = getSensores();
         int counter = 0;
 
-        for (Sensor sensor : sensores){
-            System.out.printf("Sensor %d, da classe %s, está monitorando o ambiente\n", counter, sensor.getClass());
-            ArrayList<Robo> robos = sensor.monitorar(getAmbiente());
-            if (sensor.getClass() != SensorClasse.class){
-                for (Robo robo : robos) {
-                    System.out.printf("Robo %s encontrado na posição (%d, %d, %d)\n", robo.getNome(), robo.getPosX(), robo.getPosY(), robo.getAltitude());
-                }
-            System.out.printf("Sensor %d terminou de scanear\n", counter);
-        }
-            counter++;
         }
     }
-}
+
 
 
 
