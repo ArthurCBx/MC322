@@ -23,9 +23,9 @@ public class Ambiente {
 
     public Ambiente(int comprimento, int largura, int altura) {
         // Dimensões do ambiente não podem ser negativas. Caso seja negativa, atribui 0.
-        this.comprimento = Math.max(comprimento,0);
-        this.largura = Math.max(largura,0);
-        this.altura = Math.max(altura,0);
+        this.comprimento = Math.max(comprimento, 0);
+        this.largura = Math.max(largura, 0);
+        this.altura = Math.max(altura, 0);
         this.periodo = "Dia";       // Atributo periodo iniciado como "Dia" por padrao e alterado em metodo mudarTempo
 
     }
@@ -63,13 +63,14 @@ public class Ambiente {
         this.periodo = periodo;
     }
 
-    /** Metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
+    /**
+     * Metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
      * Args = "Dia", "Noite"
      */
     public void mudarTempo(String tempo) {
         if (Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")) {   // So aceita "Dia" e "Noite"
             setPeriodo(tempo);
-        }else{
+        } else {
             System.out.println("Argumentos válidos são 'Dia' ou 'Noite'. Tente chamar o método novamente com um argumento válido.");
         }
 
@@ -115,18 +116,27 @@ public class Ambiente {
         robo = null;
     }
 
-    public void adicionarObstaculo(Obstaculo obstaculo){
+    public void adicionarObstaculo(Obstaculo obstaculo) {
 
         if (listaObstaculos == null) {
             listaObstaculos = new ArrayList<>();
         }
         listaObstaculos.add(obstaculo);
-
-
-
     }
 
-
-
+    public void detectarColisoes(){
+        // Verifica se algum robo colidiu com um obstáculo
+        for (Robo robo : listaRobos) {
+            for (Obstaculo obstaculo : listaObstaculos) {
+                int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
+                int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1(); int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
+                if (roboX >= obstaculoX1 && roboX <= obstaculo.getPosX2() && roboY >= obstaculo.getPosY1() && roboY <= obstaculo.getPosY2()){
+                    if (roboX == obstaculoX1 || roboX == obstaculoX2 || roboY == obstaculoY1 || roboY == obstaculoY2){
+                        obstaculo. System.out.printf("Robo %s colidiu com o obstáculo %s\n", robo.getNome(), obstaculo.getNome());
+                    }
+                }
+            }
+        }
+    }
 
 }
