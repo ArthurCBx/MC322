@@ -128,7 +128,24 @@ public class Ambiente {
         }
         listaObstaculos.add(obstaculo);
     }
+    public void detectarColisoes(){
+        // Verifica se algum robo colidiu com algum obstáculo
+        // Só há colisão se obstáculo bloqueia passagem
+        for (Robo robo : listaRobos) {
+            for (Obstaculo obstaculo : listaObstaculos) {
+                int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
+                int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1(); int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
 
+                if (obstaculo.getTipo().bloqueiaPassagem()) {
+                    if (roboX >= obstaculoX1 && roboX <= obstaculoX2 && roboY >= obstaculoY1 && roboY <= obstaculoY2) {
+                        if (roboX == obstaculoX1 || roboX == obstaculoX2 || roboY == obstaculoY1 || roboY == obstaculoY2) {
+                            System.out.printf("Robo %s colidiu com o obstáculo %s\n", robo.getNome(), obstaculo.getTipo().getNome());
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     
 
