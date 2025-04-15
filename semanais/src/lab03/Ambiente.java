@@ -2,7 +2,6 @@ package lab03;
 
 import lab03.obstaculos.Obstaculo;
 import lab03.robos.Robo;
-import lab03.robos.RoboAereo;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -23,14 +22,21 @@ public class Ambiente {
 
     public Ambiente(int comprimento, int largura, int altura) {
         // Dimensões do ambiente não podem ser negativas. Caso seja negativa, atribui 0.
-        this.comprimento = Math.max(comprimento, 0);
-        this.largura = Math.max(largura, 0);
-        this.altura = Math.max(altura, 0);
-        this.periodo = "Dia";       // Atributo periodo iniciado como "Dia" por padrao e alterado em metodo mudarTempo
+        this.comprimento = Math.max(comprimento,0);
+        this.largura = Math.max(largura,0);
+        this.altura = Math.max(altura,0);
+        this.periodo = "Dia";       // Atributo período iniciado como "Dia" por padrão e alterado em metodo mudarTempo
 
     }
 
-
+    public Ambiente(int comprimento, int largura, int altura, ArrayList<Robo> listaRobos, ArrayList<Obstaculo> listaObstaculos) {
+        this.comprimento = comprimento;
+        this.largura = largura;
+        this.altura = altura;
+        this.periodo = "Dia";
+        this.listaRobos = listaRobos;
+        this.listaObstaculos = listaObstaculos;
+    }
     // Getters e Setters:
 
     public int getComprimento() {
@@ -53,7 +59,7 @@ public class Ambiente {
         return listaRobos;
     }
 
-    public ArrayList<Obstaculo> getListObstaculos() {
+    public ArrayList<Obstaculo> getListaObstaculos() {
         return listaObstaculos;
     }
 
@@ -63,14 +69,13 @@ public class Ambiente {
         this.periodo = periodo;
     }
 
-    /**
-     * Metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
+    /** Metodo mudarTempo altera atributo periodo para "Dia" ou "Noite"
      * Args = "Dia", "Noite"
      */
     public void mudarTempo(String tempo) {
         if (Objects.equals(tempo, "Dia") || Objects.equals(tempo, "Noite")) {   // So aceita "Dia" e "Noite"
             setPeriodo(tempo);
-        } else {
+        }else{
             System.out.println("Argumentos válidos são 'Dia' ou 'Noite'. Tente chamar o método novamente com um argumento válido.");
         }
 
@@ -80,7 +85,7 @@ public class Ambiente {
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
 
     public boolean dentroDosLimites(int x, int y, int z) {
-        // Verifica se as coordenadas passadas são positivas e menores ou iguais as dimensões do ambiente
+        // Verifica se as coordenadas passadas são positivas e menores ou iguais às dimensões do ambiente
 
         return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
     }
@@ -89,7 +94,7 @@ public class Ambiente {
     // Metodo para adiconar robo à lista de robos do ambiente:
 
     public void adicionarRobo(Robo robo) {
-        // Inicializa lista vazia, se necessário, e adiciona robo a lista
+        // Inicializa lista vazia, se necessário, e adiciona robô a lista
 
         if (listaRobos == null) {
             listaRobos = new ArrayList<>();
@@ -116,7 +121,7 @@ public class Ambiente {
         robo = null;
     }
 
-    public void adicionarObstaculo(Obstaculo obstaculo) {
+    public void adicionarObstaculo(Obstaculo obstaculo){
 
         if (listaObstaculos == null) {
             listaObstaculos = new ArrayList<>();
@@ -125,14 +130,18 @@ public class Ambiente {
     }
 
     public void detectarColisoes(){
-        // Verifica se algum robo colidiu com um obstáculo
+        // Verifica se algum robo colidiu com algum obstáculo
+        // Só há colisão se obstáculo bloqueia passagem
         for (Robo robo : listaRobos) {
             for (Obstaculo obstaculo : listaObstaculos) {
                 int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
                 int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1(); int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
-                if (roboX >= obstaculoX1 && roboX <= obstaculo.getPosX2() && roboY >= obstaculo.getPosY1() && roboY <= obstaculo.getPosY2()){
-                    if (roboX == obstaculoX1 || roboX == obstaculoX2 || roboY == obstaculoY1 || roboY == obstaculoY2){
-                        obstaculo. System.out.printf("Robo %s colidiu com o obstáculo %s\n", robo.getNome(), obstaculo.getNome());
+
+                if (obstaculo.getTipo().bloqueiaPassagem()) {
+                    if (roboX >= obstaculoX1 && roboX <= obstaculoX2 && roboY >= obstaculoY1 && roboY <= obstaculoY2) {
+                        if (roboX == obstaculoX1 || roboX == obstaculoX2 || roboY == obstaculoY1 || roboY == obstaculoY2) {
+                            System.out.printf("Robo %s colidiu com o obstáculo %s\n", robo.getNome(), obstaculo.getTipo().getNome());
+                        }
                     }
                 }
             }
