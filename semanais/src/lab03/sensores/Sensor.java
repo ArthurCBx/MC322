@@ -1,6 +1,7 @@
 package lab03.sensores;
 
 import lab03.Ambiente;
+import lab03.obstaculos.Obstaculo;
 import lab03.robos.Robo;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class Sensor {
     private double raio;
 
-    public Sensor(double raio){
+    public Sensor(double raio) {
         this.raio = Math.abs(raio); // Raio não pode ser negativo.
     }
 
@@ -20,14 +21,42 @@ public class Sensor {
         this.raio = Math.abs(raio);
     }
 
-    public void monitorar(Ambiente ambiente){
+    public void monitorar(Ambiente ambiente, Robo mestre) {
         // Verifica no ambiente se existe algum robo dentro do raio do sensor
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
         for (Robo robo : listaRobos) {
-            double distancia = Math.sqrt(Math.pow(robo.getPosX(),2) + Math.pow(robo.getPosY(),2));
-            if (distancia <= raio){
-                System.out.printf("Robo foi encontrado na posição (%d,%d)",robo.getPosX(),robo.getPosY());
+            double distancia = Math.sqrt(Math.pow(robo.getPosX() - mestre.getPosX(), 2) + Math.pow(robo.getPosY() - mestre.getPosY(), 2));
+            if (distancia <= raio && !robo.equals(mestre) && (robo.getAltitude() == mestre.getAltitude())) {
+                System.out.printf("Robo encontrado na posição (%d,%d).\n", robo.getPosX(), robo.getPosY());
             }
         }
+
+        // Verifica se algum obstáculo está dentro do raio do sensor ou se o robô está dentro do obstáculo
+        ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
+        for (Obstaculo obstaculo : obstaculos) {
+            int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getPosX(), obstaculo.getPosX2()));
+            int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));
+
+            double distancia = Math.sqrt(Math.pow(mestre.getPosX() - cX,2) + Math.pow(mestre.getPosY() - cY,2));
+            if ((mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= obstaculo.getBase() + obstaculo.getAltura())){
+                if (distancia == 0) {
+                    System.out.printf("Robo está dentro do obstáculo %s\n", obstaculo.getTipo().getNome());
+                } else if (distancia <= raio) {
+                    System.out.printf("Obstáculo %s encontrado a %.2f metros\n", obstaculo.getTipo().getNome(), distancia);
+                }
+            }
+        }
+    }
+
+    public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre){
+        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+        ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
+        for (Robo robo : listaRobos) {
+            double distancia = Math.sqrt(Math.pow(robo.getPosX() - mestre.getPosX(), 2) + Math.pow(robo.getPosY() - mestre.getPosY(), 2));
+            if (distancia <= raio && !robo.equals(mestre) && (robo.getAltitude() == mestre.getAltitude())) {
+                listaRobosEncontrados.add(robo);
+            }
+        }
+        return listaRobosEncontrados;
     }
 }
