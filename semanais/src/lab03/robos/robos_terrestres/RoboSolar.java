@@ -15,8 +15,15 @@ public class RoboSolar extends RoboTerrestre {
 
     // Construtor para o robo Solar, considera que começa descarregado e possi uma potencia de painel solar (sempre positiva)
 
-    public RoboSolar(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima, int potenciaPainelSolar) {
-        super(nome, posX, posY, direcao, raioSensor, velocidadeMaxima);
+    public RoboSolar(String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor, int potenciaPainelSolar) {
+        super(nome, direcao, posX, posY, velocidadeMaxima, raioSensor);
+        this.potenciaPainelSolar = Math.abs(potenciaPainelSolar);
+        this.bateria = 0;
+
+    }
+
+    public RoboSolar(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor, int potenciaPainelSolar) {
+        super(ambiente, nome, direcao, posX, posY, velocidadeMaxima, raioSensor);
         this.potenciaPainelSolar = Math.abs(potenciaPainelSolar);
         this.bateria = 0;
 
@@ -56,15 +63,17 @@ public class RoboSolar extends RoboTerrestre {
     // Sobreescrita do metodo mover do robo terrestre considerando bateria e periodo do dia
 
     @Override
-    public void mover(int deltaX, int deltaY, Ambiente ambiente) {
+    public void mover(int deltaX, int deltaY) {
 
-        if (Objects.equals(ambiente.getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
-            super.mover(deltaX, deltaY, ambiente);                 // Assim o robo pode se mover independentemente de sua bateria durante o dia
+        // VERIFICAR SE ESTA EM AMBIENTE
+
+        if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
+            super.mover(deltaX, deltaY);                                // Assim o robo pode se mover independentemente de sua bateria durante o dia
 
         } else {    // Caso não esteja no periodo diurno, a bateria será utilizada para mover ***
             if (Math.abs(deltaX) + Math.abs(deltaY) <= getBateria()) {
                 setBateria(getBateria() - Math.abs(deltaX) - Math.abs(deltaY));
-                super.mover(deltaX, deltaY, ambiente);
+                super.mover(deltaX, deltaY);
 
                 // O robo utiliza bateria conforme a distancia que se move em cada direção
                 // Ex: se o robo se move +10 em X e -50 em Y, será consumida uma bateria de 60 (10 + 50)

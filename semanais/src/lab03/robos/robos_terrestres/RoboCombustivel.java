@@ -12,8 +12,14 @@ public class RoboCombustivel extends RoboTerrestre {
 
     // Contrutor do robo Combustivel, considera o combustivel presente no robo (minimo de zero)
 
-    public RoboCombustivel(String nome, int posX, int posY, String direcao, int raioSensor, int velocidadeMaxima, int combustivel) {
-        super(nome, posX, posY, direcao, raioSensor, velocidadeMaxima);
+    public RoboCombustivel(String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor, int combustivel) {
+        super(nome, direcao, posX, posY, velocidadeMaxima, raioSensor);
+        this.combustivel = Math.min(0, combustivel);
+
+    }
+
+    public RoboCombustivel(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor, int combustivel) {
+        super(ambiente, nome, direcao, posX, posY, velocidadeMaxima, raioSensor);
         this.combustivel = Math.min(0, combustivel);
 
     }
