@@ -52,13 +52,15 @@ public class RoboAereo extends Robo {
 
     // Metodo para subir o robo aereo, considerando a altitude maxima e se ele não sairá do ambiente.
     public void subir(int deltaAltitude) {
+        if (getAmbiente() == null){
+            System.out.printf("O robo %s não está em um ambiente, logo não pode subir.\n", getNome());
+            return;
+        }
 
-        // VERIFICA SE ESTA EM UM AMBIENTE
-
+        // Aceita apenas valores positivos para deltaAltitude:
         int newAltitude = getAltitude() + Math.max(deltaAltitude, 0);
-        // Aceita apenas valores positivos para deltaAltitude.
 
-        // Altitute não pode ser maior que altitudeMaxima.
+        // Altitute não pode ser maior que altitudeMaxima:
         newAltitude = Math.min(newAltitude, getAltitudeMaxima());
 
         // Verificando se nova altitude sairá ou não do ambiente.
@@ -71,10 +73,15 @@ public class RoboAereo extends Robo {
 
     // Metodo para descer o robo aereo, verificando se a sua nova altitude não será negativa.
     public void descer(int deltaAltitude, Ambiente ambiente) {
-        int newAltitude = getAltitude() - Math.max(deltaAltitude, 0);
-        // Não aceita valores negativos para deltaAltitude.
+        if (getAmbiente() == null){
+            System.out.printf("O robo %s não está em um ambiente, logo não pode descer.\n", getNome());
+            return;
+        }
 
-        // Altitude não pode ser negativa.
+        // Não aceita valores negativos para deltaAltitude:
+        int newAltitude = getAltitude() - Math.max(deltaAltitude, 0);
+
+        // Altitude não pode ser negativa:
         setAltitude(Math.max(newAltitude, 0));
     }
 

@@ -15,8 +15,14 @@ public class RoboExplosivo extends RoboAereo {
     private final int raioExplosao;
 
 
-    public RoboExplosivo(String nome, int posX, int posY, String direcao, int altitude, int altitudeMaxima, int raioExplosao) {
+    public RoboExplosivo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
         super(nome, direcao, posX, posY, altitude, altitudeMaxima);
+        this.raioExplosao = Math.abs(raioExplosao);
+
+    }
+
+    public RoboExplosivo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
+        super(ambiente, nome, direcao, posX, posY, altitude, altitudeMaxima);
         this.raioExplosao = Math.abs(raioExplosao);
 
     }
@@ -25,11 +31,17 @@ public class RoboExplosivo extends RoboAereo {
         return raioExplosao;
     }
 
+    // REFAZER O EXPLODIR
+
     // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
     public void explodir(Ambiente ambiente) {
+        if (getAmbiente() == null){
+            System.out.printf("O robo %s não está em um ambiente, logo não pode explodir.\n", getNome());
+            return;
+        }
 
         // Metodo identificarRedondezas retorna uma lista de robos que estão no raio de explosao.
-        List<Robo> robosAtingidos = identificarRedondezas(getRaioExplosao(), ambiente);
+        List<Robo> robosAtingidos = identificarRedondezas();
 
         // Para cada robo dentro do raio de explosão, remove-o do ambiente e faz o seu apontador ser nulo.
         for (Robo robo : robosAtingidos) {

@@ -6,30 +6,30 @@ public class RoboTerrestre extends Robo {
 
     // Subclasse para implementar um robo que é exclusivamente terrestre e possui uma velocidade maxima
 
-    private int velocidadeMaxima;
+    private double velocidadeMaxima;
 
 
     // Metodos construtores para o robo Terrestre, considera a velocidade maxima (em modulo)
     // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
 
-    public RoboTerrestre(String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor) {
-        super(nome, direcao, posX, posY, raioSensor);
+    public RoboTerrestre(String nome, String direcao, int posX, int posY, double velocidadeMaxima) {
+        super(nome, direcao, posX, posY);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
 
     }
 
-    public RoboTerrestre(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, int raioSensor) {
-        super(ambiente, nome, direcao, posX, posY, raioSensor);
+    public RoboTerrestre(Ambiente ambiente, String nome, String direcao, int posX, int posY, double velocidadeMaxima) {
+        super(ambiente, nome, direcao, posX, posY);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
     }
 
     // Setters e Getters:
 
-    public int getVelocidadeMaxima() {
+    public double getVelocidadeMaxima() {
         return velocidadeMaxima;
     }
 
-    protected void setVelocidadeMaxima(int velocidadeMaxima) {
+    protected void setVelocidadeMaxima(double velocidadeMaxima) {
         this.velocidadeMaxima = velocidadeMaxima;
     }
 
@@ -39,7 +39,7 @@ public class RoboTerrestre extends Robo {
 
     @Override
     public void mover(int deltaX, int deltaY) {
-        if (Math.abs(deltaX) > getVelocidadeMaxima() || Math.abs(deltaY) > getVelocidadeMaxima())
+        if (Math.pow(deltaX,2) + Math.pow(deltaY,2) <= Math.pow(getVelocidadeMaxima(),2))
             System.out.printf("O movimento de %s excede a velocidade maxima, operação cancelada\n", getNome());
         else
             super.mover(deltaX, deltaY);

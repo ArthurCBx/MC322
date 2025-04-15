@@ -2,10 +2,8 @@ package lab03.robos;
 
 import lab03.Ambiente;
 import lab03.sensores.Sensor;
-import lab03.sensores.SensorClasse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Robo {
 
@@ -111,8 +109,7 @@ public class Robo {
     // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido.
 
     public void mover(int deltaX, int deltaY) {
-        ambiente = getAmbiente();
-        if (ambiente == null){
+        if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
             return;
         }
@@ -121,7 +118,7 @@ public class Robo {
         int newPosY = getPosY() + deltaY;
 
         // É preciso verificar se o movimento leva o robô para fora do ambiente.
-        if (ambiente.dentroDosLimites(newPosX, newPosY, getAltitude())) {
+        if (getAmbiente().dentroDosLimites(newPosX, newPosY, getAltitude())) {
             setPosX(newPosX);
             setPosY(newPosY);
         } else {
@@ -132,8 +129,7 @@ public class Robo {
 
     // Metodo para exibiar a posição do robo:
     public void exibirPosicao() {
-        ambiente = getAmbiente();
-        if (ambiente == null) {
+        if (getAmbiente() == null) {
             System.out.printf("O robô %s não se encontra em um ambiente.\n", getNome());
             return;
         }
@@ -143,14 +139,12 @@ public class Robo {
 
     //DA UMA OLHADA NESSA AQUI, MAS ACHO Q TA CERTA
     public ArrayList<Robo> identificarRedondezas(){
-        ambiente = getAmbiente();
-        sensores = getSensores();
-        if (ambiente == null || sensores == null){
+        if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robô %s não está em um ambiente ou não possui um sensor, então não consegue analisar o que está em sua volta.\n", getNome());
             return null;
         }
         ArrayList<Robo> robosProximos = new ArrayList<>();
-        for (Sensor sensor : sensores){
+        for (Sensor sensor : getSensores()){
             ArrayList<Robo> identificados = sensor.listaRobosEncontrados(getAmbiente(),this);
             for (Robo robo : identificados){
                 if (!robosProximos.contains(robo)){

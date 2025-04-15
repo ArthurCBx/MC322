@@ -19,12 +19,20 @@ public class RoboBombardeiro extends RoboAereo {
     private int bombas;
     private final int capacidadeBombas;
 
-    public RoboBombardeiro(String nome, int posX, int posY, String direcao, int altitude, int altitudeMaxima, int capacidadeBombas) {
+    public RoboBombardeiro(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
         super(nome,direcao, posX, posY, altitude, altitudeMaxima);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
 
     }
+
+    public RoboBombardeiro(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
+        super(ambiente, nome, direcao, posX, posY, altitude, altitudeMaxima);
+        this.bombas = 0;
+        this.capacidadeBombas = Math.abs(capacidadeBombas);
+
+    }
+
     // Getters e Setters específicos do bombardeiro
     public int getBombas() {
         return bombas;
@@ -51,6 +59,10 @@ public class RoboBombardeiro extends RoboAereo {
 
     // Metodo que bombardeia robos na mesma posição (x,y) e altitude igual ou inferior.
     public void bombardear(Ambiente ambiente) {
+        if (getAmbiente() == null){
+            System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());
+            return;
+        }
 
         // Não pode bombardear se o robo estiver sem bombas.
         if (getBombas() <= 0) {
@@ -63,19 +75,15 @@ public class RoboBombardeiro extends RoboAereo {
         List<Robo> listaRobos = ambiente.getListaRobos();
         List<Robo> robosAtingidos = new ArrayList<>();
 
-        int altitude;
         int vitimas = 0;
 
         for (Robo robo : listaRobos) {
-            // Para cada robo da lista do ambiente, verifica primeiro se é aereo (para pegar altitude) ou terrestre (altitude 0).
-            altitude = robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0;
-
-            if (getPosX() == robo.getPosX() && getPosY() == robo.getPosY() && altitude <= getAltitude()) {
+            if (getPosX() == robo.getPosX() && getPosY() == robo.getPosY() && robo.getAltitude() <= getAltitude()) {
                 vitimas++;
                 robosAtingidos.add(robo);
             }
         }
-        // Remove ele mesmo da lista de robos atingidos.
+        // Se remove da lista de robos atingidos.
         robosAtingidos.remove(this);
         vitimas--;
 
