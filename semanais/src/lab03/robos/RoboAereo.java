@@ -72,7 +72,7 @@ public class RoboAereo extends Robo {
     }
 
     // Metodo para descer o robo aereo, verificando se a sua nova altitude não será negativa.
-    public void descer(int deltaAltitude, Ambiente ambiente) {
+    public void descer(int deltaAltitude) {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode descer.\n", getNome());
             return;

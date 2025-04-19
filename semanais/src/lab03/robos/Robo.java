@@ -221,86 +221,14 @@ public class Robo {
             }
         }
     }
-
-
-
-    /*
-
-     public void mover(int deltaX, int deltaY) {
-        if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
-            return;
+    public void monitorar(){
+        int count = 0;
+        for (Sensor sensor : getSensores()){
+            System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
+            sensor.monitorar(getAmbiente(),this);
+            System.out.println();
         }
-
-        int newPosX = getPosX() + deltaX;
-        int newPosY = getPosY() + deltaY;
-        if (!getAmbiente().dentroDosLimites(newPosX, newPosY,getAltitude())) {
-            System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
-            return;
-        }
-
-        // Verifica se o robô não vai colidir com um obstáculo.
-        ArrayList<Obstaculo> obstaculos = getAmbiente().getListaObstaculos();
-        for (Obstaculo obstaculo : obstaculos) {
-            if (obstaculo.contemPonto(newPosX,newPosY,getAltitude())) {
-                // Aqui assume-se que não há sobreposição de obstáculos.
-                // Se newPos(x,y) for dentro de um obstáculo, o robô é realocado para a interseção mais próxima e a função termina.
-                double[] newPos = calcularIntersecaoMaisProxima(getPosX(), getPosY(), newPosX, newPosY, obstaculo);
-                setPosX((int) newPos[0]);
-                setPosY((int) newPos[1]);
-                System.out.printf("O robo %s colidiu com o obstáculo %s e foi realocado para a posição (%d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY());
-                return;
-            }
-        }
-        // Se o robô não colidir com nenhum obstáculo, ele pode se mover.
-        setPosX(newPosX); setPosY(newPosY);
     }
-
-
-
-
-
-    public double[] calcularIntersecaoMaisProxima(int x, int y, int newPosX, int newPosY, Obstaculo obstaculo) {
-        double[] intersecao = new double[2];
-        double menorDistancia = Double.MAX_VALUE;
-
-        // Arrays com as coordenadas das linhas do retângulo
-        int[] xLinha = {obstaculo.getPosX1(), obstaculo.getPosX2(), obstaculo.getPosX2(), obstaculo.getPosX1()};
-        int[] yLinha = {obstaculo.getPosY1(), obstaculo.getPosY1(), obstaculo.getPosY2(), obstaculo.getPosY2()};
-
-        // Para cada linha do retângulo
-        for (int i = 0; i < 4; i++) {
-            int x1 = xLinha[i];
-            int y1 = yLinha[i];
-            int x2 = xLinha[(i + 1) % 4];
-            int y2 = yLinha[(i + 1) % 4];
-
-            // Calcula a interseção entre a trajetória e a linha atual
-            double denominador = (x - newPosX) * (y1 - y2) - (y - newPosY) * (x1 - x2);
-            if (denominador != 0) {
-                double t = ((x - x1) * (y1 - y2) - (y - y1) * (x1 - x2)) / denominador;
-                double u = -((x - newPosX) * (y - y1) - (y - newPosY) * (x - x1)) / denominador;
-
-                if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-                    double xIntersecao = x + t * (newPosX - x);
-                    double yIntersecao = y + t * (newPosY - y);
-                    double distancia = Math.sqrt(Math.pow(x - xIntersecao, 2) + Math.pow(y - yIntersecao, 2));
-
-                    if (distancia < menorDistancia) {
-                        menorDistancia = distancia;
-                        intersecao[0] = xIntersecao;
-                        intersecao[1] = yIntersecao;
-                    }
-                }
-            }
-        }
-        return intersecao;
-    }
-
-
-
-*/
-
 
 }
 

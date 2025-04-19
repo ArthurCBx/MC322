@@ -78,12 +78,13 @@ public class RoboSolar extends RoboTerrestre {
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
             super.mover(deltaX, deltaY);                                // Assim o robo pode se mover independentemente de sua bateria durante o dia
 
-        } else {    // Caso não esteja no periodo diurno, a bateria será utilizada para mover ***
-            if (Math.abs(deltaX) + Math.abs(deltaY) <= getBateria()) {
-                setBateria(getBateria() - Math.abs(deltaX) - Math.abs(deltaY));
+        } else {    // Caso não esteja no período diurno, a bateria será utilizada para mover ***
+            double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+            if (Math.sqrt(distancia) <= getBateria()) {
+                setBateria(getBateria() - distancia);
                 super.mover(deltaX, deltaY);
 
-                // O robo utiliza bateria conforme a distancia que se move em cada direção
+                // O robo utiliza bateria conforme a distância que se move em cada direção
                 // Ex: se o robo se move +10 em X e -50 em Y, será consumida uma bateria de 60 (10 + 50)
 
             } else {

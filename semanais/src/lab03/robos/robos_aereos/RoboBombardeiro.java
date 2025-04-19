@@ -42,7 +42,7 @@ public class RoboBombardeiro extends RoboAereo {
         return capacidadeBombas;
     }
 
-    // Set como protected porque nao deve ser acessado fora desta classe ou subclasses.
+    // Set como protected porque não deve ser acessado fora desta classe ou subclasses.
     // Há metodo específico para mudar numero de bombas.
     protected void setBombas(int bombas) {
         this.bombas = bombas;
@@ -57,8 +57,8 @@ public class RoboBombardeiro extends RoboAereo {
 
     }
 
-    // Metodo que bombardeia robos na mesma posição (x,y) e altitude igual ou inferior.
-    public void bombardear(Ambiente ambiente) {
+    // Metodo que bombardeia robos na mesma posição (x, y) e altitude igual ou inferior.
+    public void bombardear() {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());
             return;
@@ -72,7 +72,7 @@ public class RoboBombardeiro extends RoboAereo {
 
         setBombas(getBombas() - 1);
 
-        List<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> listaRobos = getAmbiente().getListaRobos();
         List<Robo> robosAtingidos = new ArrayList<>();
 
         int vitimas = 0;
@@ -90,7 +90,7 @@ public class RoboBombardeiro extends RoboAereo {
         // Remove os robos atingidos do ambiente.
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
-            ambiente.removerRobo(robo);
+            getAmbiente().removerRobo(robo);
         }
 
         System.out.printf("O robo bombardeiro %s destruiu %d robos\n", getNome(), vitimas);
@@ -98,7 +98,7 @@ public class RoboBombardeiro extends RoboAereo {
         // Se autodestroi se estava no solo.
         if (getAltitude() == 0) {
             System.out.printf("O robo %s não sobreviveu\n", getNome());
-            ambiente.removerRobo(this);
+            getAmbiente().removerRobo(this);
         }
 
     }

@@ -34,25 +34,25 @@ public class RoboExplosivo extends RoboAereo {
     // REFAZER O EXPLODIR
 
     // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
-    public void explodir(Ambiente ambiente) {
+    public void explodir() {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode explodir.\n", getNome());
             return;
         }
 
         // Metodo identificarRedondezas retorna uma lista de robos que estão no raio de explosao.
-        List<Robo> robosAtingidos = identificarRedondezas();
+        List<Robo> robosAtingidos = identificarRobosProximos();
 
         // Para cada robo dentro do raio de explosão, remove-o do ambiente e faz o seu apontador ser nulo.
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
-            ambiente.removerRobo(robo);
+            getAmbiente().removerRobo(robo);
         }
 
         System.out.printf("O robo explosivo %s destruiu %d robos\n", getNome(), robosAtingidos.size());
 
         // Por fim, remove o robo explosivo do ambiente e torna o seu apontador nulo.
-        ambiente.removerRobo(this);
+        getAmbiente().removerRobo(this);
 
     }
 }
