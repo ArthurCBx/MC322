@@ -147,6 +147,18 @@ public class Ambiente {
         }
     }
 
+    public ArrayList<Obstaculo> detectarObstaculos(int x1, int y1, int z1, int x2, int y2, int z2){
+
+        ArrayList<Obstaculo> obstaculosEncontrados = new ArrayList<>();
+
+        for (Obstaculo obstaculo : getListaObstaculos())
+            if(!((obstaculo.getPosX1() < x1 && obstaculo.getPosX2() < x1 ) || (obstaculo.getPosX1() > x2 && obstaculo.getPosX2() > x2 )))
+                if(!((obstaculo.getPosY1() < y1 && obstaculo.getPosY2() < y1 ) || (obstaculo.getPosY1() > y2 && obstaculo.getPosY2() > y2 )))
+                    if(!((obstaculo.getBase() < z1 && (obstaculo.getBase() + obstaculo.getAltura() ) < z1 ) || (obstaculo.getBase() > z2 && (obstaculo.getBase() + obstaculo.getAltura() ) > z2 )))
+                        obstaculosEncontrados.add(obstaculo);
+
+        return obstaculosEncontrados;
+    }
     
 
 }

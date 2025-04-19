@@ -12,7 +12,7 @@ public class Obstaculo {
     private final TipoObstaculo tipo;
 
 
-    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura,int base, TipoObstaculo tipo) {
+    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura, int base, TipoObstaculo tipo) {
         this.posX1 = Math.abs(Math.min(posX1,posX2));
         this.posY1 = Math.abs(Math.min(posY1,posY2));
 
@@ -89,7 +89,7 @@ public class Obstaculo {
         this.altura = altura;
     }
 
-    public boolean contemPonto(int x, int y, int z) {
+    public boolean contemPonto(double x, double y, double z) {
         // Verifica se o ponto (x,y,z) está dentro do obstáculo
         return (x >= posX1 && x <= posX2 && y >= posY1 && y <= posY2 && (z >= base && z <= base + altura));
     }

@@ -108,7 +108,8 @@ public class Robo {
         this.altitude = altitude;
     }
 
-    // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido.
+
+    // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
 
     public void mover(int deltaX, int deltaY) {
         if (getAmbiente() == null){
@@ -116,28 +117,58 @@ public class Robo {
             return;
         }
 
-        int newPosX = getPosX() + deltaX;
-        int newPosY = getPosY() + deltaY;
-        if (!getAmbiente().dentroDosLimites(newPosX, newPosY,getAltitude())) {
+        int finalPosX = getPosX() + deltaX;
+        int finalPosY = getPosY() + deltaY;
+        if (!getAmbiente().dentroDosLimites(finalPosX, finalPosY,getAltitude())) {
             System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
             return;
         }
 
-        // Verifica se o robô não vai colidir com um obstáculo.
-        ArrayList<Obstaculo> obstaculos = getAmbiente().getListaObstaculos();
-        for (Obstaculo obstaculo : obstaculos) {
-            if (obstaculo.contemPonto(newPosX,newPosY,getAltitude())) {
-                // Aqui assume-se que não há sobreposição de obstáculos.
-                // Se newPos(x,y) for dentro de um obstáculo, o robô é realocado para a interseção mais próxima e a função termina.
-                double[] newPos = calcularIntersecaoMaisProxima(getPosX(), getPosY(), newPosX, newPosY, obstaculo);
-                setPosX((int) newPos[0]);
-                setPosY((int) newPos[1]);
-                System.out.printf("O robo %s colidiu com o obstáculo %s e foi realocado para a posição (%d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY());
-                return;
-            }
+        ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getPosX(),getPosY(),getAltitude(),finalPosX,finalPosY,getAltitude());
+
+        double[] vetorMove = {0.25*((double)deltaX/Math.abs(deltaX)),0.25*((double)deltaX/Math.abs(deltaX))};
+
+        double[] newPos = {getPosX(),getPosY()};
+        double[] newTempPos = {0,0};
+
+        while(true){
+
+            if( (finalPosX - (newPos[0] + vetorMove[0]) * vetorMove[0] ) >= 0 )
+                newTempPos[0] = newPos[0] + vetorMove[0];
+            else
+                newTempPos[0] = finalPosX;
+
+            if( (finalPosY - (newPos[1] + vetorMove[1]) * vetorMove[1] ) >= 0 )
+                newTempPos[1] = newPos[1] + vetorMove[1];
+            else
+                newTempPos[1] = finalPosX;
+
+            for (Obstaculo obstaculo : obstaculosPresentes)
+                if(obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
+                    newTempPos[0] = -1;
+                    System.out.printf("O robo %s colidiu com um obstáculo %s", getNome(), obstaculo.getTipo().getNome());
+                    break;
+                }
+
+            if(newTempPos[0] == -1)
+                break;
+
+            newPos[0] = newTempPos[0];
+            newPos[1] = newTempPos[1];
+
+            if(newPos[0] == finalPosX)
+                break;
+
         }
-        // Se o robô não colidir com nenhum obstáculo, ele pode se mover.
-        setPosX(newPosX); setPosY(newPosY);
+
+        if(newPos[0] == finalPosX){
+            setPosX(finalPosX); setPosY(finalPosY);
+        }
+        else{
+            setPosX((int)newPos[0]); setPosY((int)newPos[1]);
+            System.out.printf(" e foi realocado para a posição (%d, %d, %d)\n", getPosX(), getPosY(),getAltitude());
+        }
+
     }
 
 
@@ -168,7 +199,7 @@ public class Robo {
         return robosProximos;
     }
 
-    // Metodo para identificar obstaculos no ambiente (o robo ainda pode se mover pelos obstaculos já que é considerado como pequeno)
+    // Metodo para identificar obstaculos no ambiente
     public void identificarObstaculosProximos() {
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robo %s não está em um ambiente ou não possui um sensor para identificar obstáculos.\n", getNome());
@@ -190,6 +221,44 @@ public class Robo {
             }
         }
     }
+
+
+
+    /*
+
+     public void mover(int deltaX, int deltaY) {
+        if (getAmbiente() == null){
+            System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
+            return;
+        }
+
+        int newPosX = getPosX() + deltaX;
+        int newPosY = getPosY() + deltaY;
+        if (!getAmbiente().dentroDosLimites(newPosX, newPosY,getAltitude())) {
+            System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
+            return;
+        }
+
+        // Verifica se o robô não vai colidir com um obstáculo.
+        ArrayList<Obstaculo> obstaculos = getAmbiente().getListaObstaculos();
+        for (Obstaculo obstaculo : obstaculos) {
+            if (obstaculo.contemPonto(newPosX,newPosY,getAltitude())) {
+                // Aqui assume-se que não há sobreposição de obstáculos.
+                // Se newPos(x,y) for dentro de um obstáculo, o robô é realocado para a interseção mais próxima e a função termina.
+                double[] newPos = calcularIntersecaoMaisProxima(getPosX(), getPosY(), newPosX, newPosY, obstaculo);
+                setPosX((int) newPos[0]);
+                setPosY((int) newPos[1]);
+                System.out.printf("O robo %s colidiu com o obstáculo %s e foi realocado para a posição (%d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY());
+                return;
+            }
+        }
+        // Se o robô não colidir com nenhum obstáculo, ele pode se mover.
+        setPosX(newPosX); setPosY(newPosY);
+    }
+
+
+
+
 
     public double[] calcularIntersecaoMaisProxima(int x, int y, int newPosX, int newPosY, Obstaculo obstaculo) {
         double[] intersecao = new double[2];
@@ -227,6 +296,12 @@ public class Robo {
         }
         return intersecao;
     }
+
+
+
+*/
+
+
 }
 
 
