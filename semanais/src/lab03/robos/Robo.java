@@ -227,6 +227,7 @@ public class Robo {
             System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
             sensor.monitorar(getAmbiente(),this);
             System.out.println();
+            count++;
         }
     }
 
