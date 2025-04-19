@@ -35,7 +35,7 @@ public class RoboTerrestre extends Robo {
 
 
     // Sobreescrita do metodo Mover para o robo Terrestre:
-    // A velocidade maxima é considerada unidimensional, ou seja, pode se mover uma velocidade maxima para cada direção
+    // A velocidade maxima é considerada radial, ou seja, pode se mover uma velocidade maxima considerando o raio do movimento [raiz(x^2 + y^2)]
 
     @Override
     public void mover(int deltaX, int deltaY) {

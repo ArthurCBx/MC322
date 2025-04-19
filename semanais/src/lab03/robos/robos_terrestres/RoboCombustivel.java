@@ -48,16 +48,21 @@ public class RoboCombustivel extends RoboTerrestre {
 
 
     // Sobreescrita do metodo Mover do robo Terrestre para acomodar o uso de gasolina
-    // O robo precisa ter no minimo uma quantia igual à soma das das coordenadas movidas unidirecionalmente
-    // Ou seja, se ele se move 3 em X e -10 em Y, consome 13 de gasolina (3 + 10)
+    // O robo precisa ter no minimo uma quantia igual à dsitancia total percorrida (similar a velocidade maxima)
 
     @Override
     public void mover(int deltaX, int deltaY) {
         double movetotal = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
 
         if (movetotal <= getCombustivel()) {
-            setCombustivel((getCombustivel() - movetotal));
+            int x0 = getPosX();
+            int y0 = getPosY();
+
             super.mover(deltaX, deltaY);
+
+            // Considera o se o movimento foi impedido por obstaculo e remove da gasolina:
+            movetotal = Math.sqrt(Math.pow(getPosX() - x0,2) + Math.pow(getPosY() - y0,2));
+            setCombustivel(getCombustivel() - movetotal);
 
         } else {
             System.out.printf("O robo %s não tem combustivel suficiente para a locomoção\n", getNome());

@@ -33,7 +33,9 @@ public class RoboBombardeiro extends RoboAereo {
 
     }
 
-    // Getters e Setters específicos do bombardeiro
+
+    // Getters e Setters:
+
     public int getBombas() {
         return bombas;
     }
@@ -48,7 +50,9 @@ public class RoboBombardeiro extends RoboAereo {
         this.bombas = bombas;
     }
 
+
     // Adiciona bombas ao RoboBombardeiro, verificando se a capacidade limite foi atingida. Não carrega valores negatgivos negativo.
+
     public void carregarBombas(int bombas) {
         if (bombas >= 0)
             setBombas(Math.min(getBombas() + bombas, getCapacidadeBombas()));
@@ -57,7 +61,9 @@ public class RoboBombardeiro extends RoboAereo {
 
     }
 
+
     // Metodo que bombardeia robos na mesma posição (x, y) e altitude igual ou inferior.
+
     public void bombardear() {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());

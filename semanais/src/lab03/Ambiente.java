@@ -37,6 +37,8 @@ public class Ambiente {
         this.listaRobos = listaRobos;
         this.listaObstaculos = listaObstaculos;
     }
+
+
     // Getters e Setters:
 
     public int getComprimento() {
@@ -135,6 +137,8 @@ public class Ambiente {
             for (Obstaculo obstaculo : listaObstaculos) {
                 int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
                 int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1(); int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
+
+                // nao da pra trocar os 2 ifs de baixo pra tipo: se bloqueia passagem e obstaculo.contemponto(coordenadas robo)???
 
                 if (obstaculo.getTipo().bloqueiaPassagem()) {
                     if (roboX >= obstaculoX1 && roboX <= obstaculoX2 && roboY >= obstaculoY1 && roboY <= obstaculoY2) {

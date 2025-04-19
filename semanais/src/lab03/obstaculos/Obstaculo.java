@@ -8,9 +8,10 @@ public class Obstaculo {
     private int posX2;
     private int posY2;
     private int altura;
-    private int base;
+    private int base;   // Altitude onde o obstaculo começa
     private final TipoObstaculo tipo;
 
+    // Construtores para obstaculo:
 
     public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura, int base, TipoObstaculo tipo) {
         this.posX1 = Math.abs(Math.min(posX1,posX2));
@@ -36,7 +37,8 @@ public class Obstaculo {
         this.tipo = tipo;
     }
 
-    // Getters e setters
+    // Getters e Setters:
+
     public int getPosX1() {
         return posX1;
     }

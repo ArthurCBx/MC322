@@ -8,12 +8,19 @@ import java.util.ArrayList;
 
 public class SensorAltitude extends Sensor{
     // Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas tambem consegue monitorar a altura em um raioZ.
+
     private double raioZ;
+
+
+    // Construtores para sensor:
 
     public SensorAltitude(double raio, double raioZ) {
         super(raio);
         this.raioZ = Math.abs(raioZ); // RaioZ não pode ser negativo.
     }
+
+
+    // Getters e Setters:
 
     public double getRaioZ() {
         return raioZ;
@@ -22,6 +29,9 @@ public class SensorAltitude extends Sensor{
     public void setRaioZ(double raioZ) {
         this.raioZ = Math.abs(raioZ);
     }
+
+
+    // Função para monitorar o posicionamento do robo em relação aos outros robos e obstaculos
 
     public void monitoraAltitude(Ambiente ambiente, Robo mestre) {
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
@@ -49,6 +59,7 @@ public class SensorAltitude extends Sensor{
             }
         }
     }
+
     @Override
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
         // Metodo para retornar um ArrayList com os robôs encontrados pelo sensor

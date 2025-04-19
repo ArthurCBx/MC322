@@ -64,9 +64,9 @@ public class RoboSolar extends RoboTerrestre {
 
     }
 
-// MUDAR MOVER
 
     // Sobreescrita do metodo mover do robo terrestre considerando bateria e periodo do dia
+    // O robo utiliza bateria conforme a distância total que se move (similar a velocidade maxima)
 
     @Override
     public void mover(int deltaX, int deltaY) {
@@ -78,14 +78,16 @@ public class RoboSolar extends RoboTerrestre {
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
             super.mover(deltaX, deltaY);                                // Assim o robo pode se mover independentemente de sua bateria durante o dia
 
-        } else {    // Caso não esteja no período diurno, a bateria será utilizada para mover ***
-            double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-            if (Math.sqrt(distancia) <= getBateria()) {
-                setBateria(getBateria() - distancia);
-                super.mover(deltaX, deltaY);
+        } else {    // Caso não esteja no período diurno, a bateria será utilizada para mover
 
-                // O robo utiliza bateria conforme a distância que se move em cada direção
-                // Ex: se o robo se move +10 em X e -50 em Y, será consumida uma bateria de 60 (10 + 50)
+            double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+            if (distancia <= getBateria()) {
+                int x0 = getPosX();
+                int y0 = getPosY();
+                super.mover(deltaX, deltaY);
+                distancia = Math.sqrt(Math.pow(getPosX() - x0,2) + Math.pow(getPosY() - y0,2));
+                setBateria(getBateria() - distancia);
 
             } else {
                 System.out.printf("O robo %s não tem carga suficiente na bateria para a locomoção, carregue a bateria\n", getNome());

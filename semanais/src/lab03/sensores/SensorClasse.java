@@ -9,9 +9,13 @@ import java.util.ArrayList;
 public class SensorClasse extends Sensor{
     // Subclasse de Sensor que consegue descobrir a classe de robos num raio tridimensional
 
+
+    // Construtores para sensor:
+
     public SensorClasse(double raio) {
         super(raio);
     }
+
 
     @Override
     public void monitorar(Ambiente ambiente, Robo mestre){

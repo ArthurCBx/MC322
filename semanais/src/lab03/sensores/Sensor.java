@@ -9,9 +9,15 @@ import java.util.ArrayList;
 public class Sensor {
     private double raio;
 
+
+    // Construtores para sensor:
+
     public Sensor(double raio) {
         this.raio = Math.abs(raio); // Raio não pode ser negativo.
     }
+
+
+    // Getters e Setters:
 
     public double getRaio() {
         return raio;
@@ -20,6 +26,9 @@ public class Sensor {
     public void setRaio(double raio) {
         this.raio = Math.abs(raio);
     }
+
+
+    // Função basica de monitoramento do ambiente:
 
     public void monitorar(Ambiente ambiente, Robo mestre) {
         // Verifica no ambiente se existe algum robo dentro do raio do sensor

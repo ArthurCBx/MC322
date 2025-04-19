@@ -144,7 +144,7 @@ public class Robo {
                 newTempPos[1] = finalPosX;
 
             for (Obstaculo obstaculo : obstaculosPresentes)
-                if(obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
+                if(obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
                     newTempPos[0] = -1;
                     System.out.printf("O robo %s colidiu com um obstáculo %s", getNome(), obstaculo.getTipo().getNome());
                     break;
