@@ -39,4 +39,9 @@ public class SensorClasse extends Sensor{
         return listaRobosEncontrados;
     }
 
+    @Override
+    public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
+        //SensorClasse não consegue identificar obstáculos.
+        return null;
+    }
 }
