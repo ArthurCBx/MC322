@@ -59,4 +59,21 @@ public class Sensor {
         }
         return listaRobosEncontrados;
     }
+
+    public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre){
+        ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
+        ArrayList<Obstaculo> listaObstaculosEncontrados = new ArrayList<>();
+        for (Obstaculo obstaculo : obstaculos) {
+            int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getPosX(), obstaculo.getPosX2()));
+            int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));
+
+            double distancia = Math.sqrt(Math.pow(mestre.getPosX() - cX,2) + Math.pow(mestre.getPosY() - cY,2));
+            if (distancia <= raio && (mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= obstaculo.getBase() + obstaculo.getAltura())){
+                // Verifica se o robô está dentro do obstáculo ou consegue ver o obstáculo na mesma altura em que está
+                listaObstaculosEncontrados.add(obstaculo);
+            }
+        }
+        return listaObstaculosEncontrados;
+    }
+
 }

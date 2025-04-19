@@ -62,4 +62,29 @@ public class SensorAltitude extends Sensor{
         }
         return listaRobosEncontrados;
     }
+
+    @Override
+    public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
+        ArrayList<Obstaculo> listaObstaculosEncontrados = super.listaObstaculosEncontrados(ambiente, mestre);
+        ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
+        for (Obstaculo obstaculo : obstaculos){
+            int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getPosX(), obstaculo.getPosX2()));
+            int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));
+
+            double distancia = Math.sqrt(Math.pow(mestre.getPosX() - cX, 2) + Math.pow(mestre.getPosY() - cY, 2));
+            int dZ = 0;
+            if (distancia == 0) {
+                if (mestre.getAltitude() > (obstaculo.getBase()+obstaculo.getAltura())) {
+                    dZ = mestre.getAltitude() - (obstaculo.getBase()+obstaculo.getAltura());
+                } else if(mestre.getAltitude() < obstaculo.getBase()) {
+                    dZ = mestre.getAltitude() - obstaculo.getBase();
+                }
+
+                if (dZ <= raioZ){
+                    listaObstaculosEncontrados.add(obstaculo);
+                }
+            }
+        }
+        return listaObstaculosEncontrados;
+    }
 }

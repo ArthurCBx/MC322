@@ -1,6 +1,8 @@
 package lab03.obstaculos;
 
 public class Obstaculo {
+    // Criando classe Obstaculo com atributos especificados no enunciado.
+    // Coordenadas não são final, pois consideram animais ou nuvens que podem se mover.
     private int posX1;
     private int posY1;
     private int posX2;

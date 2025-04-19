@@ -1,6 +1,7 @@
 package lab03.sensores;
 
 import lab03.Ambiente;
+import lab03.obstaculos.Obstaculo;
 import lab03.robos.Robo;
 
 import java.util.ArrayList;
@@ -37,4 +38,5 @@ public class SensorClasse extends Sensor{
         }
         return listaRobosEncontrados;
     }
+
 }

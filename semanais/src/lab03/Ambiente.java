@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Ambiente {
 
     // Criando classe ambiente com variaveis especificadas no enunciado,
-    // altura para atender a classe RoboAereo, e periodo para atender roboSolar, subclasse de RoboTerrestre
+    // altura para atender a classe RoboAereo, e período para atender roboSolar, subclasse de RoboTerrestre
 
     private final int comprimento;
     private final int largura;

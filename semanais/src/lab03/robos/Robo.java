@@ -1,7 +1,9 @@
 package lab03.robos;
 
 import lab03.Ambiente;
+import lab03.obstaculos.Obstaculo;
 import lab03.sensores.Sensor;
+import lab03.sensores.SensorClasse;
 
 import java.util.ArrayList;
 
@@ -137,8 +139,7 @@ public class Robo {
         System.out.printf("O robô %s está no ambiente %s na posição (%d, %d, %d) e observando %s\n", getNome(), getAmbiente(), getPosX(), getPosY(), getAltitude(), getDirecao());
     }
 
-    //DA UMA OLHADA NESSA AQUI, MAS ACHO Q TA CERTA
-    public ArrayList<Robo> identificarRedondezas(){
+    public ArrayList<Robo> identificarRobosProximos(){
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robô %s não está em um ambiente ou não possui um sensor, então não consegue analisar o que está em sua volta.\n", getNome());
             return null;
@@ -163,10 +164,21 @@ public class Robo {
         }
 
         sensores = getSensores();
-        int counter = 0;
+        ArrayList<Obstaculo> obstaculosProximos = new ArrayList<>();
+        // Para cada sensor diferente de sensorClasse, lista obstáculos encontrados e adiciona na lista de obstáculos próximos os que ainda não estão.
+        for (Sensor sensor : sensores){
+            if(sensor.getClass() != SensorClasse.class){
+                ArrayList<Obstaculo> obstaculoSensor = sensor.listaObstaculosEncontrados(this.getAmbiente(), this);
 
+                for (Obstaculo obstaculo : obstaculoSensor){
+                    if (!obstaculosProximos.contains(obstaculo)){
+                        obstaculosProximos.add(obstaculo);
+                    }
+                }
+            }
         }
     }
+}
 
 
 
