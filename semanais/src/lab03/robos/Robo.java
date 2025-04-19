@@ -118,14 +118,26 @@ public class Robo {
 
         int newPosX = getPosX() + deltaX;
         int newPosY = getPosY() + deltaY;
-
-        // É preciso verificar se o movimento leva o robô para fora do ambiente.
-        if (getAmbiente().dentroDosLimites(newPosX, newPosY, getAltitude())) {
-            setPosX(newPosX);
-            setPosY(newPosY);
-        } else {
+        if (!getAmbiente().dentroDosLimites(newPosX, newPosY,getAltitude())) {
             System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
+            return;
         }
+
+        // Verifica se o robô não vai colidir com um obstáculo.
+        ArrayList<Obstaculo> obstaculos = getAmbiente().getListaObstaculos();
+        for (Obstaculo obstaculo : obstaculos) {
+            if (obstaculo.contemPonto(newPosX,newPosY,getAltitude())) {
+                // Aqui assume-se que não há sobreposição de obstáculos.
+                // Se newPos(x,y) for dentro de um obstáculo, o robô é realocado para a interseção mais próxima e a função termina.
+                double[] newPos = calcularIntersecaoMaisProxima(getPosX(), getPosY(), newPosX, newPosY, obstaculo);
+                setPosX((int) newPos[0]);
+                setPosY((int) newPos[1]);
+                System.out.printf("O robo %s colidiu com o obstáculo %s e foi realocado para a posição (%d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY());
+                return;
+            }
+        }
+        // Se o robô não colidir com nenhum obstáculo, ele pode se mover.
+        setPosX(newPosX); setPosY(newPosY);
     }
 
 
@@ -157,7 +169,7 @@ public class Robo {
     }
 
     // Metodo para identificar obstaculos no ambiente (o robo ainda pode se mover pelos obstaculos já que é considerado como pequeno)
-    public void identificarObstaculos() {
+    public void identificarObstaculosProximos() {
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robo %s não está em um ambiente ou não possui um sensor para identificar obstáculos.\n", getNome());
             return;
@@ -177,6 +189,43 @@ public class Robo {
                 }
             }
         }
+    }
+
+    public double[] calcularIntersecaoMaisProxima(int x, int y, int newPosX, int newPosY, Obstaculo obstaculo) {
+        double[] intersecao = new double[2];
+        double menorDistancia = Double.MAX_VALUE;
+
+        // Arrays com as coordenadas das linhas do retângulo
+        int[] xLinha = {obstaculo.getPosX1(), obstaculo.getPosX2(), obstaculo.getPosX2(), obstaculo.getPosX1()};
+        int[] yLinha = {obstaculo.getPosY1(), obstaculo.getPosY1(), obstaculo.getPosY2(), obstaculo.getPosY2()};
+
+        // Para cada linha do retângulo
+        for (int i = 0; i < 4; i++) {
+            int x1 = xLinha[i];
+            int y1 = yLinha[i];
+            int x2 = xLinha[(i + 1) % 4];
+            int y2 = yLinha[(i + 1) % 4];
+
+            // Calcula a interseção entre a trajetória e a linha atual
+            double denominador = (x - newPosX) * (y1 - y2) - (y - newPosY) * (x1 - x2);
+            if (denominador != 0) {
+                double t = ((x - x1) * (y1 - y2) - (y - y1) * (x1 - x2)) / denominador;
+                double u = -((x - newPosX) * (y - y1) - (y - newPosY) * (x - x1)) / denominador;
+
+                if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+                    double xIntersecao = x + t * (newPosX - x);
+                    double yIntersecao = y + t * (newPosY - y);
+                    double distancia = Math.sqrt(Math.pow(x - xIntersecao, 2) + Math.pow(y - yIntersecao, 2));
+
+                    if (distancia < menorDistancia) {
+                        menorDistancia = distancia;
+                        intersecao[0] = xIntersecao;
+                        intersecao[1] = yIntersecao;
+                    }
+                }
+            }
+        }
+        return intersecao;
     }
 }
 

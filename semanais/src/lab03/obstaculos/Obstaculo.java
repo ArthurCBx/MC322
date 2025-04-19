@@ -89,13 +89,9 @@ public class Obstaculo {
         this.altura = altura;
     }
 
-
-
-
-// FALTA o resto
-
-
-
-
+    public boolean contemPonto(int x, int y, int z) {
+        // Verifica se o ponto (x,y,z) está dentro do obstáculo
+        return (x >= posX1 && x <= posX2 && y >= posY1 && y <= posY2 && (z >= base && z <= base + altura));
+    }
 
 }
