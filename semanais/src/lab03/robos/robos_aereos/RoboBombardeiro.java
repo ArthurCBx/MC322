@@ -13,7 +13,7 @@ Caso o RoboBombardeiro esteja na altitude 0, ele também é destruído.
 Atributos:
 Bombas: quantidade de bombas que o RoboBombardeiro possui.
 CapacidadeBombas: quantidade máxima de bombas que o RoboBombardeiro pode carregar.
-* */
+*/
 
 public class RoboBombardeiro extends RoboAereo {
     private int bombas;
@@ -51,7 +51,7 @@ public class RoboBombardeiro extends RoboAereo {
     }
 
 
-    // Adiciona bombas ao RoboBombardeiro, verificando se a capacidade limite foi atingida. Não carrega valores negatgivos negativo.
+    // Adiciona bombas ao RoboBombardeiro, verificando se a capacidade limite foi atingida. Não carrega valores negativos.
 
     public void carregarBombas(int bombas) {
         if (bombas >= 0)

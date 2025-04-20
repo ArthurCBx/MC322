@@ -9,15 +9,13 @@ import java.util.ArrayList;
 public class Sensor {
     private double raio;
 
-
-    // Construtores para sensor:
-
+    // Construtor para sensor:
     public Sensor(double raio) {
         this.raio = Math.abs(raio); // Raio não pode ser negativo.
     }
 
 
-    // Getters e Setters:
+    // Getter e Setter:
 
     public double getRaio() {
         return raio;
@@ -47,7 +45,7 @@ public class Sensor {
             int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));
 
             double distancia = Math.sqrt(Math.pow(mestre.getPosX() - cX,2) + Math.pow(mestre.getPosY() - cY,2));
-            if ((mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= obstaculo.getBase() + obstaculo.getAltura())){
+            if ((mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= (obstaculo.getBase() + obstaculo.getAltura()) )){
                 if (distancia == 0) {
                     System.out.printf("Robo está dentro do obstáculo %s\n", obstaculo.getTipo().getNome());
                 } else if (distancia <= raio) {
@@ -57,9 +55,11 @@ public class Sensor {
         }
     }
 
+    // Função para retornar listas de robôs se estão dentro do raio:
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre){
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
         ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
+
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt(Math.pow(robo.getPosX() - mestre.getPosX(), 2) + Math.pow(robo.getPosY() - mestre.getPosY(), 2));
             if (distancia <= raio && !robo.equals(mestre) && (robo.getAltitude() == mestre.getAltitude())) {
@@ -69,9 +69,11 @@ public class Sensor {
         return listaRobosEncontrados;
     }
 
+    // Função para retornar listas de obstáculos se estão dentro do raio:
     public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre){
         ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
         ArrayList<Obstaculo> listaObstaculosEncontrados = new ArrayList<>();
+
         for (Obstaculo obstaculo : obstaculos) {
             int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getPosX(), obstaculo.getPosX2()));
             int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getPosY(), obstaculo.getPosY2()));

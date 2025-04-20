@@ -7,20 +7,19 @@ import lab03.robos.Robo;
 import java.util.ArrayList;
 
 public class SensorAltitude extends Sensor{
-    // Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas tambem consegue monitorar a altura em um raioZ.
+    /* Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas também consegue monitorar
+     a altura em um raioZ imediatamente acima ou abaixo da posição do robô ao qual pertence.
+     */
 
     private double raioZ;
 
-
-    // Construtores para sensor:
-
-    public SensorAltitude(double raio, double raioZ) {
-        super(raio);
+    // Construtor para sensor:
+    public SensorAltitude(double raioZ) {
+        super(0);
         this.raioZ = Math.abs(raioZ); // RaioZ não pode ser negativo.
     }
 
-
-    // Getters e Setters:
+    // Getter e Setter:
 
     public double getRaioZ() {
         return raioZ;
@@ -51,20 +50,22 @@ public class SensorAltitude extends Sensor{
             if (distancia == 0) {
                 if ((mestre.getAltitude() >= obstaculo.getBase()) && (mestre.getAltitude() <= obstaculo.getBase() + obstaculo.getAltura())) {
                     System.out.printf("Robo está dentro do obstáculo %s.\n", obstaculo.getTipo().getNome());
-                } else if ((mestre.getAltitude() > obstaculo.getBase()) && (mestre.getAltitude() > obstaculo.getBase() + obstaculo.getAltura())) {
+                } else if (mestre.getAltitude() > obstaculo.getBase() + obstaculo.getAltura()) {
                     System.out.printf("Robo está acima do obstáculo %s.\n", obstaculo.getTipo().getNome());
-                } else if((mestre.getAltitude() < obstaculo.getBase()) && (mestre.getAltitude() < obstaculo.getBase() + obstaculo.getAltura())) {
+                } else if(mestre.getAltitude() < obstaculo.getBase()) {
                     System.out.printf("Robo está abaixo do obstáculo %s.\n", obstaculo.getTipo().getNome());
                 }
             }
         }
     }
 
+
+    // Metodo para retornar um ArrayList com os robôs encontrados pelo sensor.
     @Override
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
-        // Metodo para retornar um ArrayList com os robôs encontrados pelo sensor
         ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+
         for (Robo robo : listaRobos) {
             int distancia = Math.abs(robo.getAltitude() - mestre.getAltitude());
             if (distancia <= raioZ && (mestre.getPosX() == robo.getPosX()) && (mestre.getPosY() == robo.getPosY())){
@@ -74,6 +75,8 @@ public class SensorAltitude extends Sensor{
         return listaRobosEncontrados;
     }
 
+
+    // Metodo para retornar um ArrayList com os obstaculos encontrados pelo sensor.
     @Override
     public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
         ArrayList<Obstaculo> listaObstaculosEncontrados = super.listaObstaculosEncontrados(ambiente, mestre);

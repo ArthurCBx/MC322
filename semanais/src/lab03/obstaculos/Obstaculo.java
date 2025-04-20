@@ -1,14 +1,16 @@
 package lab03.obstaculos;
 
+/* Criando classe Obstaculo com atributos especificados no enunciado.
+   Coordenadas não são final, pois consideram animais ou nuvens que podem se mover.
+*/
 public class Obstaculo {
-    // Criando classe Obstaculo com atributos especificados no enunciado.
-    // Coordenadas não são final, pois consideram animais ou nuvens que podem se mover.
+
     private int posX1;
     private int posY1;
     private int posX2;
     private int posY2;
-    private int altura;
     private int base;   // Altitude onde o obstaculo começa
+    private int altura; // Obstaculo ocupa base + altura
     private final TipoObstaculo tipo;
 
     // Construtores para obstaculo:
@@ -25,7 +27,7 @@ public class Obstaculo {
         this.tipo = tipo;
     }
 
-    // Sobrecarga de construtor porque obstáculos possuem altura padrão
+    // Sobrecarga de construtor porque obstáculos possuem altura padrão, então não precisa ser especificada
     public Obstaculo(int posX1, int posY1, int posX2, int posY2, int base, TipoObstaculo tipo) {
         this.posX1 = Math.abs(Math.min(posX1,posX2));
         this.posY1 = Math.abs(Math.min(posY1,posY2));
@@ -93,7 +95,7 @@ public class Obstaculo {
 
     public boolean contemPonto(double x, double y, double z) {
         // Verifica se o ponto (x,y,z) está dentro do obstáculo
-        return (x >= posX1 && x <= posX2 && y >= posY1 && y <= posY2 && (z >= base && z <= base + altura));
+        return (x >= posX1 && x <= posX2 && y >= posY1 && y <= posY2 && z >= base && z <= (base + altura));
     }
 
 }

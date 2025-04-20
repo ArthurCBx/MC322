@@ -5,7 +5,7 @@ import lab03.robos.RoboTerrestre;
 
 public class RoboCombustivel extends RoboTerrestre {
 
-    // Subclasse para lidar com robos que utilizam combustivel para locoção
+    // Subclasse para lidar com robos que utilizam combustível para locomoção
 
     private double combustivel;    // Se assume que sempre possuem um tanque suficiente para o combustivel
 
@@ -48,7 +48,7 @@ public class RoboCombustivel extends RoboTerrestre {
 
 
     // Sobreescrita do metodo Mover do robo Terrestre para acomodar o uso de gasolina
-    // O robo precisa ter no minimo uma quantia igual à dsitancia total percorrida (similar a velocidade maxima)
+    // O robo precisa ter no minimo uma quantia igual à distância total percorrida (similar à velocidade maxima)
 
     @Override
     public void mover(int deltaX, int deltaY) {
@@ -60,12 +60,12 @@ public class RoboCombustivel extends RoboTerrestre {
 
             super.mover(deltaX, deltaY);
 
-            // Considera o se o movimento foi impedido por obstaculo e remove da gasolina:
+            // Considera o se o movimento foi impedido por obstáculo e remove da gasolina:
             movetotal = Math.sqrt(Math.pow(getPosX() - x0,2) + Math.pow(getPosY() - y0,2));
             setCombustivel(getCombustivel() - movetotal);
 
         } else {
-            System.out.printf("O robo %s não tem combustivel suficiente para a locomoção\n", getNome());
+            System.out.printf("O robo %s não tem combustível suficiente para a locomoção.\n", getNome());
         }
 
     }

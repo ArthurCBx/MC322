@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Ambiente {
-
-    // Criando classe ambiente com variaveis especificadas no enunciado,
-    // altura para atender a classe RoboAereo, e período para atender roboSolar, subclasse de RoboTerrestre
+    // Criando classe ambiente com variaveis especificadas no enunciado.
+    // Período para atender roboSolar, subclasse de RoboTerrestre
 
     private final int comprimento;
     private final int largura;
-    private final int altura;   // Atributo altura será da classe Ambiente e irá impor restrição de altura maxima para robos aereos
+    private final int altura;   // Atributo altura irá impor restrição de altura maxima para robos aereos
     private String periodo;     // Dia ou Noite. Atributo para atender a subclasse criada RoboSolar
     private ArrayList<Robo> listaRobos;
     private ArrayList<Obstaculo> listaObstaculos;
@@ -29,10 +28,11 @@ public class Ambiente {
 
     }
 
+    // Sobrecarga do construtor para adicionar lista de robos e obstaculos.
     public Ambiente(int comprimento, int largura, int altura, ArrayList<Robo> listaRobos, ArrayList<Obstaculo> listaObstaculos) {
-        this.comprimento = comprimento;
-        this.largura = largura;
-        this.altura = altura;
+        this.comprimento = Math.max(comprimento,0);
+        this.largura = Math.max(largura,0);
+        this.altura = Math.max(altura,0);
         this.periodo = "Dia";
         this.listaRobos = listaRobos;
         this.listaObstaculos = listaObstaculos;
@@ -65,8 +65,8 @@ public class Ambiente {
         return listaObstaculos;
     }
 
-    // Metodo setPeriodo só pode ser acessado por metodos de classe (mudaTempo) que ira verificar se o argumento foi passado corretamente
 
+    // Metodo setPeriodo só pode ser acessado por metodos de classe (mudaTempo) que ira verificar se o argumento foi passado corretamente
     private void setPeriodo(String periodo) {
         this.periodo = periodo;
     }
@@ -85,11 +85,9 @@ public class Ambiente {
 
 
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
-
     public boolean dentroDosLimites(int x, int y, int z) {
-        // Verifica se as coordenadas passadas são positivas e menores ou iguais às dimensões do ambiente
 
-        return x >= 0 && x <= getLargura() && y >= 0 && y <= getAltura() && z >= 0 && z <= getComprimento();
+        return x >= 0 && x <= getLargura() && y >= 0 && y <= getComprimento() && z >= 0 && z <= getAltura();
     }
 
 
@@ -113,11 +111,8 @@ public class Ambiente {
 
     }
 
-
-    // Metodo para remover um robo do ambiente:
-
     public void removerRobo(Robo robo) {
-        // Remove robo da lista e apaga seu apontador. Criado para operar com subclasses de RoboAereo
+        // Remove robo da lista e apaga seu apontador.
 
         listaRobos.remove(robo);
         robo = null;
@@ -128,41 +123,50 @@ public class Ambiente {
         if (listaObstaculos == null) {
             listaObstaculos = new ArrayList<>();
         }
-        listaObstaculos.add(obstaculo);
+
+        // Adiciona obstáculo ao ambiente apenas se ele estiver dentro dos limites do ambiente
+        if(dentroDosLimites(obstaculo.getPosX1(), obstaculo.getPosY1(),obstaculo.getBase())){
+            if(dentroDosLimites(obstaculo.getPosX2(), obstaculo.getPosY2(),obstaculo.getBase() + obstaculo.getAltura())) {
+                listaObstaculos.add(obstaculo);
+            }else{
+                System.out.println("Uma das coordenadas do obstáculo não respeita os limites de ambiente. Altere-a para adicionar o obstáculo.");
+            }
+        }else{
+            System.out.println("Uma das coordenadas do obstáculo não respeita os limites de ambiente. Altere-a para adicionar o obstáculo.");
+        }
+
     }
     public void detectarColisoes(){
-        // Verifica se algum robo colidiu com algum obstáculo
-        // Só há colisão se obstáculo bloqueia passagem
+        // Verifica se algum robo colidiu com algum obstáculo.
+        // Só há colisão se obstáculo bloqueia passagem e robo está na borda desse obstáculo, pois robô não o atravessa.
         for (Robo robo : listaRobos) {
             for (Obstaculo obstaculo : listaObstaculos) {
                 int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
-                int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1(); int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
+                int obstaculoX1 = obstaculo.getPosX1(); int obstaculoY1 = obstaculo.getPosY1();
+                int obstaculoX2 = obstaculo.getPosX2(); int obstaculoY2 = obstaculo.getPosY2();
 
-                // nao da pra trocar os 2 ifs de baixo pra tipo: se bloqueia passagem e obstaculo.contemponto(coordenadas robo)???
-
-                if (obstaculo.getTipo().bloqueiaPassagem()) {
-                    if (roboX >= obstaculoX1 && roboX <= obstaculoX2 && roboY >= obstaculoY1 && roboY <= obstaculoY2) {
-                        if (roboX == obstaculoX1 || roboX == obstaculoX2 || roboY == obstaculoY1 || roboY == obstaculoY2) {
-                            System.out.printf("Robo %s colidiu com o obstáculo %s\n", robo.getNome(), obstaculo.getTipo().getNome());
-                        }
-                    }
+                if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(roboX,roboY,roboZ)) {
+                    System.out.printf("O robo %s colidiu com um obstáculo %s em (%d,%d,%d).\n",
+                            robo.getNome(), obstaculo.getTipo().getNome(),roboX,roboY,roboZ);
                 }
             }
         }
     }
 
+    // Metodo auxiliar para verificar se há obstáculo num plano definido por dois pontos (x1,y1,z1) e (x2,y2,z2)
+    // Movimento é ou bidimensional em robos ou unidimensional em robos aéreos nos metodos subir e descer.
     public ArrayList<Obstaculo> detectarObstaculos(int x1, int y1, int z1, int x2, int y2, int z2){
 
         ArrayList<Obstaculo> obstaculosEncontrados = new ArrayList<>();
 
         for (Obstaculo obstaculo : getListaObstaculos())
-            if(!((obstaculo.getPosX1() < x1 && obstaculo.getPosX2() < x1 ) || (obstaculo.getPosX1() > x2 && obstaculo.getPosX2() > x2 )))
-                if(!((obstaculo.getPosY1() < y1 && obstaculo.getPosY2() < y1 ) || (obstaculo.getPosY1() > y2 && obstaculo.getPosY2() > y2 )))
-                    if(!((obstaculo.getBase() < z1 && (obstaculo.getBase() + obstaculo.getAltura() ) < z1 ) || (obstaculo.getBase() > z2 && (obstaculo.getBase() + obstaculo.getAltura() ) > z2 )))
+            if(x1 <= obstaculo.getPosX1() && x2 >= obstaculo.getPosX2())
+                if(y1 <= obstaculo.getPosY1() && y2 >= obstaculo.getPosY2())
+                    if(z1 <= obstaculo.getBase() && z2 >= obstaculo.getBase() + obstaculo.getAltura())
                         obstaculosEncontrados.add(obstaculo);
 
         return obstaculosEncontrados;
     }
-    
+
 
 }

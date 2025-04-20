@@ -7,7 +7,7 @@ import lab03.robos.Robo;
 import java.util.ArrayList;
 
 public class SensorClasse extends Sensor{
-    // Subclasse de Sensor que consegue descobrir a classe de robos num raio tridimensional
+    // Subclasse de Sensor que consegue descobrir a classe de robos num raio tridimensional, mas não sabe sobre obstáculos.
 
 
     // Construtores para sensor:

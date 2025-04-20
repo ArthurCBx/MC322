@@ -32,7 +32,15 @@ public class RoboAereo extends Robo {
 
         // A altitude é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);
-        this.altitude = Math.max(Math.min(altitude, this.altitudeMaxima), 0);
+        int altura = Math.max(Math.min(altitude, this.altitudeMaxima), 0);
+
+        // Verificando se a altitude do robô não é maior que a altura do ambiente.
+        if (altura > ambiente.getAltura()){
+            System.out.printf("Altitude de %s era maior que a altura do ambiente e foi realocada para a altura do ambiente.\n", nome);
+            this.altitude = ambiente.getAltura();
+        } else {
+            this.altitude = altura;
+        }
 
         if (altitude > altitudeMaxima)
             System.out.printf("Altitude de %s era maior que maxima e foi realocada para a maxima\n", nome);
@@ -40,7 +48,7 @@ public class RoboAereo extends Robo {
     }
 
 
-    // Getters e Setters
+    // Getter e Setter
 
     public int getAltitudeMaxima() {
         return altitudeMaxima;

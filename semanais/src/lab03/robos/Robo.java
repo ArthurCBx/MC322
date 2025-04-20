@@ -9,21 +9,20 @@ import java.util.ArrayList;
 
 public class Robo {
 
-    // Criando classe Robo com atributos especificados no enunciado e raioSensor para identificar obstaculos.
+    // Criando classe Robo com atributos especificados no enunciado
 
     private Ambiente ambiente;
     private final String nome;
     private String direcao;
     private int posX;
     private int posY;
-    protected int altitude = 0;
+    protected int altitude = 0; // Altura padrão do robô, que é alterada em robos aéreos.
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
 
 
     // Construtores para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
-    // Um recebe o ambiente como parâmetro e outro apenas cria um robô sem ambiente
-
+    // Um recebe o ambiente como parâmetro e outro apenas cria um robô sem ambiente.
 
     public Robo(String nome, String direcao, int posX, int posY) {
         this.nome = nome;
@@ -126,7 +125,10 @@ public class Robo {
 
         ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getPosX(),getPosY(),getAltitude(),finalPosX,finalPosY,getAltitude());
 
-        double[] vetorMove = {0.25*((double)deltaX/Math.abs(deltaX)),0.25*((double)deltaX/Math.abs(deltaX))};
+        double[] vetorMove = {
+                (deltaX != 0) ? 0.25*((double)deltaX/Math.abs(deltaX)) : 0,
+                (deltaY != 0) ? 0.25*((double)deltaY/Math.abs(deltaY)) : 0
+        };
 
         double[] newPos = {getPosX(),getPosY()};
         double[] newTempPos = {0,0};
@@ -141,7 +143,7 @@ public class Robo {
             if( (finalPosY - (newPos[1] + vetorMove[1]) * vetorMove[1] ) >= 0 )
                 newTempPos[1] = newPos[1] + vetorMove[1];
             else
-                newTempPos[1] = finalPosX;
+                newTempPos[1] = finalPosY;
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if(obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
@@ -161,7 +163,7 @@ public class Robo {
 
         }
 
-        if(newPos[0] == finalPosX){
+        if(newPos[0] == finalPosX && newPos[1] == finalPosY){
             setPosX(finalPosX); setPosY(finalPosY);
         }
         else{
@@ -182,6 +184,7 @@ public class Robo {
         System.out.printf("O robô %s está no ambiente %s na posição (%d, %d, %d) e observando %s\n", getNome(), getAmbiente(), getPosX(), getPosY(), getAltitude(), getDirecao());
     }
 
+    // Metodo para identificar robos proximos:
     public ArrayList<Robo> identificarRobosProximos(){
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robô %s não está em um ambiente ou não possui um sensor, então não consegue analisar o que está em sua volta.\n", getNome());
@@ -199,7 +202,7 @@ public class Robo {
         return robosProximos;
     }
 
-    // Metodo para identificar obstaculos no ambiente
+    // Metodo para identificar obstaculos no ambiente:
     public void identificarObstaculosProximos() {
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robo %s não está em um ambiente ou não possui um sensor para identificar obstáculos.\n", getNome());
@@ -229,6 +232,7 @@ public class Robo {
             System.out.println();
             count++;
         }
+        System.out.println("Monitoramente finalizado.");
     }
 
 }
