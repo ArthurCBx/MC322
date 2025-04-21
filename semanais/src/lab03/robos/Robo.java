@@ -3,6 +3,7 @@ package lab03.robos;
 import lab03.Ambiente;
 import lab03.obstaculos.Obstaculo;
 import lab03.sensores.Sensor;
+import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
 
 import java.util.ArrayList;
@@ -225,13 +226,18 @@ public class Robo {
         }
     }
     public void monitorar(){
-        int count = 0;
-        for (Sensor sensor : getSensores()){
-            System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
-            sensor.monitorar(getAmbiente(),this);
-            System.out.println();
-            count++;
-        }
+        int count = 1;
+        if (getSensores() != null)
+            for (Sensor sensor : getSensores()){
+                System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
+                if (sensor.getClass() == SensorAltitude.class){
+                    System.out.println("Sensor de altitude:");
+                    ((SensorAltitude) sensor).monitoraAltitude(getAmbiente(), this);
+                }
+                sensor.monitorar(getAmbiente(),this);
+                System.out.println();
+                count++;
+            }
         System.out.println("Monitoramente finalizado.");
     }
 

@@ -23,7 +23,7 @@ public class SensorClasse extends Sensor{
 
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt((Math.pow(robo.getPosX() - mestre.getPosX(), 2) + Math.pow(robo.getPosY() - mestre.getPosY(), 2) + Math.pow(robo.getAltitude() - mestre.getAltitude(), 2)));
-            if (distancia <= getRaio()){
+            if (distancia <= getRaio() && !robo.equals(mestre)){
                 System.out.printf("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n", robo.getClass(), robo.getPosX(), robo.getPosY(), robo.getAltitude());
             }
         }
@@ -36,7 +36,7 @@ public class SensorClasse extends Sensor{
 
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt((Math.pow(robo.getPosX() - mestre.getPosX(), 2) + Math.pow(robo.getPosY() - mestre.getPosY(), 2) + Math.pow(robo.getAltitude() - mestre.getAltitude(), 2)));
-            if (distancia <= getRaio()) {
+            if (distancia <= getRaio() && !robo.equals(mestre)) {
                 listaRobosEncontrados.add(robo);
             }
         }

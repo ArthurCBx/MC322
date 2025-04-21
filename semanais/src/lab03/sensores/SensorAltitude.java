@@ -14,8 +14,8 @@ public class SensorAltitude extends Sensor{
     private double raioZ;
 
     // Construtor para sensor:
-    public SensorAltitude(double raioZ) {
-        super(0);
+    public SensorAltitude(double raioZ, double raio) {
+        super(raio);
         this.raioZ = Math.abs(raioZ); // RaioZ não pode ser negativo.
     }
 
@@ -29,14 +29,13 @@ public class SensorAltitude extends Sensor{
         this.raioZ = Math.abs(raioZ);
     }
 
-
     // Função para monitorar o posicionamento do robo em relação aos outros robos e obstaculos
 
     public void monitoraAltitude(Ambiente ambiente, Robo mestre) {
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
         for (Robo robo : listaRobos) {
             int distancia = Math.abs(robo.getAltitude() - mestre.getAltitude());
-            if (distancia <= raioZ && (mestre.getPosX() == robo.getPosX()) && (mestre.getPosY() == robo.getPosY())) {
+            if (distancia <= raioZ && (mestre.getPosX() == robo.getPosX()) && (mestre.getPosY() == robo.getPosY()) && !robo.equals(mestre)) {
                 System.out.printf("Robo encontrado a %d metros de altitude.\n", distancia);
             }
         }
@@ -68,7 +67,7 @@ public class SensorAltitude extends Sensor{
 
         for (Robo robo : listaRobos) {
             int distancia = Math.abs(robo.getAltitude() - mestre.getAltitude());
-            if (distancia <= raioZ && (mestre.getPosX() == robo.getPosX()) && (mestre.getPosY() == robo.getPosY())){
+            if (distancia <= raioZ && (mestre.getPosX() == robo.getPosX()) && (mestre.getPosY() == robo.getPosY()) && !robo.equals(mestre)) {
                 listaRobosEncontrados.add(robo);
             }
         }
