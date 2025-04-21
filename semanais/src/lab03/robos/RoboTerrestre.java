@@ -39,7 +39,7 @@ public class RoboTerrestre extends Robo {
 
     @Override
     public void mover(int deltaX, int deltaY) {
-        if (Math.pow(deltaX,2) + Math.pow(deltaY,2) < Math.pow(getVelocidadeMaxima(),2))
+        if (Math.pow(deltaX,2) + Math.pow(deltaY,2) > Math.pow(getVelocidadeMaxima(),2))
             System.out.printf("O movimento de %s excede a velocidade maxima, operação cancelada\n", getNome());
         else
             super.mover(deltaX, deltaY);

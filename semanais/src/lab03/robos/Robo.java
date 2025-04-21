@@ -148,13 +148,10 @@ public class Robo {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if(obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
-                    newTempPos[0] = -1;
-                    System.out.printf("O robo %s colidiu com um obstáculo %s", getNome(), obstaculo.getTipo().getNome());
-                    break;
+                    setPosX((int)newPos[0]); setPosY((int)newPos[1]);
+                    System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY(),getAltitude());
+                    return;
                 }
-
-            if(newTempPos[0] == -1)
-                break;
 
             newPos[0] = newTempPos[0];
             newPos[1] = newTempPos[1];
@@ -164,13 +161,7 @@ public class Robo {
 
         }
 
-        if(newPos[0] == finalPosX && newPos[1] == finalPosY){
             setPosX(finalPosX); setPosY(finalPosY);
-        }
-        else{
-            setPosX((int)newPos[0]); setPosY((int)newPos[1]);
-            System.out.printf(" e foi realocado para a posição (%d, %d, %d)\n", getPosX(), getPosY(),getAltitude());
-        }
 
     }
 
