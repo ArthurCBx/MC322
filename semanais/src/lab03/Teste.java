@@ -11,6 +11,7 @@ import lab03.robos.robos_terrestres.RoboSolar;
 import lab03.sensores.Sensor;
 import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,55 +87,69 @@ public class Teste {
                     robo = null;
                     switch (nomeRobo) {
                         case "teste1":
-                            robo = robo1;
+                            if (robosVivos.contains(robo1))
+                                robo = robo1;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste2":
-                            robo = robo2;
+                            if (robosVivos.contains(robo2))
+                                robo = robo2;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste3":
-                            robo = robo3;
+                            if (robosVivos.contains(robo3))
+                                robo = robo3;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste4":
-                            robo = robo4;
+                            if (robosVivos.contains(robo4))
+                                robo = robo4;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         default:
                             System.out.println("Nome de robô inválido.");
                             continue;
                     }
+                    if (robo != null) {
 
-                    System.out.println("Digite o tipo de sensor que deseja adicionar. Opções:\n" +
-                            "[1] - SensorComum20\n" +
-                            "[2] - SensorComum50\n" +
-                            "[3] - SensorAltitude80XY20\n" +
-                            "[4] - SensorAltitude40XY10\n" +
-                            "[5] - SensorClasse50\n" +
-                            "[6] - SensorClasse100");
-                    int comando2 = scanner.nextInt();
-                    scanner.nextLine();
 
-                    switch (comando2) {
-                        case 1:
-                            robo.addSensor(sensorComum20);
-                            break;
-                        case 2:
-                            robo.addSensor(sensorComum50);
-                            break;
-                        case 3:
-                            robo.addSensor(sensorAltitude80XY20);
-                            break;
-                        case 4:
-                            robo.addSensor(sensorAltitude40XY10);
-                            break;
-                        case 5:
-                            robo.addSensor(sensorClasse50);
-                            break;
-                        case 6:
-                            robo.addSensor(sensorClasse100);
-                            break;
+                        System.out.println("Digite o tipo de sensor que deseja adicionar. Opções:\n" +
+                                "[1] - SensorComum20\n" +
+                                "[2] - SensorComum50\n" +
+                                "[3] - SensorAltitude80XY20\n" +
+                                "[4] - SensorAltitude40XY10\n" +
+                                "[5] - SensorClasse50\n" +
+                                "[6] - SensorClasse100");
+                        int comando2 = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (comando2) {
+                            case 1:
+                                robo.addSensor(sensorComum20);
+                                break;
+                            case 2:
+                                robo.addSensor(sensorComum50);
+                                break;
+                            case 3:
+                                robo.addSensor(sensorAltitude80XY20);
+                                break;
+                            case 4:
+                                robo.addSensor(sensorAltitude40XY10);
+                                break;
+                            case 5:
+                                robo.addSensor(sensorClasse50);
+                                break;
+                            case 6:
+                                robo.addSensor(sensorClasse100);
+                                break;
+                        }
+                        System.out.printf("Sensor adicionado ao robô %s com sucesso\n", robo.getNome());
+                        break;
                     }
-                    System.out.printf("Sensor adicionado ao robô %s com sucesso\n", robo.getNome());
-                    break;
-
 
                 case 2:
                     System.out.printf("Digite o nome do robô que irá monitorar seu arredor. Opções: %s\n", nomes);
@@ -143,19 +158,32 @@ public class Teste {
                     robo = null;
                     switch (nomeRobo) {
                         case "teste1":
-                            robo = robo1;
+                            if (robosVivos.contains(robo1))
+                                robo = robo1;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste2":
-                            robo = robo2;
+                            if (robosVivos.contains(robo2))
+                                robo = robo2;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste3":
-                            robo = robo3;
+                            if (robosVivos.contains(robo3))
+                                robo = robo3;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste4":
-                            robo = robo4;
+                            if (robosVivos.contains(robo4))
+                                robo = robo4;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         default:
                             System.out.println("Nome de robô inválido.");
+                            continue;
                     }
                     if (robo != null) {
                         robo.monitorar();
@@ -169,20 +197,32 @@ public class Teste {
                     robo = null;
                     switch (nomeRobo) {
                         case "teste1":
-                            robo = robo1;
+                            if (robosVivos.contains(robo1))
+                                robo = robo1;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste2":
-                            robo = robo2;
+                            if (robosVivos.contains(robo2))
+                                robo = robo2;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste3":
-                            robo = robo3;
+                            if (robosVivos.contains(robo3))
+                                robo = robo3;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste4":
-                            robo = robo4;
+                            if (robosVivos.contains(robo4))
+                                robo = robo4;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         default:
                             System.out.println("Nome de robô inválido.");
-                            break;
+                            continue;
                     }
 
                     if (robo != null) {
@@ -198,12 +238,13 @@ public class Teste {
                             if (deltaZ >= 0) {
                                 ((RoboAereo) robo).subir(deltaZ);
                             } else {
-                                ((RoboAereo) robo).descer(deltaZ);
+                                ((RoboAereo) robo).descer(Math.abs(deltaZ));
                             }
                         } else {
                             robo.mover(deltaX, deltaY);
                         }
                     }
+                    System.out.printf("(%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     break;
                 case 4:
                     System.out.printf("Digite o nome do robô que irá usar a habilidade específica. Opções: %s\n",nomes);
@@ -211,20 +252,32 @@ public class Teste {
                     robo = null;
                     switch (nomeRobo) {
                         case "teste1":
-                            robo = robo1;
+                            if (robosVivos.contains(robo1))
+                                robo = robo1;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste2":
-                            robo = robo2;
+                            if (robosVivos.contains(robo2))
+                                robo = robo2;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste3":
-                            robo = robo3;
+                            if (robosVivos.contains(robo3))
+                                robo = robo3;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         case "teste4":
-                            robo = robo4;
+                            if (robosVivos.contains(robo4))
+                                robo = robo4;
+                            else
+                                System.out.println("Robô foi morto.");
                             break;
                         default:
                             System.out.println("Nome de robô inválido.");
-                            break;
+                            continue;
                     }
                     if (robo != null) {
                         switch (robo.getNome()){

@@ -47,7 +47,7 @@ public class RoboExplosivo extends RoboAereo {
 
         ArrayList<Robo> listaRobos = getAmbiente().getListaRobos();
         for (Robo robo : listaRobos) {
-            double distancia = Math.pow(Math.pow(robo.getPosX() - getPosX(), 2) + Math.pow(robo.getPosY() - getPosY(), 2) + Math.pow(robo.getAltitude() - getAltitude(), 2),(double)(1/3));
+            double distancia = Math.sqrt(Math.pow(robo.getPosX() - getPosX(), 2) + Math.pow(robo.getPosY() - getPosY(), 2) + Math.pow(robo.getAltitude() - getAltitude(), 2));
             if (distancia <= getRaioExplosao() && !robo.equals(this)) {
                 robosAtingidos.add(robo);
             }
