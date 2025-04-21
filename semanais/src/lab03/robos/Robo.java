@@ -221,10 +221,6 @@ public class Robo {
         if (getSensores() != null)
             for (Sensor sensor : getSensores()){
                 System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
-                if (sensor.getClass() == SensorAltitude.class){
-                    System.out.println("Sensor de altitude:");
-                    ((SensorAltitude) sensor).monitoraAltitude(getAmbiente(), this);
-                }
                 sensor.monitorar(getAmbiente(),this);
                 System.out.println();
                 count++;

@@ -31,7 +31,11 @@ public class SensorAltitude extends Sensor{
 
     // Função para monitorar o posicionamento do robo em relação aos outros robos e obstaculos
 
-    public void monitoraAltitude(Ambiente ambiente, Robo mestre) {
+    @Override
+    public void monitorar(Ambiente ambiente, Robo mestre) {
+        System.out.println("Monitoramento em XY:");
+        super.monitorar(ambiente, mestre);
+        System.out.println("Monitoramento em altitude:");
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
         for (Robo robo : listaRobos) {
             int distancia = Math.abs(robo.getAltitude() - mestre.getAltitude());
