@@ -60,7 +60,6 @@ public class Teste {
         String nomeRobo;
         Robo robo = null;
 
-
         while (true) {
             String nomes = robosVivos.stream()
                     .map(Robo::getNome)

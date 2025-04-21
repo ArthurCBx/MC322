@@ -84,7 +84,7 @@ public class RoboAereo extends Robo {
 
         double newAlt = getAltitude();
 
-        for(double newTempAlt = getAltitude() + vetorsubir; newAlt == finalAlt; newTempAlt = Math.min(finalAlt, newAlt + vetorsubir)) {
+        for(double newTempAlt = getAltitude() + vetorsubir; newAlt != finalAlt; newTempAlt = Math.min(finalAlt, newAlt + vetorsubir)) {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(getPosX(), getPosY(), newTempAlt)) {
@@ -120,7 +120,7 @@ public class RoboAereo extends Robo {
 
         double newAlt = getAltitude();
 
-        for(double newTempAlt = getAltitude() - vetordescer; newAlt == finalAlt; newTempAlt = Math.max(finalAlt, newAlt - vetordescer)) {
+        for(double newTempAlt = getAltitude() - vetordescer; newAlt != finalAlt; newTempAlt = Math.max(finalAlt, newAlt - vetordescer)) {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(getPosX(), getPosY(), newTempAlt)) {
