@@ -243,8 +243,8 @@ public class Teste {
                         } else {
                             robo.mover(deltaX, deltaY);
                         }
+                        System.out.printf("(%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     }
-                    System.out.printf("(%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     break;
                 case 4:
                     System.out.printf("Digite o nome do robô que irá usar a habilidade específica. Opções: %s\n",nomes);
