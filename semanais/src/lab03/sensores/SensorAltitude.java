@@ -62,7 +62,7 @@ public class SensorAltitude extends Sensor{
     // Metodo para retornar um ArrayList com os robôs encontrados pelo sensor.
     @Override
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
-        ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
+        ArrayList<Robo> listaRobosEncontrados = super.listaRobosEncontrados(ambiente, mestre);
         ArrayList<Robo> listaRobos = ambiente.getListaRobos();
 
         for (Robo robo : listaRobos) {
