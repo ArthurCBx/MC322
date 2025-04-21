@@ -64,16 +64,16 @@ public class RoboBombardeiro extends RoboAereo {
 
     // Metodo que bombardeia robos na mesma posição (x, y) e altitude igual ou inferior.
 
-    public void bombardear() {
+    public List<Robo> bombardear() {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());
-            return;
+            return null;
         }
 
         // Não pode bombardear se o robo estiver sem bombas.
         if (getBombas() <= 0) {
             System.out.printf("O robo %s não tem bombas\n", getNome());
-            return;
+            return null;
         }
 
         setBombas(getBombas() - 1);
@@ -105,7 +105,9 @@ public class RoboBombardeiro extends RoboAereo {
         if (getAltitude() == 0) {
             System.out.printf("O robo %s não sobreviveu\n", getNome());
             getAmbiente().removerRobo(this);
+            robosAtingidos.add(this);
         }
+        return robosAtingidos;
 
     }
 }

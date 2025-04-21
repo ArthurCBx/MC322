@@ -11,7 +11,11 @@ import lab03.robos.robos_terrestres.RoboSolar;
 import lab03.sensores.Sensor;
 import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 public class Teste {
@@ -45,11 +49,26 @@ public class Teste {
         ambiente.adicionarObstaculo(obstaculoParede);
         ambiente.adicionarObstaculo(obstaculoAnimal);
 
+        ArrayList<Robo> robosVivos = new ArrayList<Robo>() {{
+            add(robo1);
+            add(robo2);
+            add(robo3);
+            add(robo4);
+        }};
+
         String nomeRobo;
         Robo robo = null;
 
 
         while (true) {
+            String nomes = robosVivos.stream()
+                    .map(Robo::getNome)
+                    .collect(Collectors.joining(", "));
+            if (nomes.isEmpty()) {
+                System.out.println("Todos os robôs foram destruídos. Finalizando o programa...");
+                return;
+            }
+
             System.out.println("Digite o comando que será realizado:\n" +
                     "[1] - Adicionar Sensor em um robô\n" +
                     "[2] - Comandar um robo para monitorar seu arredor\n" +
@@ -61,7 +80,7 @@ public class Teste {
 
             switch (comando) {
                 case 1:
-                    System.out.println("Digite o nome do robô que receberá o sensor. Opções: teste1, teste2, teste3, teste4");
+                    System.out.printf("Digite o nome do robô que receberá o sensor. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
@@ -118,7 +137,7 @@ public class Teste {
 
 
                 case 2:
-                    System.out.println("Digite o nome do robô que irá monitorar seu arredor. Opções: teste1, teste2, teste3, teste4");
+                    System.out.printf("Digite o nome do robô que irá monitorar seu arredor. Opções: %s\n", nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
@@ -144,7 +163,7 @@ public class Teste {
                     break;
 
                 case 3:
-                    System.out.println("Digite o nome do robô que irá se mover. Opções: teste1, teste2, teste3, teste4");
+                    System.out.printf("Digite o nome do robô que irá se mover. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
@@ -187,7 +206,7 @@ public class Teste {
                     }
                     break;
                 case 4:
-                    System.out.println("Digite o nome do robô que irá usar a habilidade específica. Opções: teste1, teste2, teste3, teste4");
+                    System.out.printf("Digite o nome do robô que irá usar a habilidade específica. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
                     robo = null;
                     switch (nomeRobo) {
@@ -213,7 +232,11 @@ public class Teste {
                                 System.out.println("Se deseja bombardear digite [1] ou [2] para carregar bombas");
                                 int comandoBombas = scanner.nextInt();
                                 if (comandoBombas == 1){
-                                    ((RoboBombardeiro) robo).bombardear();
+                                    List<Robo> robosAtingidos = ((RoboBombardeiro) robo).bombardear();
+                                    if (robosAtingidos != null)
+                                        for (Robo roboAtingido : robosAtingidos) {
+                                            robosVivos.remove(roboAtingido);
+                                        }
                                 }else{
                                     System.out.printf("Digite a quantidade de bombas que deseja carregar o robô %s: ", robo.getNome());
                                     int bombas = scanner.nextInt();
@@ -224,7 +247,10 @@ public class Teste {
                             case "teste2":
                                 System.out.printf("O robô %s está prestes a explodir...\n", robo.getNome());
                                 Thread.sleep(2000);
-                                ((RoboExplosivo) robo).explodir();
+                                List<Robo> robosAtingidos = ((RoboExplosivo) robo).explodir();
+                                for (Robo roboAtingido : robosAtingidos) {
+                                    robosVivos.remove(roboAtingido);
+                                }
                                 break;
 
                             case "teste3":
