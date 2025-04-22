@@ -60,6 +60,106 @@ public class Teste {
         String nomeRobo;
         Robo robo = null;
 
+        // TESTES: --------------------------------
+
+        System.out.printf("\n------- INICIO DOS TESTES: ---------\n");
+
+        // Movimento novo de robos terrestres: (vel. maxima era unicimensional --> radial):
+
+        System.out.printf("MOVIMENTO DO ROBO TERRESTRE (radial com vel. max):\n");
+        System.out.printf("Tenta mover axima da vel. maxima e depois abaixo da vel. maxima\n");
+
+        robo4.exibirPosicao();
+        robo4.mover(70,40);
+        robo4.mover(70,30);
+        robo4.exibirPosicao();
+
+
+        // Robo explosivo novo (explosao unidimensional --> radial):
+
+        System.out.printf("\nMOVIMENTO DO ROBO TERRESTRE (radial com vel. max):\n");
+        System.out.printf("Robo explosivo consegue atingir apenas um robo em seu raio\n");
+
+        Robo robo5 = new RoboExplosivo(ambiente, "teste5", "sul", 40, 40, 10, 100, 5);
+        Robo robo6 = new RoboExplosivo(ambiente, "teste6", "sul", 43, 43, 13, 100, 5);
+        Robo robo7 = new RoboExplosivo(ambiente, "teste7", "sul", 43, 43, 12, 100, 5);
+        robo5.exibirPosicao();
+        robo6.exibirPosicao();
+        robo7.exibirPosicao();
+
+        ((RoboExplosivo)robo5).explodir();
+
+        System.out.printf("Robo que sobreviveu explode\n");
+
+        ((RoboExplosivo)robo6).explodir();
+
+        // Colisão com obstaculos para movimento XY:
+
+        System.out.printf("\nCOLISAO ENTRE ROBOS E OBSTACULOS EM XY\n");
+
+        System.out.printf("Colisao no canto do obstaculo:\n");
+        robo4.mover(7,7);
+
+        System.out.printf("Colisao no lado inferior do obstaculo:\n");
+        robo4.setPosX(6);
+        robo4.setPosY(0);
+        robo4.exibirPosicao();
+        robo4.mover(0,10);
+
+        System.out.printf("Colisao no lado superior do obstaculo:\n");
+        robo4.setPosX(6);
+        robo4.setPosY(10);
+        robo4.exibirPosicao();
+        robo4.mover(0,-10);
+
+        System.out.printf("Colisao no lado esquerdo do obstaculo:\n");
+        robo4.setPosX(0);
+        robo4.setPosY(6);
+        robo4.exibirPosicao();
+        robo4.mover(10,0);
+
+        System.out.printf("Colisao no lado direito do obstaculo:\n");
+        robo4.setPosX(10);
+        robo4.setPosY(6);
+        robo4.exibirPosicao();
+        robo4.mover(-10,0);
+
+        robo4.setPosX(0);
+        robo4.setPosY(0);
+
+        // Colisão com obstaculos em subir/descer:
+
+        System.out.printf("\nCOLISAO COM OBSTACULOS EM SUBIR/DESCER\n");
+
+        System.out.printf("Robo descendo em um obstaculo:\n");
+        robo1.setPosX(6);
+        robo1.setPosY(6);
+        robo1.setAltitude(10);
+        robo1.exibirPosicao();
+        ((RoboAereo)robo1).descer(10);
+
+        System.out.printf("Robo subindo em um obstaculo:\n");
+
+        Obstaculo pedra = new Obstaculo(5,5,7,7,10,,TipoObstaculo.ROCHA);
+
+        robo1.setPosX(6);
+        robo1.setPosY(6);
+        robo1.setAltitude(10);
+        robo1.exibirPosicao();
+        ((RoboAereo)robo1).descer(10);
+        
+        pedra = null;
+
+        // Sensor basico:
+
+        // Sensor altitude:
+
+        // Sensor Classe:
+
+
+
+        // MENU INTERATIVO: ------------------------------------
+
         while (true) {
             String nomes = robosVivos.stream()
                     .map(Robo::getNome)
