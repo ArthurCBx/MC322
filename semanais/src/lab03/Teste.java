@@ -191,22 +191,29 @@ public class Teste {
                 return;
             }
 
+            // Menu principal:
+
             System.out.println("\nDigite o comando que será realizado:\n" +
                     "[1] - Adicionar Sensor em um robô\n" +
                     "[2] - Comandar um robo para monitorar seu arredor\n" +
-                    "[3] - Comandar um robo para mover-se\n" +
-                    "[4] - Usar habilidade específica da classe de robô\n" +
-                    "[5] - Finalizar o programa");
+                    "[3] - Comandar um robo para exibir sua posição\n" +
+                    "[4] - Comandar um robo para mover-se\n" +
+                    "[5] - Usar habilidade específica da classe de robô\n" +
+                    "[6] - Mudar o periodo do ambiente\n" +
+                    "[7] - Finalizar o programa");
+
+            // Leitura de comando e switch para determinar o que acontece
+
             int comando = scanner.nextInt();
             scanner.nextLine();
 
             switch (comando) {
-                case 1:
+                case 1: // Adicionar sensor
                     System.out.printf("Digite o nome do robô que receberá o sensor. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
-                    switch (nomeRobo) {
+                    switch (nomeRobo) { // Em qual robo se coloca o sensor
                         case "teste1":
                             if (robosVivos.contains(robo1))
                                 robo = robo1;
@@ -237,7 +244,7 @@ public class Teste {
                     }
                     if (robo != null) {
 
-
+                        // Tipos de sensor
                         System.out.println("Digite o tipo de sensor que deseja adicionar. Opções:\n" +
                                 "[1] - SensorComum20\n" +
                                 "[2] - SensorComum50\n" +
@@ -245,6 +252,13 @@ public class Teste {
                                 "[4] - SensorAltitude40XY10\n" +
                                 "[5] - SensorClasse50\n" +
                                 "[6] - SensorClasse100");
+                        // Sensor Comum20: Classe sensor base com raio de 20
+                        // Sensor Comum50: Classe sensor base com raio de 50
+                        // Sensor Altitude80XY20: Classe sensor altitude com raioZ de 80 e raio 20
+                        // Sensor Altitude40XY10: Classe sensor altitude com raioZ de 40 e raio 10
+                        // Sensor Classe50: Classe sensor classe com raio de 50 (XYZ radial)
+                        // Sensor Classe100: Classe sensor classe com raio de 100 (XYZ radial)
+
                         int comando2 = scanner.nextInt();
                         scanner.nextLine();
 
@@ -272,12 +286,12 @@ public class Teste {
                         break;
                     }
 
-                case 2:
+                case 2: // Monitorar ambiente
                     System.out.printf("Digite o nome do robô que irá monitorar seu arredor. Opções: %s\n", nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
-                    switch (nomeRobo) {
+                    switch (nomeRobo) { // Escolha do robo
                         case "teste1":
                             if (robosVivos.contains(robo1))
                                 robo = robo1;
@@ -311,12 +325,51 @@ public class Teste {
                     }
                     break;
 
-                case 3:
+                case 3: // Exibir posição de um robo
+                    System.out.printf("Digite o nome do robô que irá exibir sua posição. Opções: %s\n", nomes);
+                    nomeRobo = scanner.nextLine();
+
+                    robo = null;
+                    switch (nomeRobo) { // Escolha do robo
+                        case "teste1":
+                            if (robosVivos.contains(robo1))
+                                robo = robo1;
+                            else
+                                System.out.println("Robô foi morto.");
+                            break;
+                        case "teste2":
+                            if (robosVivos.contains(robo2))
+                                robo = robo2;
+                            else
+                                System.out.println("Robô foi morto.");
+                            break;
+                        case "teste3":
+                            if (robosVivos.contains(robo3))
+                                robo = robo3;
+                            else
+                                System.out.println("Robô foi morto.");
+                            break;
+                        case "teste4":
+                            if (robosVivos.contains(robo4))
+                                robo = robo4;
+                            else
+                                System.out.println("Robô foi morto.");
+                            break;
+                        default:
+                            System.out.println("Nome de robô inválido.");
+                            continue;
+                    }
+                    if (robo != null)
+                        robo.exibirPosicao();
+
+                    break;
+
+                case 4: // Movimento em XYZ (subir/descer depois XY)
                     System.out.printf("Digite o nome do robô que irá se mover. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
 
                     robo = null;
-                    switch (nomeRobo) {
+                    switch (nomeRobo) { // Escolha do robo
                         case "teste1":
                             if (robosVivos.contains(robo1))
                                 robo = robo1;
@@ -346,13 +399,15 @@ public class Teste {
                             continue;
                     }
 
-                    if (robo != null) {
+                    if (robo != null) { // Coordenadas XY
                         System.out.printf("Digite o valor de deltaX que deseja mover o robô %s: ", robo.getNome());
                         int deltaX = scanner.nextInt();
                         System.out.printf("Digite o valor de deltaY que deseja mover o robô %s: ", robo.getNome());
                         int deltaY = scanner.nextInt();
 
-                        if (robo instanceof RoboBombardeiro || robo instanceof RoboExplosivo) {
+                        // Se for robo aereo pode mover em Z
+
+                        if (robo instanceof RoboAereo) {
                             System.out.printf("Digite o valor de deltaZ que deseja mover o robô %s: ", robo.getNome());
                             int deltaZ = scanner.nextInt();
                             if (deltaZ >= 0) {
@@ -361,16 +416,17 @@ public class Teste {
                                 ((RoboAereo) robo).descer(Math.abs(deltaZ));
                             }
                         }
+
                         robo.mover(deltaX, deltaY);
 
-                        System.out.printf("(%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
+                        System.out.printf("Robo parou em (%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     }
                     break;
-                case 4:
+                case 5: // Metodos especificos de robos (explodir/bombardear/carregar....)
                     System.out.printf("Digite o nome do robô que irá usar a habilidade específica. Opções: %s\n",nomes);
                     nomeRobo = scanner.nextLine();
                     robo = null;
-                    switch (nomeRobo) {
+                    switch (nomeRobo) { // Escolha do robo
                         case "teste1":
                             if (robosVivos.contains(robo1))
                                 robo = robo1;
@@ -401,7 +457,7 @@ public class Teste {
                     }
                     if (robo != null) {
                         switch (robo.getNome()){
-                            case "teste1":
+                            case "teste1":  // Robo bombardeiro pode bombardear ou carregar bombas
                                 System.out.println("Se deseja bombardear digite [1] ou [2] para carregar bombas");
                                 int comandoBombas = scanner.nextInt();
                                 if (comandoBombas == 1){
@@ -417,7 +473,7 @@ public class Teste {
                                 }
                                 break;
 
-                            case "teste2":
+                            case "teste2":  // Robo explosivo explode
                                 System.out.printf("O robô %s está prestes a explodir...\n", robo.getNome());
                                 Thread.sleep(2000);
                                 List<Robo> robosAtingidos = ((RoboExplosivo) robo).explodir();
@@ -426,20 +482,29 @@ public class Teste {
                                 }
                                 break;
 
-                            case "teste3":
+                            case "teste3":  // Robo combustivel abastece combustivel
                                 System.out.printf("Digite a quantidade de gasolina que deseja abastecer o robô %s: ", robo.getNome());
                                 int gasolina = scanner.nextInt();
                                 ((RoboCombustivel) robo).abastecer(gasolina);
                                 break;
 
-                            case "teste4":
+                            case "teste4":  // Robo solar carrega a bateria com o sol
                                 System.out.printf("O robô %s está prestes a carregar %.2f energia pelo painel solar\n", robo.getNome(), ((RoboSolar) robo).getPotenciaPainelSolar());
                                 ((RoboSolar) robo).carregar();
                                 break;
                         }
                     }
                     break;
-                case 5:
+                case 6: // Muda o periodo do ambiente
+                    System.out.printf("Digite o novo periodo do dia do ambiente: 'Dia', 'Noite'\n");
+                    nomeRobo = scanner.nextLine();
+                    if(nomeRobo.equals("Dia") || nomeRobo.equals("Noite")) {
+                        ambiente.mudarTempo(nomeRobo);
+                        System.out.printf("O período do ambiente é %s\n",nomeRobo);
+                    }
+                    break;
+
+                case 7:
                     System.out.println("Finalizando o programa...");
                     scanner.close();
                     return;
