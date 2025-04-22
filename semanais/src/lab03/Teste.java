@@ -67,18 +67,20 @@ public class Teste {
         // Movimento novo de robos terrestres: (vel. maxima era unicimensional --> radial):
 
         System.out.printf("MOVIMENTO DO ROBO TERRESTRE (radial com vel. max):\n");
-        System.out.printf("Tenta mover axima da vel. maxima e depois abaixo da vel. maxima\n");
+        System.out.printf("Tenta mover acima da vel. maxima e depois abaixo da vel. maxima\n");
 
         robo4.exibirPosicao();
         robo4.mover(70,40);
         robo4.mover(70,30);
         robo4.exibirPosicao();
+        robo4.setPosX(0);
+        robo4.setPosY(0);
 
 
         // Robo explosivo novo (explosao unidimensional --> radial):
 
-        System.out.printf("\nMOVIMENTO DO ROBO TERRESTRE (radial com vel. max):\n");
-        System.out.printf("Robo explosivo consegue atingir apenas um robo em seu raio\n");
+        System.out.printf("\nEXPLOSAO RADIAL:\n");
+        System.out.printf("Robo explosivo consegue atingir apenas um robo em seu raio de 5\n");
 
         Robo robo5 = new RoboExplosivo(ambiente, "teste5", "sul", 40, 40, 10, 100, 5);
         Robo robo6 = new RoboExplosivo(ambiente, "teste6", "sul", 43, 43, 13, 100, 5);
@@ -89,36 +91,33 @@ public class Teste {
 
         ((RoboExplosivo)robo5).explodir();
 
-        System.out.printf("Robo que sobreviveu explode\n");
-
-        ((RoboExplosivo)robo6).explodir();
 
         // Colisão com obstaculos para movimento XY:
 
         System.out.printf("\nCOLISAO ENTRE ROBOS E OBSTACULOS EM XY\n");
 
-        System.out.printf("Colisao no canto do obstaculo:\n");
+        System.out.printf("\nColisao no canto do obstaculo:\n");
         robo4.mover(7,7);
 
-        System.out.printf("Colisao no lado inferior do obstaculo:\n");
+        System.out.printf("\nColisao no lado inferior do obstaculo:\n");
         robo4.setPosX(6);
         robo4.setPosY(0);
         robo4.exibirPosicao();
         robo4.mover(0,10);
 
-        System.out.printf("Colisao no lado superior do obstaculo:\n");
+        System.out.printf("\nColisao no lado superior do obstaculo:\n");
         robo4.setPosX(6);
         robo4.setPosY(10);
         robo4.exibirPosicao();
         robo4.mover(0,-10);
 
-        System.out.printf("Colisao no lado esquerdo do obstaculo:\n");
+        System.out.printf("\nColisao no lado esquerdo do obstaculo:\n");
         robo4.setPosX(0);
         robo4.setPosY(6);
         robo4.exibirPosicao();
         robo4.mover(10,0);
 
-        System.out.printf("Colisao no lado direito do obstaculo:\n");
+        System.out.printf("\nColisao no lado direito do obstaculo:\n");
         robo4.setPosX(10);
         robo4.setPosY(6);
         robo4.exibirPosicao();
@@ -131,32 +130,55 @@ public class Teste {
 
         System.out.printf("\nCOLISAO COM OBSTACULOS EM SUBIR/DESCER\n");
 
-        System.out.printf("Robo descendo em um obstaculo:\n");
+        System.out.printf("\nRobo descendo em um obstaculo:\n");
         robo1.setPosX(6);
         robo1.setPosY(6);
         robo1.setAltitude(10);
         robo1.exibirPosicao();
         ((RoboAereo)robo1).descer(10);
 
-        System.out.printf("Robo subindo em um obstaculo:\n");
+        System.out.printf("\nRobo subindo em um obstaculo:\n");
 
-        Obstaculo pedra = new Obstaculo(5,5,7,7,10,TipoObstaculo.ROCHA);
+        Obstaculo pedra2 = new Obstaculo(5,5,7,7,15,TipoObstaculo.ROCHA);
+        ambiente.adicionarObstaculo(pedra2);
 
         robo1.setPosX(6);
         robo1.setPosY(6);
         robo1.setAltitude(10);
         robo1.exibirPosicao();
-        ((RoboAereo)robo1).descer(10);
+        ((RoboAereo)robo1).subir(10);
 
-        pedra = null;
+        pedra2 = null;
 
-        // Sensor basico:
+        // Sensor basico e altitude:
 
-        // Sensor altitude:
+        System.out.printf("\nSENSOR BASICO, SENSOR DE ALTITUDE E DE CLASSE\n");
 
-        // Sensor Classe:
+        robo1.setPosX(1);
+        robo1.setPosY(1);
+
+        robo6.setPosX(1);
+        robo6.setPosY(1);
+        robo6.setAltitude(0);
+        robo6.addSensor(sensorComum20);
+        robo6.addSensor(sensorAltitude40XY10);
+        robo6.addSensor(sensorClasse50);
+
+        System.out.printf("\nHá 3 robos em (0,0,0), um em (1,1,14) e o robo com sensores em (1,1,0)\n");
+
+        robo6.monitorar();
+
+        robo1.setPosX(0);
+        robo1.setPosY(0);
+        robo1.setAltitude(0);
+
+        robo6.setAltitude(50);
+        ((RoboExplosivo)robo6).explodir();
 
 
+        System.out.printf("\n------FIM DOS TESTES------------\n");
+
+        System.out.printf("MENU ITERATIVO:");
 
         // MENU INTERATIVO: ------------------------------------
 
