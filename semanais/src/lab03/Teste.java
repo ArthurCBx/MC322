@@ -140,14 +140,14 @@ public class Teste {
 
         System.out.printf("Robo subindo em um obstaculo:\n");
 
-        Obstaculo pedra = new Obstaculo(5,5,7,7,10,,TipoObstaculo.ROCHA);
+        Obstaculo pedra = new Obstaculo(5,5,7,7,10,TipoObstaculo.ROCHA);
 
         robo1.setPosX(6);
         robo1.setPosY(6);
         robo1.setAltitude(10);
         robo1.exibirPosicao();
         ((RoboAereo)robo1).descer(10);
-        
+
         pedra = null;
 
         // Sensor basico:
