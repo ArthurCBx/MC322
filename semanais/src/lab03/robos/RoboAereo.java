@@ -60,6 +60,8 @@ public class RoboAereo extends Robo {
 
 
     // Metodo para subir o robo aereo, considerando a altitude maxima e se ele não sairá do ambiente e não colide com obstaculos.
+    // É implementado o mesmo metodo de dividir o movimento em pequenas partes utilizado em "mover" do robo, apenas unidirecional
+
     public void subir(int deltaAltitude) {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode subir.\n", getNome());
@@ -101,6 +103,8 @@ public class RoboAereo extends Robo {
     }
 
     // Metodo para descer o robo aereo, verificando se a sua nova altitude não será negativa e não colide com obstaculos.
+    // É implementado o mesmo metodo de dividir o movimento em pequenas partes utilizado em "mover" do robo, apenas unidirecional
+
     public void descer(int deltaAltitude) {
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode descer.\n", getNome());

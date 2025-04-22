@@ -110,6 +110,8 @@ public class Robo {
 
 
     // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
+    // A linha é feita por uma verificação de seções de 0.25*sqrt(2) do vetor unitario que representa o vetor de movimento
+    // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
     public void mover(int deltaX, int deltaY) {
         if (getAmbiente() == null){
@@ -138,6 +140,8 @@ public class Robo {
 
         while(true){
 
+            // Os 2 ifs abaixo são utilizados para verificar se o movimento não extrapola o ponto final do movimento
+            // Que, por sua vez, é indicado pela diferença de sinal do vetor que liga o ponto final ao ponto proximo do movimento
             if( (finalPosX - (newPos[0] + vetorMove[0]) * vetorMove[0] ) >= 0 )
                 newTempPos[0] = newPos[0] + vetorMove[0];
             else
@@ -153,6 +157,7 @@ public class Robo {
                     setPosX((int)newPos[0]);
                     setPosY((int)newPos[1]);
 
+                    // Arredonda para cima
                     if(vetorMove[0] < 0)    setPosX(getPosX() + 1);
                     if(vetorMove[1] < 0)    setPosY(getPosY() + 1);
 
