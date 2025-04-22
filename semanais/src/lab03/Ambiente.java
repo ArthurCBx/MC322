@@ -158,6 +158,22 @@ public class Ambiente {
 
     public ArrayList<Obstaculo> detectarObstaculos(int x1, int y1, int z1, int x2, int y2, int z2){
 
+        if(x1 > x2){
+            int tempx1 = x1;
+            x1 = x2;
+            x2 = tempx1;
+        }
+        if(y1 > y2){
+            int tempy1 = y1;
+            y1 = y2;
+            y2 = tempy1;
+        }
+        if(z1 > z2){
+            int tempz1 = z1;
+            z1 = z2;
+            z2 = tempz1;
+        }
+
         ArrayList<Obstaculo> obstaculosEncontrados = new ArrayList<>();
 
         for (Obstaculo obstaculo : getListaObstaculos())

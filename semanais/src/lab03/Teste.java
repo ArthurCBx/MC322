@@ -65,11 +65,11 @@ public class Teste {
                     .map(Robo::getNome)
                     .collect(Collectors.joining(", "));
             if (nomes.isEmpty()) {
-                System.out.println("Todos os robôs foram destruídos. Finalizando o programa...");
+                System.out.println("\nTodos os robôs foram destruídos. Finalizando o programa...");
                 return;
             }
 
-            System.out.println("Digite o comando que será realizado:\n" +
+            System.out.println("\nDigite o comando que será realizado:\n" +
                     "[1] - Adicionar Sensor em um robô\n" +
                     "[2] - Comandar um robo para monitorar seu arredor\n" +
                     "[3] - Comandar um robo para mover-se\n" +
@@ -233,15 +233,14 @@ public class Teste {
                         if (robo instanceof RoboBombardeiro || robo instanceof RoboExplosivo) {
                             System.out.printf("Digite o valor de deltaZ que deseja mover o robô %s: ", robo.getNome());
                             int deltaZ = scanner.nextInt();
-                            robo.mover(deltaX, deltaY);
                             if (deltaZ >= 0) {
                                 ((RoboAereo) robo).subir(deltaZ);
                             } else {
                                 ((RoboAereo) robo).descer(Math.abs(deltaZ));
                             }
-                        } else {
-                            robo.mover(deltaX, deltaY);
                         }
+                        robo.mover(deltaX, deltaY);
+
                         System.out.printf("(%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     }
                     break;

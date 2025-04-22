@@ -21,9 +21,11 @@ public enum TipoObstaculo {
     public int getAltura() {
         return alturaPadrao;
     }
+
     public boolean bloqueiaPassagem(){
         return bloqueia;
     }
+
     public String getNome() {
         return nome;
     }

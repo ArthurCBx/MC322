@@ -126,9 +126,11 @@ public class Robo {
 
         ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getPosX(),getPosY(),getAltitude(),finalPosX,finalPosY,getAltitude());
 
+        double norma = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+
         double[] vetorMove = {
-                (deltaX != 0) ? 0.25*((double)deltaX/Math.abs(deltaX)) : 0,
-                (deltaY != 0) ? 0.25*((double)deltaY/Math.abs(deltaY)) : 0
+                (norma != 0) ? 0.25*((double)deltaX/norma) : 0,
+                (norma != 0) ? 0.25*((double)deltaY/norma) : 0
         };
 
         double[] newPos = {getPosX(),getPosY()};
@@ -148,7 +150,12 @@ public class Robo {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if(obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0],newTempPos[1],getAltitude())){
-                    setPosX((int)newPos[0]); setPosY((int)newPos[1]);
+                    setPosX((int)newPos[0]);
+                    setPosY((int)newPos[1]);
+
+                    if(vetorMove[0] < 0)    setPosX(getPosX() + 1);
+                    if(vetorMove[1] < 0)    setPosY(getPosY() + 1);
+
                     System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY(),getAltitude());
                     return;
                 }
@@ -156,7 +163,7 @@ public class Robo {
             newPos[0] = newTempPos[0];
             newPos[1] = newTempPos[1];
 
-            if(newPos[0] == finalPosX)
+            if(newPos[0] == finalPosX && newPos[1] == finalPosY)
                 break;
 
         }

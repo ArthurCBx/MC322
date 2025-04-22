@@ -15,7 +15,7 @@ public class Obstaculo {
 
     // Construtores para obstaculo:
 
-    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int altura, int base, TipoObstaculo tipo) {
+    public Obstaculo(int posX1, int posY1, int posX2, int posY2, int base, int altura, TipoObstaculo tipo) {
         this.posX1 = Math.abs(Math.min(posX1,posX2));
         this.posY1 = Math.abs(Math.min(posY1,posY2));
 
@@ -35,6 +35,7 @@ public class Obstaculo {
         this.posX2 = Math.abs(Math.max(posX1,posX2));
         this.posY2 = Math.abs(Math.max(posY1,posY2));
 
+        this.altura = tipo.getAltura();
         this.base = Math.abs(base);
         this.tipo = tipo;
     }

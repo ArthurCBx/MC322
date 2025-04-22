@@ -88,7 +88,7 @@ public class RoboAereo extends Robo {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(getPosX(), getPosY(), newTempAlt)) {
-                    setAltitude((int) newAlt);
+                    setAltitude((int)newAlt);
                     System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY(),getAltitude());
                     return;
                 }
@@ -124,7 +124,7 @@ public class RoboAereo extends Robo {
 
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(getPosX(), getPosY(), newTempAlt)) {
-                    setAltitude((int) newAlt);
+                    setAltitude((int)newAlt + 1);
                     System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipo().getNome(), getPosX(), getPosY(),getAltitude());
                     return;
                 }
