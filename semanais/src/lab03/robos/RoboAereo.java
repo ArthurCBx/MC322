@@ -12,8 +12,8 @@ Ele possui os métodos subir e descer, que alteram a altitude do robo, verifican
 public class RoboAereo extends Robo {
     private int altitudeMaxima;
 
-    // Metodos contrutores para Robo Aereo
-    // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
+    // Metodos construtores para Robo Aereo
+    // Um recebe o ambiente como parâmetro e outro apenas cria um robo sem ambiente
 
     public RoboAereo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
         super(nome, direcao, posX, posY);
@@ -59,7 +59,7 @@ public class RoboAereo extends Robo {
     }
 
 
-    // Metodo para subir o robo aereo, considerando a altitude maxima e se ele não sairá do ambiente e não colide com obstaculos.
+    // Metodo para subir o robo aereo, considerando a altitude maxima e se ele não sairá do ambiente e não colide com obstáculos.
     // É implementado o mesmo metodo de dividir o movimento em pequenas partes utilizado em "mover" do robo, apenas unidirecional
 
     public void subir(int deltaAltitude) {

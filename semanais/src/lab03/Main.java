@@ -11,7 +11,6 @@ import lab03.robos.robos_terrestres.RoboSolar;
 import lab03.sensores.Sensor;
 import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
-public class Teste {
+public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);

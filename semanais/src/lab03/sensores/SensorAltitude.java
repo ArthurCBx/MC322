@@ -29,7 +29,7 @@ public class SensorAltitude extends Sensor{
         this.raioZ = Math.abs(raioZ);
     }
 
-    // Função para monitorar o posicionamento do robo em relação aos outros robos e obstaculos
+    // Sobrescreve as 3 funções desenvolvidas em sensor para considerar agora o raio z:
 
     @Override
     public void monitorar(Ambiente ambiente, Robo mestre) {
@@ -79,7 +79,7 @@ public class SensorAltitude extends Sensor{
     }
 
 
-    // Metodo para retornar um ArrayList com os obstaculos encontrados pelo sensor.
+    // Metodo para retornar um ArrayList com os obstáculos encontrados pelo sensor.
     @Override
     public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
         ArrayList<Obstaculo> listaObstaculosEncontrados = super.listaObstaculosEncontrados(ambiente, mestre);

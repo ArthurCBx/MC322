@@ -10,7 +10,7 @@ public class RoboTerrestre extends Robo {
 
 
     // Metodos construtores para o robo Terrestre consideram a velocidade maxima em módulo
-    // Um recebe o ambiente como parametro e outro apenas cria um robo sem ambiente
+    // Um recebe o ambiente como parâmetro e outro apenas cria um robo sem ambiente
 
     public RoboTerrestre(String nome, String direcao, int posX, int posY, double velocidadeMaxima) {
         super(nome, direcao, posX, posY);
