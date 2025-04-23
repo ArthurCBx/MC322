@@ -12,6 +12,7 @@ import lab03.sensores.Sensor;
 import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
 
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -280,6 +281,9 @@ public class Main {
                             case 6:
                                 robo.addSensor(sensorClasse100);
                                 break;
+                            default:
+                                System.out.printf("Opção invalida\n");
+
                         }
                         System.out.printf("Sensor adicionado ao robô %s com sucesso\n", robo.getNome());
                         break;
@@ -500,6 +504,8 @@ public class Main {
                     if(nomeRobo.equals("Dia") || nomeRobo.equals("Noite")) {
                         ambiente.mudarTempo(nomeRobo);
                         System.out.printf("O período do ambiente é %s\n",nomeRobo);
+                    }else{
+                        System.out.printf("\"%s\" não corresponde a uma das opções dadas, tente inserir uma opção válida.\n",nomeRobo);
                     }
                     break;
 
@@ -507,6 +513,8 @@ public class Main {
                     System.out.println("Finalizando o programa...");
                     scanner.close();
                     return;
+                default:
+                    System.out.printf("Opção invalida\n");
             }
         }
     }
