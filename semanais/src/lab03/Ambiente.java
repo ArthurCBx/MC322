@@ -139,6 +139,7 @@ public class Ambiente {
     public void detectarColisoes(){
         // Verifica se algum robo colidiu com algum obstáculo.
         // Só há colisão se obstáculo bloqueia passagem e robo está na borda desse obstáculo, pois robô não o atravessa.
+        int count = 0;
         for (Robo robo : listaRobos) {
             for (Obstaculo obstaculo : listaObstaculos) {
                 int roboX = robo.getPosX(); int roboY = robo.getPosY(); int roboZ = robo.getAltitude();
@@ -148,8 +149,12 @@ public class Ambiente {
                 if (obstaculo.getTipo().bloqueiaPassagem() && obstaculo.contemPonto(roboX,roboY,roboZ)) {
                     System.out.printf("O robo %s colidiu com um obstáculo %s em (%d,%d,%d).\n",
                             robo.getNome(), obstaculo.getTipo().getNome(),roboX,roboY,roboZ);
+                    count++;
                 }
             }
+        }
+        if (count == 0){
+            System.out.printf("Não foram verificadas colisões no ambiente %s\n", this);
         }
     }
 

@@ -12,7 +12,6 @@ import lab03.sensores.Sensor;
 import lab03.sensores.SensorAltitude;
 import lab03.sensores.SensorClasse;
 
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -200,7 +199,8 @@ public class Main {
                     "[4] - Comandar um robo para mover-se\n" +
                     "[5] - Usar habilidade específica da classe de robô\n" +
                     "[6] - Mudar o periodo do ambiente\n" +
-                    "[7] - Finalizar o programa");
+                    "[7] - Verificar colisões no ambiente\n" +
+                    "[8] - Finalizar o programa\n");
 
             // Leitura de comando e switch para determinar o que acontece
 
@@ -510,6 +510,9 @@ public class Main {
                     break;
 
                 case 7:
+                    ambiente.detectarColisoes();
+                    break;
+                case 8:
                     System.out.println("Finalizando o programa...");
                     scanner.close();
                     return;
