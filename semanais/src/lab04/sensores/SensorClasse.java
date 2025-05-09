@@ -1,0 +1,51 @@
+package lab04.sensores;
+
+import lab04.Ambiente;
+import lab04.obstaculos.Obstaculo;
+import lab04.robos.Robo;
+
+import java.util.ArrayList;
+
+public class SensorClasse extends Sensor {
+    // Subclasse de Sensor que consegue descobrir a classe de robos num raio tridimensional, mas não sabe sobre obstáculos.
+
+
+    // Construtores para sensor:
+
+    public SensorClasse(double raio) {
+        super(raio);
+    }
+
+
+    @Override
+    public void monitorar(Ambiente ambiente, Robo mestre){
+        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+
+        for (Robo robo : listaRobos) {
+            double distancia = Math.sqrt((Math.pow(robo.getX() - mestre.getX(), 2) + Math.pow(robo.getY() - mestre.getY(), 2) + Math.pow(robo.getZ() - mestre.getZ(), 2)));
+            if (distancia <= getRaio() && !robo.equals(mestre)){
+                System.out.printf("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n", robo.getClass(), robo.getX(), robo.getY(), robo.getZ());
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
+        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+        ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
+
+        for (Robo robo : listaRobos) {
+            double distancia = Math.sqrt((Math.pow(robo.getX() - mestre.getX(), 2) + Math.pow(robo.getY() - mestre.getY(), 2) + Math.pow(robo.getZ() - mestre.getZ(), 2)));
+            if (distancia <= getRaio() && !robo.equals(mestre)) {
+                listaRobosEncontrados.add(robo);
+            }
+        }
+        return listaRobosEncontrados;
+    }
+
+    @Override
+    public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
+        //SensorClasse não consegue identificar obstáculos.
+        return null;
+    }
+}
