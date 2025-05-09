@@ -1,6 +1,8 @@
 package lab04.robos.robos_aereos;
 
 import lab04.Ambiente;
+import lab04.excecoes.RoboDesligadoException;
+import lab04.robos.Estado;
 import lab04.robos.Robo;
 import lab04.robos.RoboAereo;
 
@@ -77,6 +79,9 @@ public class RoboBombardeiro extends RoboAereo {
             System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());
             return null;
         }
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode bombardear.");
+        }
 
         // Não pode bombardear se o robo estiver sem bombas.
         if (getBombas() <= 0) {
@@ -86,7 +91,7 @@ public class RoboBombardeiro extends RoboAereo {
 
         setBombas(getBombas() - 1);
 
-        List<Robo> listaRobos = getAmbiente().getListaRobos();
+        List<Robo> listaRobos = getAmbiente().getListaEntidades().stream().filter(entidade -> entidade instanceof Robo).map(entidade -> (Robo) entidade).toList();
         List<Robo> robosAtingidos = new ArrayList<>();
 
         int vitimas = 0;
@@ -104,7 +109,7 @@ public class RoboBombardeiro extends RoboAereo {
         // Remove os robos atingidos do ambiente.
         for (Robo robo : robosAtingidos) {
             System.out.printf("O robo, %s, foi atingido\n", robo.getNome());
-            getAmbiente().removerRobo(robo);
+            getAmbiente().removerEntidade(robo);
         }
 
         System.out.printf("O robo bombardeiro %s destruiu %d robos\n", getNome(), vitimas);
@@ -112,7 +117,7 @@ public class RoboBombardeiro extends RoboAereo {
         // Se autodestroi se estava no solo.
         if (getZ() == 0) {
             System.out.printf("O robo %s não sobreviveu\n", getNome());
-            getAmbiente().removerRobo(this);
+            getAmbiente().removerEntidade(this);
             robosAtingidos.add(this);
         }
         return robosAtingidos;

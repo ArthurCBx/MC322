@@ -1,6 +1,7 @@
 package lab04.robos;
 
 import lab04.Ambiente;
+import lab04.excecoes.RoboDesligadoException;
 import lab04.obstaculos.Obstaculo;
 
 import java.util.ArrayList;
@@ -63,6 +64,9 @@ public abstract class RoboAereo extends Robo{
     // É implementado o mesmo metodo de dividir o movimento em pequenas partes utilizado em "mover" do robo, apenas unidirecional
 
     public void subir(int deltaAltitude) {
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
+        }
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode subir.\n", getNome());
             return;
@@ -111,6 +115,10 @@ public abstract class RoboAereo extends Robo{
             return;
         }
 
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
+        }
+
         // Não aceita valores negativos para deltaAltitude:
         int finalAlt = getZ() - Math.max(deltaAltitude, 0);
 
@@ -139,8 +147,6 @@ public abstract class RoboAereo extends Robo{
         setAltitude((int) newAlt);
 
     }
-
-
 
 }
 

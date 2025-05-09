@@ -3,13 +3,15 @@ package lab04.robos;
 import lab04.Ambiente;
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
+import lab04.excecoes.RoboDesligadoException;
 import lab04.obstaculos.Obstaculo;
 import lab04.sensores.Sensor;
 import lab04.sensores.SensorClasse;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public abstract class Robo implements Entidade {
+public abstract class Robo implements Entidade, Sensoreavel {
 
     // Criando classe Robo com atributos especificados no enunciado
 
@@ -19,6 +21,8 @@ public abstract class Robo implements Entidade {
     private int posX;
     private int posY;
     protected int altitude = 0; // Altura padrão do robô, que é alterada em robos aéreos.
+    private final String id;
+    private Estado estado;
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
 
@@ -33,7 +37,7 @@ public abstract class Robo implements Entidade {
         this.posX = Math.max(posX, 0);
         this.posY = Math.max(posY, 0);
         if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
-
+        this.id = UUID.randomUUID().toString();
     }
 
     // Sobrecarga do construtor para adicionar o ambiente
@@ -43,8 +47,9 @@ public abstract class Robo implements Entidade {
         this.nome = nome;
         this.posX = Math.max(posX, 0);
         this.posY = Math.max(posY, 0);
+        this.id = UUID.randomUUID().toString();
 
-        ambiente.adicionarRobo(this);
+        ambiente.adicionarEntidade(this);
 
         if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
 
@@ -94,6 +99,10 @@ public abstract class Robo implements Entidade {
         }
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+
     public void addSensor(Sensor sensor) {
         sensores.add(sensor);
     }
@@ -124,6 +133,9 @@ public abstract class Robo implements Entidade {
     // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
     public void mover(int deltaX, int deltaY) {
+        if (estado == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
+        }
         if (getAmbiente() == null){
             System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
             return;
@@ -200,6 +212,9 @@ public abstract class Robo implements Entidade {
 
     // Metodo para identificar robos proximos:
     public ArrayList<Robo> identificarRobosProximos(){
+        if (estado == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+        }
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robô %s não está em um ambiente ou não possui um sensor, então não consegue analisar o que está em sua volta.\n", getNome());
             return null;
@@ -218,6 +233,9 @@ public abstract class Robo implements Entidade {
 
     // Metodo para identificar obstaculos no ambiente:
     public void identificarObstaculosProximos() {
+        if (estado == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+        }
         if (getAmbiente() == null || getSensores() == null){
             System.out.printf("O robo %s não está em um ambiente ou não possui um sensor para identificar obstáculos.\n", getNome());
             return;
@@ -238,8 +256,12 @@ public abstract class Robo implements Entidade {
             }
         }
     }
-    public void monitorar(){
+    public void acionarSensores(){
         int count = 1;
+        if (estado == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+        }
+
         if (getSensores() != null)
             for (Sensor sensor : getSensores()){
                 System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
@@ -248,6 +270,24 @@ public abstract class Robo implements Entidade {
                 count++;
             }
         System.out.println("Monitoramente finalizado.");
+    }
+
+    public void ligar(){
+        if (estado == Estado.LIGADO){
+            System.out.printf("O robô %s já está ligado.\n", getNome());
+        }else{
+            estado = Estado.LIGADO;
+            System.out.printf("O robô %s foi ligado.\n", getNome());
+        }
+    }
+
+    public void desligar(){
+        if(estado == Estado.DESLIGADO) {
+            System.out.printf("O robô %s já está desligado.\n", getNome());
+        } else{
+            estado = Estado.DESLIGADO;
+            System.out.printf("O robô %s foi desligado.\n", getNome());
+        }
     }
 
 }
