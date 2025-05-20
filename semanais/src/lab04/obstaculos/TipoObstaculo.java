@@ -5,6 +5,7 @@ public enum TipoObstaculo {
     ARVORE("Arvore", 10, true),
     ROCHA("Rocha", 3, true),
     ANIMAL("Animal", 2, true),
+    BURACO("Buraco", 0, false),
     NUVEM("Nuvem", 80, false);
 
     private final int alturaPadrao; // Altura inicial do tipo de obstáculo, que pode ser alterada na classe obstáculo.

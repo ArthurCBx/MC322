@@ -2,12 +2,12 @@ package lab04;
 
 import lab04.obstaculos.Obstaculo;
 import lab04.obstaculos.TipoObstaculo;
-import lab04.robos.Robo;
-import lab04.robos.RoboAereo;
-import lab04.robos.robos_aereos.RoboBombardeiro;
-import lab04.robos.robos_aereos.RoboExplosivo;
-import lab04.robos.robos_terrestres.RoboCombustivel;
-import lab04.robos.robos_terrestres.RoboSolar;
+import lab04.entidade.robos.Robo;
+import lab04.entidade.robos.RoboAereo;
+import lab04.entidade.robos.robos_aereos.RoboBombardeiro;
+import lab04.entidade.robos.robos_aereos.RoboExplosivo;
+import lab04.entidade.robos.robos_terrestres.RoboCombustivel;
+import lab04.entidade.robos.robos_terrestres.RoboSolar;
 import lab04.sensores.Sensor;
 import lab04.sensores.SensorAltitude;
 import lab04.sensores.SensorClasse;

@@ -1,7 +1,7 @@
-package lab04.robos.robos_terrestres;
+package lab04.entidade.robos.robos_terrestres;
 
 import lab04.Ambiente;
-import lab04.robos.RoboTerrestre;
+import lab04.entidade.robos.RoboTerrestre;
 
 import java.util.Objects;
 

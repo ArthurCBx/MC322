@@ -1,4 +1,4 @@
-package lab04.robos;
+package lab04.entidade.robos;
 
 import lab04.Ambiente;
 

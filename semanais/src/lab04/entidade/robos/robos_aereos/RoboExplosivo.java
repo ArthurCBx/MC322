@@ -1,11 +1,10 @@
-package lab04.robos.robos_aereos;
+package lab04.entidade.robos.robos_aereos;
 
 import lab04.Ambiente;
-import lab04.entidade.Entidade;
 import lab04.excecoes.RoboDesligadoException;
-import lab04.robos.Estado;
-import lab04.robos.Robo;
-import lab04.robos.RoboAereo;
+import lab04.entidade.robos.Estado;
+import lab04.entidade.robos.Robo;
+import lab04.entidade.robos.RoboAereo;
 
 import java.util.ArrayList;
 import java.util.List;

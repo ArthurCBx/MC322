@@ -1,9 +1,8 @@
 package lab04.sensores;
 
 import lab04.Ambiente;
-import lab04.entidade.TipoEntidade;
 import lab04.obstaculos.Obstaculo;
-import lab04.robos.Robo;
+import lab04.entidade.robos.Robo;
 
 import java.util.ArrayList;
 
