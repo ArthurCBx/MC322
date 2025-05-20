@@ -1,7 +1,11 @@
 package lab04.entidade.robos.robos_terrestres;
 
 import lab04.Ambiente;
+import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.RoboTerrestre;
+import lab04.excecoes.RoboDesligadoException;
+import lab04.excecoes.SemAmbienteException;
+import lab04.excecoes.SemCombustivelException;
 
 public class RoboCombustivel extends RoboTerrestre {
 
@@ -12,14 +16,8 @@ public class RoboCombustivel extends RoboTerrestre {
 
     // Contrutor do robo Combustivel, considera o combustivel presente no robo (minimo de zero)
 
-    public RoboCombustivel(String nome, String direcao, int posX, int posY, int velocidadeMaxima, double combustivel) {
-        super(nome, direcao, posX, posY, velocidadeMaxima);
-        this.combustivel = Math.min(0, combustivel);
-
-    }
-
-    public RoboCombustivel(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, double combustivel) {
-        super(ambiente, nome, direcao, posX, posY, velocidadeMaxima);
+    public RoboCombustivel(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double combustivel) {
+        super(ambiente, nome, posX, posY, velocidadeMaxima);
         this.combustivel = Math.min(0, combustivel);
 
     }
@@ -33,6 +31,7 @@ public class RoboCombustivel extends RoboTerrestre {
 
     public String getDescricao() {
         return "Robo Combustivel: " + getNome() + "\n" +
+                "id: " + this.getId() + "\n" +
                 "Combustivel disponivel: " + getCombustivel() + "\n" +
                 "Velocidade Maxima: " + getVelocidadeMaxima() + "\n" +
                 "Posicao Atual: (" + getX() + ", " + getY() + ")";
@@ -72,8 +71,18 @@ public class RoboCombustivel extends RoboTerrestre {
             setCombustivel(getCombustivel() - movetotal);
 
         } else {
-            System.out.printf("O robo %s não tem combustível suficiente para a locomoção.\n", getNome());
+            throw new SemCombustivelException("O robo não tem combustível suficiente para a locomoção.");
         }
 
+    }
+
+    @Override
+    public void executarTarefa() {
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+        }
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+        }
     }
 }

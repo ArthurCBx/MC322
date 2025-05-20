@@ -3,6 +3,7 @@ package lab04.entidade.robos;
 import lab04.Ambiente;
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
+import lab04.excecoes.ColisaoException;
 import lab04.excecoes.ForaDosLimitesException;
 import lab04.excecoes.RoboDesligadoException;
 import lab04.excecoes.SemAmbienteException;
@@ -89,6 +90,10 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         return estado;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void addSensor(Sensor sensor) {
         sensores.add(sensor);
     }
@@ -119,15 +124,13 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
             throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
         }
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
-            return;
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode movimentar-se.");
         }
 
         int finalPosX = getX() + deltaX;
         int finalPosY = getY() + deltaY;
         if (!getAmbiente().dentroDosLimites(finalPosX, finalPosY,getZ())) {
-            System.out.printf("O robo %s está saindo do ambiente, operação cancelada\n", getNome());
-            return;
+            throw new ForaDosLimitesException("O robo está saindo do ambiente, operação cancelada");
         }
 
         ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getX(),getY(),getZ(),finalPosX,finalPosY,getZ());
@@ -165,8 +168,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
                     if(vetorMove[0] < 0)    setPosX(getX() + 1);
                     if(vetorMove[1] < 0)    setPosY(getY() + 1);
 
-                    System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipoObstaculo().getNome(), getX(), getY(),getZ());
-                    return;
+                    throw new ColisaoException("O robo colidiu com um obstáculo "+obstaculo.getTipoObstaculo()+" e foi realocado para a posição ("+getX()+","+getY()+","+getZ()+")");
                 }
 
             newPos[0] = newTempPos[0];

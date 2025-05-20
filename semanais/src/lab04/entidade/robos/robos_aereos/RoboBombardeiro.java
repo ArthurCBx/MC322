@@ -5,6 +5,7 @@ import lab04.excecoes.RoboDesligadoException;
 import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.Robo;
 import lab04.entidade.robos.RoboAereo;
+import lab04.excecoes.SemAmbienteException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +22,8 @@ public class RoboBombardeiro extends RoboAereo {
     private int bombas;
     private final int capacidadeBombas;
 
-    public RoboBombardeiro(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
-        super(nome,direcao, posX, posY, altitude, altitudeMaxima);
-        this.bombas = 0;
-        this.capacidadeBombas = Math.abs(capacidadeBombas);
-
-    }
-
-    public RoboBombardeiro(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
-        super(ambiente, nome, direcao, posX, posY, altitude, altitudeMaxima);
+    public RoboBombardeiro(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
+        super(ambiente, nome, posX, posY, altitude, altitudeMaxima);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
 
@@ -55,6 +49,7 @@ public class RoboBombardeiro extends RoboAereo {
 
     public String getDescricao() {
         return "Robo Bombardeiro: " + getNome() + "\n" +
+                "id: " + this.getId() + "\n" +
                 "Bombas: " + getBombas() + "\n" +
                 "Capacidade Bombas: " + getCapacidadeBombas() + "\n" +
                 "Altura Maxima: " + getAltitudeMaxima() + "\n" +
@@ -76,11 +71,10 @@ public class RoboBombardeiro extends RoboAereo {
 
     public List<Robo> bombardear() {
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode bombardear.\n", getNome());
-            return null;
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
         }
         if (getEstado() == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode bombardear.");
+            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
         }
 
         // Não pode bombardear se o robo estiver sem bombas.

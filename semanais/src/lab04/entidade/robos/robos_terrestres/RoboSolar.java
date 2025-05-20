@@ -2,6 +2,8 @@ package lab04.entidade.robos.robos_terrestres;
 
 import lab04.Ambiente;
 import lab04.entidade.robos.RoboTerrestre;
+import lab04.excecoes.SemAmbienteException;
+import lab04.excecoes.SemCombustivelException;
 
 import java.util.Objects;
 
@@ -15,15 +17,8 @@ public class RoboSolar extends RoboTerrestre {
 
     // Construtor para o robo Solar, considera que começa descarregado e possui uma potência de painel solar (sempre positiva)
 
-    public RoboSolar(String nome, String direcao, int posX, int posY, int velocidadeMaxima, double potenciaPainelSolar) {
-        super(nome, direcao, posX, posY, velocidadeMaxima);
-        this.potenciaPainelSolar = Math.abs(potenciaPainelSolar);
-        this.bateria = 0;
-
-    }
-
-    public RoboSolar(Ambiente ambiente, String nome, String direcao, int posX, int posY, int velocidadeMaxima, double potenciaPainelSolar) {
-        super(ambiente, nome, direcao, posX, posY, velocidadeMaxima);
+    public RoboSolar(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double potenciaPainelSolar) {
+        super(ambiente, nome, posX, posY, velocidadeMaxima);
         this.potenciaPainelSolar = Math.abs(potenciaPainelSolar);
         this.bateria = 0;
 
@@ -42,6 +37,7 @@ public class RoboSolar extends RoboTerrestre {
 
     public String getDescricao() {
         return "Robo Solar: " + getNome() + "\n" +
+                "id: " + this.getId() + "\n" +
                 "Bateria: " + getBateria() + "\n" +
                 "Potencia do Painel Solar: " + getPotenciaPainelSolar() + "\n" +
                 "Velocidade Maxima: " + getVelocidadeMaxima() + "\n" +
@@ -61,8 +57,7 @@ public class RoboSolar extends RoboTerrestre {
 
     public void carregar() {
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode carregar-se.\n", getNome());
-            return;
+            throw new SemAmbienteException("O robo não está em um ambiente, não pode carregar.");
         }
 
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))
@@ -78,11 +73,6 @@ public class RoboSolar extends RoboTerrestre {
 
     @Override
     public void mover(int deltaX, int deltaY) {
-        if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode movimentar-se.\n", getNome());
-            return;
-        }
-
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
             super.mover(deltaX, deltaY);                                // Assim o robo pode se mover independentemente da sua bateria durante o dia
 
@@ -98,7 +88,7 @@ public class RoboSolar extends RoboTerrestre {
                 setBateria(getBateria() - distancia);
 
             } else {
-                System.out.printf("O robo %s não tem carga suficiente na bateria para a locomoção, carregue a bateria\n", getNome());
+                throw new SemCombustivelException("O robo não tem carga suficiente na bateria para a locomoção, carregue a bateria");
             }
         }
 

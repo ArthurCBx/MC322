@@ -11,8 +11,8 @@ public abstract class RoboTerrestre extends Robo {
 
     // Metodo construtor para o robo Terrestre consideram a velocidade maxima em módulo
 
-    public RoboTerrestre(Ambiente ambiente, String nome, String direcao, int posX, int posY, double velocidadeMaxima) {
-        super(ambiente, nome, direcao, posX, posY);
+    public RoboTerrestre(Ambiente ambiente, String nome, int posX, int posY, double velocidadeMaxima) {
+        super(ambiente, nome, posX, posY);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
     }
 

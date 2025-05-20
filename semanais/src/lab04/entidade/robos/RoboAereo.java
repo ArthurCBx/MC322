@@ -1,7 +1,10 @@
 package lab04.entidade.robos;
 
 import lab04.Ambiente;
+import lab04.excecoes.ColisaoException;
+import lab04.excecoes.ForaDosLimitesException;
 import lab04.excecoes.RoboDesligadoException;
+import lab04.excecoes.SemAmbienteException;
 import lab04.obstaculos.Obstaculo;
 
 import java.util.ArrayList;
@@ -15,8 +18,8 @@ public abstract class RoboAereo extends Robo{
 
     // Metodos construtores para Robo Aereo
 
-    public RoboAereo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
-        super(ambiente, nome, direcao, posX, posY);
+    public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima) {
+        super(ambiente, nome, posX, posY);
 
         // A altitude é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);
@@ -52,11 +55,10 @@ public abstract class RoboAereo extends Robo{
 
     public void subir(int deltaAltitude) {
         if (getEstado() == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
+            throw new RoboDesligadoException("O robô está desligado, não pode se mover.");
         }
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode subir.\n", getNome());
-            return;
+            throw new SemAmbienteException("O robo não está em um ambiente, não pode subir.");
         }
 
         // Aceita apenas valores positivos para deltaAltitude:
@@ -67,8 +69,7 @@ public abstract class RoboAereo extends Robo{
 
         // Verificando se nova altitude sairá ou não do ambiente.
         if (!getAmbiente().dentroDosLimites(getX(), getY(), finalAlt)){
-            System.out.printf("O robo %s está saindo do ambiente %s, operação cancelada\n", getNome(), getAmbiente());
-            return;
+            throw new ForaDosLimitesException("O robo está saindo do ambiente, operação cancelada");
         }
 
         ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getX(),getY(),getZ(),getX(),getY(),finalAlt);
@@ -82,8 +83,7 @@ public abstract class RoboAereo extends Robo{
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(getX(), getY(), newTempAlt)) {
                     setAltitude((int)newAlt);
-                    System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipoObstaculo().getNome(), getX(), getY(),getZ());
-                    return;
+                    throw new ColisaoException("O robo colidiu com um obstáculo "+obstaculo.getTipoObstaculo()+" e foi realocado para a posição ("+getX()+","+getY()+","+getZ()+")");
                 }
 
             newAlt = newTempAlt;
@@ -98,10 +98,8 @@ public abstract class RoboAereo extends Robo{
 
     public void descer(int deltaAltitude) {
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode descer.\n", getNome());
-            return;
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode descer.");
         }
-
         if (getEstado() == Estado.DESLIGADO){
             throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
         }
@@ -124,8 +122,7 @@ public abstract class RoboAereo extends Robo{
             for (Obstaculo obstaculo : obstaculosPresentes)
                 if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(getX(), getY(), newTempAlt)) {
                     setAltitude((int)newAlt + 1);
-                    System.out.printf("O robo %s colidiu com um obstáculo %s e foi realocado para a posição (%d, %d, %d)\n", getNome(), obstaculo.getTipoObstaculo().getNome(), getX(), getY(),getZ());
-                    return;
+                    throw new ColisaoException("O robo colidiu com um obstáculo "+obstaculo.getTipoObstaculo()+" e foi realocado para a posição ("+getX()+","+getY()+","+getZ()+")");
                 }
 
             newAlt = newTempAlt;

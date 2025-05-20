@@ -5,6 +5,7 @@ import lab04.excecoes.RoboDesligadoException;
 import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.Robo;
 import lab04.entidade.robos.RoboAereo;
+import lab04.excecoes.SemAmbienteException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,8 @@ public class RoboExplosivo extends RoboAereo {
     private final int raioExplosao;
 
 
-    public RoboExplosivo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
-        super(nome, direcao, posX, posY, altitude, altitudeMaxima);
-        this.raioExplosao = Math.abs(raioExplosao);
-
-    }
-
-    public RoboExplosivo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
-        super(ambiente, nome, direcao, posX, posY, altitude, altitudeMaxima);
+    public RoboExplosivo(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
+        super(ambiente, nome, posX, posY, altitude, altitudeMaxima);
         this.raioExplosao = Math.abs(raioExplosao);
 
     }
@@ -37,6 +32,7 @@ public class RoboExplosivo extends RoboAereo {
 
     public String getDescricao() {
         return "Robo Explosivo: " + getNome() + "\n" +
+                "id: " + this.getId() + "\n" +
                 "Raio de Explosão: " + getRaioExplosao() + "\n" +
                 "Altura Maxima: " + getAltitudeMaxima() + "\n" +
                 "Altura Atual: " + getZ() + "\n" +
@@ -46,11 +42,10 @@ public class RoboExplosivo extends RoboAereo {
 
     public List<Robo> explodir() {
         if (getAmbiente() == null){
-            System.out.printf("O robo %s não está em um ambiente, logo não pode explodir.\n", getNome());
-            return null;
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode explodir.");
         }
         if (getEstado() == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode explodir.");
+            throw new RoboDesligadoException("O robô está desligado, não pode explodir.");
         }
 
         // Metodo identificarRedondezas retorna uma lista de robos que estão no raio de explosao.
