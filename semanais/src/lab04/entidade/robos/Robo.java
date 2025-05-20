@@ -3,7 +3,9 @@ package lab04.entidade.robos;
 import lab04.Ambiente;
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
+import lab04.excecoes.ForaDosLimitesException;
 import lab04.excecoes.RoboDesligadoException;
+import lab04.excecoes.SemAmbienteException;
 import lab04.obstaculos.Obstaculo;
 import lab04.sensores.Sensor;
 import lab04.sensores.SensorClasse;
@@ -17,7 +19,6 @@ public abstract class Robo implements Entidade, Sensoreavel {
 
     private Ambiente ambiente;
     private final String nome;
-    private String direcao;
     private int posX;
     private int posY;
     protected int altitude = 0; // Altura padrão do robô, que é alterada em robos aéreos.
@@ -27,31 +28,20 @@ public abstract class Robo implements Entidade, Sensoreavel {
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
 
 
-    // Construtores para robo:
+    // Construtor para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
-    // Um recebe o ambiente como parâmetro e outro apenas cria um robô sem ambiente.
 
-    public Robo(String nome, String direcao, int posX, int posY) {
-        this.nome = nome;
-        this.direcao = direcao;
-        this.posX = Math.max(posX, 0);
-        this.posY = Math.max(posY, 0);
-        if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
-        this.id = UUID.randomUUID().toString();
-    }
-
-    // Sobrecarga do construtor para adicionar o ambiente
-    public Robo(Ambiente ambiente, String nome, String direcao, int posX, int posY) {
+    public Robo(Ambiente ambiente, String nome, int posX, int posY) {
         this.ambiente = ambiente;
-        this.direcao = direcao;
         this.nome = nome;
-        this.posX = Math.max(posX, 0);
-        this.posY = Math.max(posY, 0);
+        this.posX = Math.min(Math.max(posX,0), ambiente.getComprimento());
+        this.posY = Math.min(Math.max(posY,0), ambiente.getLargura());
         this.id = UUID.randomUUID().toString();
 
         ambiente.adicionarEntidade(this);
 
-        if (posX < 0 || posY < 0) System.out.printf("Coordenadas negativas de %s foram realocadas para 0\n", getNome());
+        if(posX != this.posX || posY != this.posY)
+            System.out.println("Posicao do robô foi realocada para dentro do ambiente");
 
     }
 
@@ -60,10 +50,6 @@ public abstract class Robo implements Entidade, Sensoreavel {
 
     public Ambiente getAmbiente() {
         return ambiente;
-    }
-
-    public String getDirecao() {
-        return direcao;
     }
 
     public String getNome() {
@@ -109,10 +95,6 @@ public abstract class Robo implements Entidade, Sensoreavel {
 
     public void setAmbiente(Ambiente ambiente) {
         this.ambiente = ambiente;
-    }
-
-    public void setDirecao(String direcao) {
-        this.direcao = direcao;
     }
 
     public void setPosX(int posX) {
@@ -203,20 +185,25 @@ public abstract class Robo implements Entidade, Sensoreavel {
     // Metodo para exibiar a posição do robo:
     public void exibirPosicao() {
         if (getAmbiente() == null) {
-            System.out.printf("O robô %s não se encontra em um ambiente.\n", getNome());
-            return;
+            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
+        }
+        if (getEstado() == Estado.DESLIGADO) {
+            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
 
-        System.out.printf("O robô %s está no ambiente %s na posição (%d, %d, %d) e observando %s\n", getNome(), getAmbiente(), getX(), getY(), getZ(), getDirecao());
+        System.out.printf("O robô %s está na posição (%d, %d, %d)\n", getNome(), getX(), getY(), getZ());
     }
 
     // Metodo para identificar robos proximos:
     public ArrayList<Robo> identificarRobosProximos(){
         if (estado == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-        if (getAmbiente() == null || getSensores() == null){
-            System.out.printf("O robô %s não está em um ambiente ou não possui um sensor, então não consegue analisar o que está em sua volta.\n", getNome());
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
+        }
+        if (sensores == null){
+            System.out.println("O robô solicitado não possui sensores");
             return null;
         }
         ArrayList<Robo> robosProximos = new ArrayList<>();
@@ -234,10 +221,13 @@ public abstract class Robo implements Entidade, Sensoreavel {
     // Metodo para identificar obstaculos no ambiente:
     public void identificarObstaculosProximos() {
         if (estado == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-        if (getAmbiente() == null || getSensores() == null){
-            System.out.printf("O robo %s não está em um ambiente ou não possui um sensor para identificar obstáculos.\n", getNome());
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
+        }
+        if (sensores == null){
+            System.out.println("O robô solicitado não possui sensores");
             return;
         }
 
@@ -256,19 +246,25 @@ public abstract class Robo implements Entidade, Sensoreavel {
             }
         }
     }
+
     public void acionarSensores(){
         int count = 1;
         if (estado == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode acionar sensores.");
+            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-
-        if (getSensores() != null)
-            for (Sensor sensor : getSensores()){
-                System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
-                sensor.monitorar(getAmbiente(),this);
-                System.out.println();
-                count++;
-            }
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
+        }
+        if (sensores == null){
+            System.out.println("O robô solicitado não possui sensores");
+            return;
+        }
+        for (Sensor sensor : getSensores()){
+            System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
+            sensor.monitorar(getAmbiente(),this);
+            System.out.println();
+            count++;
+        }
         System.out.println("Monitoramente finalizado.");
     }
 
@@ -289,6 +285,8 @@ public abstract class Robo implements Entidade, Sensoreavel {
             System.out.printf("O robô %s foi desligado.\n", getNome());
         }
     }
+
+    public abstract void executarTarefa();
 
 }
 

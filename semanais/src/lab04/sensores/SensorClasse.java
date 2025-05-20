@@ -1,10 +1,12 @@
 package lab04.sensores;
 
 import lab04.Ambiente;
+import lab04.entidade.TipoEntidade;
 import lab04.obstaculos.Obstaculo;
 import lab04.entidade.robos.Robo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SensorClasse extends Sensor {
     // Subclasse de Sensor que consegue descobrir a classe de robos num raio tridimensional, mas não sabe sobre obstáculos.
@@ -19,7 +21,7 @@ public class SensorClasse extends Sensor {
 
     @Override
     public void monitorar(Ambiente ambiente, Robo mestre){
-        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
 
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt((Math.pow(robo.getX() - mestre.getX(), 2) + Math.pow(robo.getY() - mestre.getY(), 2) + Math.pow(robo.getZ() - mestre.getZ(), 2)));
@@ -31,7 +33,7 @@ public class SensorClasse extends Sensor {
 
     @Override
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
-        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
         ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
 
         for (Robo robo : listaRobos) {

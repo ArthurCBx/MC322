@@ -30,7 +30,7 @@ public class Ambiente {
         this.listaEntidades = new ArrayList<>();
     }
 
-    // Sobrecarga do construtor para adicionar lista de robos e obstaculos.
+    // Sobrecarga do construtor para adicionar lista de entidades.
     public Ambiente(int comprimento, int largura, int altura, ArrayList<Entidade> listaEntidades) {
         this.comprimento = Math.max(comprimento,0);
         this.largura = Math.max(largura,0);
@@ -83,26 +83,13 @@ public class Ambiente {
 
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
     public boolean dentroDosLimites(int x, int y, int z) {
-
-        return x >= 0 && x <= getLargura() && y >= 0 && y <= getComprimento() && z >= 0 && z <= getAltura();
+        return x >= 0 && x <= getComprimento() && y >= 0 && y <= getLargura() && z >= 0 && z <= getAltura();
     }
-
 
     // Metodo para adiconar robo à lista de robos do ambiente:
 
     public void adicionarEntidade(Entidade entidade) {
-
-        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
-            Robo robo = (Robo) entidade;
-            if (!dentroDosLimites(robo.getX(), robo.getY(), robo.getZ())) {
-                System.out.println("Uma das coordenadas do robo não respeita os limites de ambiente. Posicionando-o em (0,0,0).");
-                robo.setPosX(0);
-                robo.setPosY(0);
-                robo.setAltitude(0);
-            }
-            listaEntidades.add(entidade);
-        }
-        else if (entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) {
+        if (entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) {
             Obstaculo obstaculo = (Obstaculo) entidade;
 
             // Adiciona obstáculo ao ambiente apenas se ele estiver dentro dos limites do ambiente.
@@ -115,19 +102,17 @@ public class Ambiente {
             }else{
                 System.out.println("Uma das coordenadas do obstáculo não respeita os limites de ambiente. Altere-a para adicionar o obstáculo.");
             }
+        }else{
+            listaEntidades.add(entidade);
         }
     }
 
     public void removerEntidade(Entidade entidade) {
-        if ((entidade.getTipoEntidade() == TipoEntidade.ROBO) || entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) {
-            if (listaEntidades.contains(entidade)) {
-                listaEntidades.remove(entidade);
-                entidade = null; // Remove a referência ao objeto
-            } else {
-                System.out.println("A entidade não está no ambiente.");
-            }
+        if (listaEntidades.contains(entidade)) {
+            listaEntidades.remove(entidade);
+            entidade = null; // Remove a referência ao objeto
         } else {
-            System.out.println("Tipo de entidade inválido. Somente robôs e obstáculos podem ser removidos.");
+            System.out.println("A entidade não está no ambiente.");
         }
     }
 
@@ -183,6 +168,16 @@ public class Ambiente {
                         obstaculosEncontrados.add(obstaculo);
 
         return obstaculosEncontrados;
+    }
+
+    public void executarSensores(){
+        // Executa sensores de todos os robôs no ambiente.
+        for (Entidade entidade : listaEntidades) {
+            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+                Robo robo = (Robo) entidade;
+                robo.acionarSensores();
+            }
+        }
     }
 
 

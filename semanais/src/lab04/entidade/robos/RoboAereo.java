@@ -14,19 +14,6 @@ public abstract class RoboAereo extends Robo{
     private int altitudeMaxima;
 
     // Metodos construtores para Robo Aereo
-    // Um recebe o ambiente como parâmetro e outro apenas cria um robo sem ambiente
-
-    public RoboAereo(String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
-        super(nome, direcao, posX, posY);
-
-        // A altitude é sempre positiva e menor ou igual a altitudeMaxima.
-        this.altitudeMaxima = Math.abs(altitudeMaxima);
-        this.altitude = Math.max(Math.min(altitude, this.altitudeMaxima), 0);
-
-        if (altitude > altitudeMaxima)
-            System.out.printf("Altitude de %s era maior que maxima e foi realocada para a maxima\n", nome);
-
-    }
 
     public RoboAereo(Ambiente ambiente, String nome, String direcao, int posX, int posY, int altitude, int altitudeMaxima) {
         super(ambiente, nome, direcao, posX, posY);

@@ -1,10 +1,13 @@
 package lab04.sensores;
 
 import lab04.Ambiente;
+import lab04.entidade.Entidade;
+import lab04.entidade.TipoEntidade;
 import lab04.obstaculos.Obstaculo;
 import lab04.entidade.robos.Robo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SensorAltitude extends Sensor {
     /* Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas também consegue monitorar
@@ -36,15 +39,15 @@ public class SensorAltitude extends Sensor {
         System.out.println("Monitoramento em XY:");
         super.monitorar(ambiente, mestre);
         System.out.println("Monitoramento em altitude:");
-        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
-        for (Robo robo : listaRobos) {
-            int distancia = Math.abs(robo.getZ() - mestre.getZ());
-            if (distancia <= raioZ && (mestre.getX() == robo.getX()) && (mestre.getY() == robo.getY()) && !robo.equals(mestre)) {
-                System.out.printf("Robo encontrado a %d metros de altitude.\n", distancia);
+        ArrayList<Entidade> listaEntidades = ambiente.getListaEntidades();
+        for (Entidade entidade : listaEntidades) {
+            int distancia = Math.abs(entidade.getZ() - mestre.getZ());
+            if (distancia <= raioZ && (mestre.getX() == entidade.getX()) && (mestre.getY() == entidade.getY()) && !entidade.equals(mestre)) {
+                System.out.printf("Entidade %s encontrada na posição (%d,%d,%d)", entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY(), entidade.getZ());
             }
         }
 
-        ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
+        List<Obstaculo> obstaculos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList();
         for (Obstaculo obstaculo : obstaculos) {
             int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getX(), obstaculo.getPosX2()));
             int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getY(), obstaculo.getPosY2()));
@@ -67,7 +70,7 @@ public class SensorAltitude extends Sensor {
     @Override
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre) {
         ArrayList<Robo> listaRobosEncontrados = super.listaRobosEncontrados(ambiente, mestre);
-        ArrayList<Robo> listaRobos = ambiente.getListaRobos();
+        List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
 
         for (Robo robo : listaRobos) {
             int distancia = Math.abs(robo.getZ() - mestre.getZ());
@@ -83,7 +86,7 @@ public class SensorAltitude extends Sensor {
     @Override
     public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre) {
         ArrayList<Obstaculo> listaObstaculosEncontrados = super.listaObstaculosEncontrados(ambiente, mestre);
-        ArrayList<Obstaculo> obstaculos = ambiente.getListaObstaculos();
+        List<Obstaculo> obstaculos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList();
         for (Obstaculo obstaculo : obstaculos){
             int cX = Math.max(obstaculo.getPosX1(), Math.min(mestre.getX(), obstaculo.getPosX2()));
             int cY = Math.max(obstaculo.getPosY1(), Math.min(mestre.getY(), obstaculo.getPosY2()));
