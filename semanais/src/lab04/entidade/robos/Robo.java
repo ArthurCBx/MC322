@@ -13,7 +13,7 @@ import lab04.sensores.SensorClasse;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public abstract class Robo implements Entidade, Sensoreavel {
+public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
     // Criando classe Robo com atributos especificados no enunciado
 

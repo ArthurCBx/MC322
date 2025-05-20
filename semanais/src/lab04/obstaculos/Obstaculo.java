@@ -84,7 +84,7 @@ public class Obstaculo implements Entidade {
     }
 
     public char getRepresentacao() {
-        return getTipoObstaculo().getNome().charAt(0);
+        return 'O';
     }
 
     public TipoObstaculo getTipoObstaculo() {
