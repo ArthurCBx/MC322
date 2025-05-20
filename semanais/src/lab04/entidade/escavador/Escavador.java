@@ -22,9 +22,12 @@ public class Escavador implements Entidade {
     private final TipoEntidade tipoEntidade = TipoEntidade.ESCAVADOR;
 
     public Escavador(int posX, int posY, Ambiente ambiente){
-        this.posX = posX;
-        this.posY = posY;
+        this.posX = Math.min(Math.max(posX,0), ambiente.getComprimento());
+        this.posY = Math.min(Math.max(posY,0), ambiente.getLargura());
         this.ambiente = ambiente; ambiente.adicionarEntidade(this);
+
+        if(posX != this.posX || posY != this.posY)
+            System.out.println("Posicao do escavador foi realocada para dentro do ambiente");
     }
 
     public int getX() {
