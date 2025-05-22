@@ -7,6 +7,7 @@ Alunos: Arthur Costa Barreto (206325), Vitor Benaglia Albertini (206645).
 Turma: A
 
 # Estrutura do projeto
+```
 MC322
 ├── MC322.iml
 ├── README.md
@@ -97,4 +98,4 @@ MC322
         │       ├── SensorAltitude.java
         │       └── SensorClasse.java
         └── semanais.iml
-
+```
