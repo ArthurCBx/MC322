@@ -1,11 +1,10 @@
 package lab04.entidade;
 
+// Enumeração que define os tipos de entidades que podem existir no ambiente e estarão no mapa.
+
 public enum TipoEntidade {
     ROBO("Robo"),
     OBSTACULO("Obstáculo"),
-    ESCAVADOR("Escavador"),
-    GEOGRAFO("Geografo"),
-    LADRAO("Ladrao"),
     VAZIO("Vazio");
 
     private final String nome;

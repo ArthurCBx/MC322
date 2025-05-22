@@ -15,7 +15,7 @@ Subclasse de RoboAereo que possui a habilidade de se autodestruir, levando consi
  Para isso, ele possui o metodo explodir, que recebe o ambiente em que está inserido como atributo.
  */
 
-public class RoboExplosivo extends RoboAereo {
+public class RoboExplosivo extends RoboAereo implements Explosivos{
     private final int raioExplosao;
 
 

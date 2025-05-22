@@ -1,12 +1,10 @@
 package lab04.entidade.robos;
 
 import lab04.Ambiente;
+import lab04.comunicacao.CentralComunicacao;
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
-import lab04.excecoes.ColisaoException;
-import lab04.excecoes.ForaDosLimitesException;
-import lab04.excecoes.RoboDesligadoException;
-import lab04.excecoes.SemAmbienteException;
+import lab04.excecoes.*;
 import lab04.obstaculos.Obstaculo;
 import lab04.sensores.Sensor;
 import lab04.sensores.SensorClasse;
@@ -286,6 +284,25 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
             estado = Estado.DESLIGADO;
             System.out.printf("O robô %s foi desligado.\n", getNome());
         }
+    }
+
+    public void enviarMensagem(Comunicavel destinatario, String mensagem) {
+        if (this.estado == Estado.DESLIGADO){
+            throw new ErroComunicacaoException("Mensagem não enviada. O robô que tentou enviar está desligado.");
+        }
+        if (((Robo)(destinatario)).getEstado() == Estado.DESLIGADO){
+            throw new ErroComunicacaoException("Mensagem não enviada. O robô destinatário está desligado.");
+        }
+
+        String remetente = String.format("%s(id:%s)", getNome(), getId());
+        CentralComunicacao.registrarMensagem(remetente, mensagem);
+
+        ((Robo) destinatario).receberMensagem(mensagem);
+    }
+
+    public void receberMensagem(String mensagem) {
+        // Não exige verificação de estado, pois o robô que enviou a mensagem já fez a verificação.
+        System.out.printf("Robô %s recebeu a seguinte mensagem:%s\n", getNome(), mensagem);
     }
 
     public abstract void executarTarefa();

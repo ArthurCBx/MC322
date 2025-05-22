@@ -25,10 +25,10 @@ public class Main {
 
         Ambiente ambiente = new Ambiente(100, 100, 100);
 
-        Robo robo1 = new RoboBombardeiro(ambiente, "teste1", "norte", 0, 0, 0, 120, 10);
-        Robo robo2 = new RoboExplosivo(ambiente, "teste2", "sul", 0, 0, 0, 100, 5);
-        Robo robo3 = new RoboCombustivel(ambiente, "teste3", "leste", 0, 0, 50, 100);
-        Robo robo4 = new RoboSolar(ambiente, "teste4", "oeste", 0, 0, 80, 20);
+        Robo robo1 = new RoboBombardeiro(ambiente, "teste1", 0, 0, 0, 120, 10);
+        Robo robo2 = new RoboExplosivo(ambiente, "teste2", 0, 0, 0, 100, 5);
+        Robo robo3 = new RoboCombustivel(ambiente, "teste3", 0, 0, 50, 100);
+        Robo robo4 = new RoboSolar(ambiente, "teste4", 0, 0, 80, 20);
 
         Sensor sensorComum20 = new Sensor(20);
         Sensor sensorComum50 = new Sensor(50);

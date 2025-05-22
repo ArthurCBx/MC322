@@ -18,7 +18,7 @@ Bombas: quantidade de bombas que o RoboBombardeiro possui.
 CapacidadeBombas: quantidade máxima de bombas que o RoboBombardeiro pode carregar.
 */
 
-public class RoboBombardeiro extends RoboAereo {
+public class RoboBombardeiro extends RoboAereo implements Explosivos{
     private int bombas;
     private final int capacidadeBombas;
 
@@ -69,7 +69,7 @@ public class RoboBombardeiro extends RoboAereo {
 
     // Metodo que bombardeia robos na mesma posição (x, y) e altitude igual ou inferior.
 
-    public List<Robo> bombardear() {
+    public List<Robo> explodir() {
         if (getAmbiente() == null){
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
         }

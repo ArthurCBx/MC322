@@ -55,7 +55,7 @@ public class RoboSolar extends RoboTerrestre {
 
     // Metodo para carregar a bateria do Robo Solar (só carrega durante o dia [atributo do ambiente])
 
-    public void carregar() {
+    public void abastecer() {
         if (getAmbiente() == null){
             throw new SemAmbienteException("O robo não está em um ambiente, não pode carregar.");
         }
