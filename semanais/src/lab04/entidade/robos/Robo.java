@@ -20,7 +20,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     private final String nome;
     private int posX;
     private int posY;
-    protected int altitude = 0; // Altura padrão do robô, que é alterada em robos aéreos.
+    protected int posZ = 0; // Altura padrão do robô, que é alterada em robos aéreos.
     private final String id;
     private Estado estado;
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
@@ -64,7 +64,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     }
 
     public int getZ() {
-        return altitude;
+        return posZ;
     }
 
     public char getRepresentacao() {
@@ -84,16 +84,16 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
+    public void addSensor(Sensor sensor) {
+        sensores.add(sensor);
+    }
+
     public Estado getEstado() {
         return estado;
     }
 
     public String getId() {
         return id;
-    }
-
-    public void addSensor(Sensor sensor) {
-        sensores.add(sensor);
     }
 
     public void setAmbiente(Ambiente ambiente) {
@@ -108,78 +108,84 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.posY = posY;
     }
 
-    public void setAltitude(int altitude) {
-        this.altitude = altitude;
+    public void setPosZ(int altitude) {
+        this.posZ = altitude;
     }
 
 
-    // Metodo para mover o robo em deltaX e deltaY, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
+    // Metodo para mover o robo em deltaX, deltaY e deltaZ, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
     // A linha é feita por uma verificação de seções de 0.25*sqrt(2) do vetor unitario que representa o vetor de movimento
     // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
-    public void mover(int deltaX, int deltaY) {
-        if (estado == Estado.DESLIGADO){
+    public void moverPara(int deltaX, int deltaY, int deltaZ) {
+        if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
         }
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode movimentar-se.");
         }
 
-        int finalPosX = getX() + deltaX;
-        int finalPosY = getY() + deltaY;
-        if (!getAmbiente().dentroDosLimites(finalPosX, finalPosY,getZ())) {
+        int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};
+
+        if (!getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2])) {
             throw new ForaDosLimitesException("O robo está saindo do ambiente, operação cancelada");
         }
+        // REFAZER PELO AMBIENTE SER DIFERENTE
+        ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getX(), getY(), getZ(), finalPos[0], finalPos[1], finalPos[2]);
 
-        ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getX(),getY(),getZ(),finalPosX,finalPosY,getZ());
-
-        double norma = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+        double norma = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
 
         double[] vetorMove = {
-                (norma != 0) ? 0.25*((double)deltaX/norma) : 0,
-                (norma != 0) ? 0.25*((double)deltaY/norma) : 0
+                (norma != 0) ? 0.25 * ((double) deltaX / norma) : 0,
+                (norma != 0) ? 0.25 * ((double) deltaY / norma) : 0,
+                (norma != 0) ? 0.25 * ((double) deltaZ / norma) : 0
         };
 
-        double[] newPos = {getX(),getY()};
-        double[] newTempPos = {0,0};
+        double[] newPos = {getX(), getY(), getZ()};
+        double[] newTempPos = {0, 0, 0};
 
-        while(true){
+        while (true) {
 
             // Os 2 ifs abaixo são utilizados para verificar se o movimento não extrapola o ponto final do movimento
             // Que, por sua vez, é indicado pela diferença de sinal do vetor que liga o ponto final ao ponto proximo do movimento
-            if( (finalPosX - (newPos[0] + vetorMove[0]) * vetorMove[0] ) >= 0 )
-                newTempPos[0] = newPos[0] + vetorMove[0];
-            else
-                newTempPos[0] = finalPosX;
 
-            if( (finalPosY - (newPos[1] + vetorMove[1]) * vetorMove[1] ) >= 0 )
-                newTempPos[1] = newPos[1] + vetorMove[1];
-            else
-                newTempPos[1] = finalPosY;
+            for(int i = 0; i < 3;i++)
+                if ((finalPos[i] - (newPos[i] + vetorMove[i]) * vetorMove[i]) >= 0)
+                    newTempPos[i] = newPos[i] + vetorMove[i];
+                else
+                    newTempPos[i] = finalPos[i];
+
 
             for (Obstaculo obstaculo : obstaculosPresentes)
-                if(obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0],newTempPos[1],getZ())){
-                    setPosX((int)newPos[0]);
-                    setPosY((int)newPos[1]);
+                if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0], newTempPos[1], newTempPos[2])) {
+                    setPosX((int) newPos[0]);
+                    setPosY((int) newPos[1]);
+                    setPosZ((int) newPos[2]);
 
                     // Arredonda para cima
-                    if(vetorMove[0] < 0)    setPosX(getX() + 1);
-                    if(vetorMove[1] < 0)    setPosY(getY() + 1);
+                    if (vetorMove[0] < 0) setPosX(getX() + 1);
+                    if (vetorMove[1] < 0) setPosY(getY() + 1);
+                    if (vetorMove[2] < 0) setPosZ(getZ() + 1);
 
-                    throw new ColisaoException("O robo colidiu com um obstáculo "+obstaculo.getTipoObstaculo()+" e foi realocado para a posição ("+getX()+","+getY()+","+getZ()+")");
+                    throw new ColisaoException("O robo colidiu com um obstáculo " + obstaculo.getTipoObstaculo() + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
+
                 }
 
             newPos[0] = newTempPos[0];
             newPos[1] = newTempPos[1];
+            newPos[2] = newTempPos[2];
 
-            if(newPos[0] == finalPosX && newPos[1] == finalPosY)
+            if (newPos[0] == finalPos[0] && newPos[1] == finalPos[1] && newPos[2] == finalPos[2])
                 break;
 
         }
 
-            setPosX(finalPosX); setPosY(finalPosY);
+        setPosX(finalPos[0]);
+        setPosY(finalPos[1]);
+        setPosY(finalPos[2]);
 
     }
+
 
 
     // Metodo para exibiar a posição do robo:

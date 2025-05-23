@@ -7,7 +7,7 @@ import lab04.excecoes.RoboDesligadoException;
 import lab04.excecoes.SemAmbienteException;
 import lab04.excecoes.SemCombustivelException;
 
-public class RoboCombustivel extends RoboTerrestre {
+public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     // Subclasse para lidar com robos que utilizam combustível para locomoção
 
@@ -44,7 +44,7 @@ public class RoboCombustivel extends RoboTerrestre {
 
     // Metodo para abastecer o robo:
 
-    public void abastecer(double gasolina) {
+    public void carregar(double gasolina) {
         if (gasolina >= 0)      // Não se remove gasolina do robo no abastecimento
             setCombustivel(getCombustivel() + gasolina);
         else
@@ -52,23 +52,30 @@ public class RoboCombustivel extends RoboTerrestre {
 
     }
 
+    public void descarregar(double gasolina) {
+        if (gasolina >= 0)      // Não se adiciona gasolina do robo no abastecimento
+            setCombustivel(Math.max(getCombustivel() - gasolina, 0));
+        else
+            System.out.printf("Gasolina de %s precisa ser maior que 0\n", getNome());
+
+    }
 
     // Sobreescrita do metodo Mover do robo Terrestre para acomodar o uso de gasolina
     // O robo precisa ter no minimo uma quantia igual à distância total percorrida (similar à velocidade maxima)
 
     @Override
-    public void mover(int deltaX, int deltaY) {
-        double movetotal = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+    public void moverPara(int deltaX, int deltaY, int deltaZ) {
+        double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-        if (movetotal <= getCombustivel()) {
+        if (distancia <= getCombustivel()) {
             int x0 = getX();
             int y0 = getY();
 
-            super.mover(deltaX, deltaY);
+            super.moverPara(deltaX, deltaY, 0);
 
             // Considera o se o movimento foi impedido por obstáculo e remove da gasolina:
-            movetotal = Math.sqrt(Math.pow(getX() - x0,2) + Math.pow(getY() - y0,2));
-            setCombustivel(getCombustivel() - movetotal);
+            distancia = Math.sqrt(Math.pow(getX() - x0, 2) + Math.pow(getY() - y0, 2));
+            descarregar(distancia);
 
         } else {
             throw new SemCombustivelException("O robo não tem combustível suficiente para a locomoção.");
@@ -78,10 +85,10 @@ public class RoboCombustivel extends RoboTerrestre {
 
     @Override
     public void executarTarefa() {
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
         }
-        if (getEstado() == Estado.DESLIGADO){
+        if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
         }
     }

@@ -69,8 +69,8 @@ public class Main {
         System.out.printf("Tenta mover acima da vel. maxima e depois abaixo da vel. maxima\n");
 
         robo4.exibirPosicao();
-        robo4.mover(70,40);
-        robo4.mover(70,30);
+        robo4.moverPara(70,40);
+        robo4.moverPara(70,30);
         robo4.exibirPosicao();
         robo4.setPosX(0);
         robo4.setPosY(0);
@@ -96,31 +96,31 @@ public class Main {
         System.out.printf("\nCOLISAO ENTRE ROBOS E OBSTACULOS EM XY\n");
 
         System.out.printf("\nColisao no canto do obstaculo:\n");
-        robo4.mover(7,7);
+        robo4.moverPara(7,7);
 
         System.out.printf("\nColisao no lado inferior do obstaculo:\n");
         robo4.setPosX(6);
         robo4.setPosY(0);
         robo4.exibirPosicao();
-        robo4.mover(0,10);
+        robo4.moverPara(0,10);
 
         System.out.printf("\nColisao no lado superior do obstaculo:\n");
         robo4.setPosX(6);
         robo4.setPosY(10);
         robo4.exibirPosicao();
-        robo4.mover(0,-10);
+        robo4.moverPara(0,-10);
 
         System.out.printf("\nColisao no lado esquerdo do obstaculo:\n");
         robo4.setPosX(0);
         robo4.setPosY(6);
         robo4.exibirPosicao();
-        robo4.mover(10,0);
+        robo4.moverPara(10,0);
 
         System.out.printf("\nColisao no lado direito do obstaculo:\n");
         robo4.setPosX(10);
         robo4.setPosY(6);
         robo4.exibirPosicao();
-        robo4.mover(-10,0);
+        robo4.moverPara(-10,0);
 
         robo4.setPosX(0);
         robo4.setPosY(0);
@@ -132,7 +132,7 @@ public class Main {
         System.out.printf("\nRobo descendo em um obstaculo:\n");
         robo1.setPosX(6);
         robo1.setPosY(6);
-        robo1.setAltitude(10);
+        robo1.setPosZ(10);
         robo1.exibirPosicao();
         ((RoboAereo)robo1).descer(10);
 
@@ -143,7 +143,7 @@ public class Main {
 
         robo1.setPosX(6);
         robo1.setPosY(6);
-        robo1.setAltitude(10);
+        robo1.setPosZ(10);
         robo1.exibirPosicao();
         ((RoboAereo)robo1).subir(10);
 
@@ -158,7 +158,7 @@ public class Main {
 
         robo6.setPosX(1);
         robo6.setPosY(1);
-        robo6.setAltitude(0);
+        robo6.setPosZ(0);
         robo6.addSensor(sensorComum20);
         robo6.addSensor(sensorAltitude40XY10);
         robo6.addSensor(sensorClasse50);
@@ -169,9 +169,9 @@ public class Main {
 
         robo1.setPosX(0);
         robo1.setPosY(0);
-        robo1.setAltitude(0);
+        robo1.setPosZ(0);
 
-        robo6.setAltitude(50);
+        robo6.setPosZ(50);
         ((RoboExplosivo)robo6).explodir();
 
 
@@ -420,7 +420,7 @@ public class Main {
                             }
                         }
 
-                        robo.mover(deltaX, deltaY);
+                        robo.moverPara(deltaX, deltaY);
 
                         System.out.printf("Robo parou em (%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
                     }

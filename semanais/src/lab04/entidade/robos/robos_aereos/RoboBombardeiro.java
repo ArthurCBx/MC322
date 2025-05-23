@@ -22,8 +22,8 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos{
     private int bombas;
     private final int capacidadeBombas;
 
-    public RoboBombardeiro(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima, int capacidadeBombas) {
-        super(ambiente, nome, posX, posY, altitude, altitudeMaxima);
+    public RoboBombardeiro(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, int capacidadeBombas) {
+        super(ambiente, nome, posX, posY, posZ, altitudeMaxima);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
 
@@ -117,4 +117,17 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos{
         return robosAtingidos;
 
     }
+
+    @Override
+    public void executarTarefa() {
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+        }
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+        }
+    }
+
+
+
 }

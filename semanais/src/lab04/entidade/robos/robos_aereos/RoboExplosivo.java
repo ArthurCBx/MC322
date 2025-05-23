@@ -72,4 +72,17 @@ public class RoboExplosivo extends RoboAereo implements Explosivos{
         robosAtingidos.add(this);
         return robosAtingidos;
     }
+
+
+    @Override
+    public void executarTarefa() {
+        if (getAmbiente() == null){
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+        }
+        if (getEstado() == Estado.DESLIGADO){
+            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+        }
+    }
+
+
 }
