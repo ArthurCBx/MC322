@@ -5,7 +5,8 @@ package lab04.entidade;
 public enum TipoEntidade {
     ROBO("Robo"),
     OBSTACULO("Obstáculo"),
-    VAZIO("Vazio");
+    VAZIO("Vazio"),
+    DESCONHECIDO("Desconhecido");
 
     private final String nome;
 

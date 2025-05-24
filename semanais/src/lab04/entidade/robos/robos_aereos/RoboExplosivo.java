@@ -1,11 +1,14 @@
 package lab04.entidade.robos.robos_aereos;
 
 import lab04.Ambiente;
+import lab04.entidade.robos.Autonomo;
 import lab04.excecoes.RoboDesligadoException;
 import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.Robo;
 import lab04.entidade.robos.RoboAereo;
 import lab04.excecoes.SemAmbienteException;
+import lab04.sensores.SensorAltitude;
+import lab04.sensores.SensorClasse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +18,7 @@ Subclasse de RoboAereo que possui a habilidade de se autodestruir, levando consi
  Para isso, ele possui o metodo explodir, que recebe o ambiente em que está inserido como atributo.
  */
 
-public class RoboExplosivo extends RoboAereo implements Explosivos{
+public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
     private final int raioExplosao;
 
 
@@ -38,13 +41,14 @@ public class RoboExplosivo extends RoboAereo implements Explosivos{
                 "Altura Atual: " + getZ() + "\n" +
                 "Posicao Atual: (" + getX() + ", " + getY() + ", " + getZ() + ")";
     }
-// Metodo para se autodestruir e levar consigo os robos num raio de explosao.
+
+    // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
 
     public List<Robo> explodir() {
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode explodir.");
         }
-        if (getEstado() == Estado.DESLIGADO){
+        if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado, não pode explodir.");
         }
 
@@ -73,16 +77,53 @@ public class RoboExplosivo extends RoboAereo implements Explosivos{
         return robosAtingidos;
     }
 
+    @Override
+    public void moveAutomatico() {
+
+        int[] move = {(int) (20 * (2 * Math.random() - 1)),
+                (int) (20 * (2 * Math.random() - 1)),
+                (int) (20 * (2 * Math.random() - 1))};
+
+
+        move[0] = Math.max(0, Math.min(getX() + move[0], getAmbiente().getComprimento()));
+        move[1] = Math.max(0, Math.min(getX() + move[1], getAmbiente().getComprimento()));
+        move[2] = Math.max(0, Math.min(getX() + move[2], getAmbiente().getComprimento()));
+
+        moverPara(move[0], move[1], move[2]);
+
+    }
+
 
     @Override
     public void executarTarefa() {
-        if (getAmbiente() == null){
-            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+        if (getAmbiente() == null) {
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode realizar sua tarefa.");
         }
-        if (getEstado() == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+        if (getEstado() == Estado.DESLIGADO) {
+            throw new RoboDesligadoException("O robô está desligado, não pode realizar sua tarefa.");
         }
-    }
+        if (getSensores() == null) {
+            System.out.println("O robô solicitado não possui sensores, logo pode realizar sua tarefa.");
+            return;
+        }
 
+        System.out.printf("Executando a busca e destruição de robos\n");
+
+        List<Robo> robosencontrados = identificarRobosProximos();
+
+        for (int i = 0; i < 5; i++) {
+            if (robosencontrados != null) {
+                Robo roboescolhido = robosencontrados.get((int) (Math.random() * (robosencontrados.size() + 1)));
+                moverPara(roboescolhido.getX(),roboescolhido.getY(),roboescolhido.getZ());
+                explodir();
+
+            } else {
+                moveAutomatico();
+                robosencontrados = identificarRobosProximos();
+
+            }
+        }
+
+    }
 
 }

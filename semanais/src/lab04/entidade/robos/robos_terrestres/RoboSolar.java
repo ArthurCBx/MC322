@@ -1,6 +1,7 @@
 package lab04.entidade.robos.robos_terrestres;
 
 import lab04.Ambiente;
+import lab04.entidade.robos.Autonomo;
 import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.RoboTerrestre;
 import lab04.excecoes.RoboDesligadoException;
@@ -9,7 +10,7 @@ import lab04.excecoes.SemCombustivelException;
 
 import java.util.Objects;
 
-public class RoboSolar extends RoboTerrestre implements Energizavel {
+public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     // Subclasse de robo terrestre que implementa energia e recarga por painel solar no robo
 
@@ -91,7 +92,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel {
     // O robo utiliza bateria conforme a distância total que se move (similar a velocidade maxima)
 
     @Override
-    public void moverPara(int deltaX, int deltaY,int deltaZ) {
+    public void moverPara(int deltaX, int deltaY, int deltaZ) {
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
             super.moverPara(deltaX, deltaY, 0);                                // Assim o robo pode se mover independentemente da sua bateria durante o dia
 
@@ -114,12 +115,38 @@ public class RoboSolar extends RoboTerrestre implements Energizavel {
     }
 
     @Override
+    public void moveAutomatico() {
+
+        int[] move = {  (int) (20 * (2 * Math.random() - 1)),
+                        (int) (20 * (2 * Math.random() - 1))};
+
+        moverPara(move[0], move[1], 0);
+
+    }
+
+    @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {
-            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode realizar sua tarefa.");
         }
         if (getEstado() == Estado.DESLIGADO) {
-            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+            throw new RoboDesligadoException("O robô está desligado, não pode realizar sua tarefa.");
+        }
+
+        if (Objects.equals(getAmbiente().getPeriodo(), "Noite")) {
+            System.out.printf("A tarefa do robo Solar so pode ser executado durante o dia\n");
+            return;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))
+                carregar();
+
+            moveAutomatico();
+
+            if (getSensores() != null)
+                acionarSensores();
+
         }
     }
 

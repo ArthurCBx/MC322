@@ -98,7 +98,7 @@ public class Ambiente {
 
     public void adicionarEntidade(Entidade entidade) {
 
-        if(mapa == null){
+        if (mapa == null) {
             System.out.printf("O ambiente não possui mapa inicializado, inicialize o mapa primeiro\n");
             return;
         }
@@ -142,7 +142,7 @@ public class Ambiente {
     }
 
     public void removerEntidade(Entidade entidade) {
-        if(mapa == null){
+        if (mapa == null) {
             System.out.printf("O ambiente não possui mapa inicializado, inicialize o mapa primeiro\n");
             return;
         }
@@ -205,26 +205,26 @@ public class Ambiente {
 
         if (!colisao) {
             System.out.printf("Não foram verificadas colisões no ambiente %s\n", this);
-        }else{
+        } else {
             throw new ColisaoException("Uma ou mais colisões foram detectadas");
         }
     }
 
-// Metodo auxiliar para verificar se há obstáculo num plano definido por dois pontos (x1,y1,z1) e (x2,y2,z2)
+    // Metodo auxiliar para verificar se há obstáculo num plano definido por dois pontos (x1,y1,z1) e (x2,y2,z2)
     // Movimento é ou bidimensional em robos ou unidimensional em robos aéreos nos metodos subir e descer.
 
     public boolean estaOcupado(int x, int y, int z) {
         return mapa[x][y][z] != TipoEntidade.VAZIO;
     }
 
-    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ){
+    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ) {
 
-        if(entidade.getTipoEntidade() == TipoEntidade.ROBO){
-            ((Robo)entidade).setPosX(novoX);
-            ((Robo)entidade).setPosY(novoY);
-            ((Robo)entidade).setPosZ(novoZ);
+        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+            ((Robo) entidade).setPosX(novoX);
+            ((Robo) entidade).setPosY(novoY);
+            ((Robo) entidade).setPosZ(novoZ);
 
-        }else {
+        } else {
             System.out.printf("A posição de entidades do tipo" + entidade.getTipoEntidade() + "não muda\n");
         }
 
@@ -259,19 +259,51 @@ public class Ambiente {
 
         return obstaculosEncontrados;
     }
+*/
 
     public void executarSensores() {
         // Executa sensores de todos os robôs no ambiente.
-        for (Entidade entidade : listaEntidades) {
-            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
-                Robo robo = (Robo) entidade;
-                robo.acionarSensores();
+        for (Entidade entidade : listaEntidades)
+            if (entidade.getTipoEntidade() == TipoEntidade.ROBO)
+                ((Robo) entidade).acionarSensores();
+
+    }
+
+    public void vizualizarAmbiente() {
+
+        System.out.printf("Vizualização 2D da camada Z = 0 do Ambiente\n\n");
+
+        for (int x = 0; x <= comprimento + 2; x++)
+            System.out.print('_');
+
+        for (int y = largura; y >= 0; y--) {
+            System.out.print('|');
+            for (int x = 0; x <= comprimento; x++) {
+                for (Entidade entidade : listaEntidades)
+                    if (entidade.getTipoEntidade() == mapa[x][y][0])
+                        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+
+                            if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == 0) {
+                                System.out.print(entidade.getRepresentacao());
+                                break;
+                            }
+
+                        } else {
+                            if (((Obstaculo) entidade).contemPonto(x, y, 0)) {
+                                System.out.print(entidade.getRepresentacao());
+                                break;
+                            }
+
+                        }
+                System.out.print("|\n");
             }
+
+            for (int x = 0; x <= comprimento + 2; x++)
+                System.out.print('-');
+
+            System.out.printf("\n\n");
         }
     }
 
-
-
- */
 
 }
