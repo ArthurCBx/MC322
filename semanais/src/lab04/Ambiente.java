@@ -2,6 +2,7 @@ package lab04;
 
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
+import lab04.excecoes.ColisaoException;
 import lab04.excecoes.ForaDosLimitesException;
 import lab04.obstaculos.Obstaculo;
 import lab04.entidade.robos.Robo;
@@ -75,8 +76,10 @@ public class Ambiente {
 
 
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
-    public boolean dentroDosLimites(int x, int y, int z) {
-        return x >= 0 && x <= getComprimento() && y >= 0 && y <= getLargura() && z >= 0 && z <= getAltura();
+    public void dentroDosLimites(int x, int y, int z) {
+        if (!(x >= 0 && x <= getComprimento() && y >= 0 && y <= getLargura() && z >= 0 && z <= getAltura()))
+            throw new ForaDosLimitesException("As coordenadas (" + x + "," + y + "," + z + ") estão fora dos limites do ambiente");
+
     }
 
     public void inicializarMapa() {
@@ -86,84 +89,149 @@ public class Ambiente {
 
         for (int x = 0; x < getComprimento(); x++)
             for (int y = 0; y < getLargura(); y++)
-                for (int z = 0; z < getAltura(); z++) {
+                for (int z = 0; z < getAltura(); z++)
                     mapa[x][y][z] = TipoEntidade.VAZIO;
-                }
-
-        if (!listaEntidades.isEmpty())
-            for (Entidade entidade : listaEntidades)
-                mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = entidade.getTipoEntidade();
-
 
     }
 
     // Metodo para adiconar entidade à lista e mapa de entidades do ambiente:
 
     public void adicionarEntidade(Entidade entidade) {
+
+        if(mapa == null){
+            System.out.printf("O ambiente não possui mapa inicializado, inicialize o mapa primeiro\n");
+            return;
+        }
+
         if (entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) {
             Obstaculo obstaculo = (Obstaculo) entidade;
 
             // Adiciona obstáculo ao ambiente apenas se ele estiver dentro dos limites do ambiente.
-            if (dentroDosLimites(obstaculo.getPosX1(), obstaculo.getPosY1(), obstaculo.getBase())) {
-                if (dentroDosLimites(obstaculo.getPosX2(), obstaculo.getPosY2(), obstaculo.getBase() + obstaculo.getAltura())) {
-                    listaEntidades.add(obstaculo);
-                    //COLOCAR NO MAPA
-                } else {
-                    throw new ForaDosLimitesException("Uma das coordenadas do obstáculo não respeita os limites de ambiente. Altere-a para adicionar o obstáculo.");
-                }
-            } else {
-                throw new ForaDosLimitesException("Uma das coordenadas do obstáculo não respeita os limites de ambiente. Altere-a para adicionar o obstáculo.");
-            }
+            dentroDosLimites(obstaculo.getPosX1(), obstaculo.getPosY1(), obstaculo.getBase());
+            dentroDosLimites(obstaculo.getPosX2(), obstaculo.getPosY2(), obstaculo.getBase() + obstaculo.getAltura());
+
+            for (int x = obstaculo.getPosX1(); x <= obstaculo.getPosX2(); x++)
+                for (int y = obstaculo.getPosY1(); y <= obstaculo.getPosY2(); y++)
+                    for (int z = obstaculo.getBase(); z <= obstaculo.getBase() + obstaculo.getAltura(); z++)
+                        if (estaOcupado(x, y, z))
+                            throw new ColisaoException("Obstaculo especificado colide com outra entidade já presente em seu domínio, operação cancelada");
+
+            listaEntidades.add(obstaculo);
+
+            for (int x = obstaculo.getPosX1(); x <= obstaculo.getPosX2(); x++)
+                for (int y = obstaculo.getPosY1(); y <= obstaculo.getPosY2(); y++)
+                    for (int z = obstaculo.getBase(); z <= obstaculo.getBase() + obstaculo.getAltura(); z++)
+                        mapa[x][y][z] = TipoEntidade.OBSTACULO;
+
+
         } else {
-            if(dentroDosLimites(entidade.getX(),entidade.getY(), entidade.getZ())) {
+
+            dentroDosLimites(entidade.getX(), entidade.getY(), entidade.getZ());
+
+            if (!estaOcupado(entidade.getX(), entidade.getY(), entidade.getZ())) {
+
                 listaEntidades.add(entidade);
                 mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = entidade.getTipoEntidade();
-            }
-            else{
-                throw new ForaDosLimitesException("Não é possivel adicionar entidade fora dos limites do ambiente")
+
+            } else {
+
+                throw new ColisaoException("Entidade especificada colide com outra entidade já presente nestas coordenadas, operação cancelada");
+
             }
         }
     }
 
     public void removerEntidade(Entidade entidade) {
+        if(mapa == null){
+            System.out.printf("O ambiente não possui mapa inicializado, inicialize o mapa primeiro\n");
+            return;
+        }
+
         if (listaEntidades.contains(entidade)) {
             listaEntidades.remove(entidade);
+
+            if (entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) {
+                Obstaculo obstaculo = (Obstaculo) entidade;
+                for (int x = obstaculo.getPosX1(); x <= obstaculo.getPosX2(); x++)
+                    for (int y = obstaculo.getPosY1(); y <= obstaculo.getPosY2(); y++)
+                        for (int z = obstaculo.getBase(); z <= obstaculo.getBase() + obstaculo.getAltura(); z++)
+                            mapa[x][y][z] = TipoEntidade.VAZIO;
+
+
+            } else {
+                mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
+            }
+
             entidade = null; // Remove a referência ao objeto
         } else {
             System.out.println("A entidade não está no ambiente.");
         }
     }
 
-    public void detectarColisoes() {
+    public void verificarColisoes() {
         // Verifica se algum robo colidiu com algum obstáculo.
         // Só há colisão se obstáculo bloqueia passagem e robo está na borda desse obstáculo, pois robô não o atravessa.
-        int count = 0;
-        for (Robo robo : getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList()) {
-            for (Obstaculo obstaculo : getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList()) {
-                int roboX = robo.getX();
-                int roboY = robo.getY();
-                int roboZ = robo.getZ();
-                int obstaculoX1 = obstaculo.getPosX1();
-                int obstaculoY1 = obstaculo.getPosY1();
-                int obstaculoX2 = obstaculo.getPosX2();
-                int obstaculoY2 = obstaculo.getPosY2();
+        boolean colisao = false;
+        List<Robo> listaRobo = getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
 
+        int roboX;
+        int roboY;
+        int roboZ;
+
+        for (Robo robo : listaRobo) {
+
+            roboX = robo.getX();
+            roboY = robo.getY();
+            roboZ = robo.getZ();
+
+            for (Obstaculo obstaculo : getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList()) {
                 if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(roboX, roboY, roboZ)) {
                     System.out.printf("O robo %s colidiu com um obstáculo %s em (%d,%d,%d).\n",
                             robo.getNome(), obstaculo.getTipoObstaculo().getNome(), roboX, roboY, roboZ);
-                    count++;
+                    colisao = true;
                 }
             }
+
+            for (Robo robo2 : listaRobo) {
+                if (roboX == robo2.getX() && roboY == robo2.getY() && roboZ == robo2.getZ()) {
+                    System.out.printf("O robo %s colidiu com o robo %s em (%d,%d,%d).\n",
+                            robo.getNome(), robo2.getNome(), roboX, roboY, roboZ);
+                    colisao = true;
+                }
+            }
+
         }
-        if (count == 0) {
+
+
+        if (!colisao) {
             System.out.printf("Não foram verificadas colisões no ambiente %s\n", this);
+        }else{
+            throw new ColisaoException("Uma ou mais colisões foram detectadas");
         }
     }
 
-    // Metodo auxiliar para verificar se há obstáculo num plano definido por dois pontos (x1,y1,z1) e (x2,y2,z2)
+// Metodo auxiliar para verificar se há obstáculo num plano definido por dois pontos (x1,y1,z1) e (x2,y2,z2)
     // Movimento é ou bidimensional em robos ou unidimensional em robos aéreos nos metodos subir e descer.
 
-    public ArrayList<Obstaculo> detectarObstaculos(int x1, int y1, int z1, int x2, int y2, int z2) {
+    public boolean estaOcupado(int x, int y, int z) {
+        return mapa[x][y][z] != TipoEntidade.VAZIO;
+    }
+
+    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ){
+
+        if(entidade.getTipoEntidade() == TipoEntidade.ROBO){
+            ((Robo)entidade).setPosX(novoX);
+            ((Robo)entidade).setPosY(novoY);
+            ((Robo)entidade).setPosZ(novoZ);
+
+        }else {
+            System.out.printf("A posição de entidades do tipo" + entidade.getTipoEntidade() + "não muda\n");
+        }
+
+    }
+
+/*
+    public ArrayList<Entidade> detectarEntidades(int x1, int y1, int z1, int x2, int y2, int z2) {
 
         if (x1 > x2) {
             int tempx1 = x1;
@@ -202,5 +270,8 @@ public class Ambiente {
         }
     }
 
+
+
+ */
 
 }

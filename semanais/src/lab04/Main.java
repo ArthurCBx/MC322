@@ -510,7 +510,7 @@ public class Main {
                     break;
 
                 case 7:
-                    ambiente.detectarColisoes();
+                    ambiente.verificarColisoes();
                     break;
                 case 8:
                     System.out.println("Finalizando o programa...");

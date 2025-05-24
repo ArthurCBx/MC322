@@ -33,13 +33,13 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     public Robo(Ambiente ambiente, String nome, int posX, int posY) {
         this.ambiente = ambiente;
         this.nome = nome;
-        this.posX = Math.min(Math.max(posX,0), ambiente.getComprimento());
-        this.posY = Math.min(Math.max(posY,0), ambiente.getLargura());
+        this.posX = Math.min(Math.max(posX, 0), ambiente.getComprimento());
+        this.posY = Math.min(Math.max(posY, 0), ambiente.getLargura());
         this.id = UUID.randomUUID().toString();
 
         ambiente.adicionarEntidade(this);
 
-        if(posX != this.posX || posY != this.posY)
+        if (posX != this.posX || posY != this.posY)
             System.out.println("Posicao do robô foi realocada para dentro do ambiente");
 
     }
@@ -79,7 +79,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         if (sensores.isEmpty()) {
             System.out.printf("O robô %s não possui sensores.\n", getNome());
             return null;
-        }else{
+        } else {
             return sensores;
         }
     }
@@ -108,8 +108,8 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.posY = posY;
     }
 
-    public void setPosZ(int altitude) {
-        this.posZ = altitude;
+    public void setPosZ(int posZ) {
+        this.posZ = posZ;
     }
 
 
@@ -127,11 +127,10 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
         int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};
 
-        if (!getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2])) {
-            throw new ForaDosLimitesException("O robo está saindo do ambiente, operação cancelada");
-        }
+        getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2]);
+
         // REFAZER PELO AMBIENTE SER DIFERENTE
-        ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarObstaculos(getX(), getY(), getZ(), finalPos[0], finalPos[1], finalPos[2]);
+        // ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarEntidades(getX(), getY(), getZ(), finalPos[0], finalPos[1], finalPos[2]);
 
         double norma = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
 
@@ -146,28 +145,21 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
         while (true) {
 
-            // Os 2 ifs abaixo são utilizados para verificar se o movimento não extrapola o ponto final do movimento
+            // O if dentro do for abaixo é utilizados para verificar se o movimento não extrapola o ponto final do movimento
             // Que, por sua vez, é indicado pela diferença de sinal do vetor que liga o ponto final ao ponto proximo do movimento
 
-            for(int i = 0; i < 3;i++)
+            for (int i = 0; i < 3; i++)
                 if ((finalPos[i] - (newPos[i] + vetorMove[i]) * vetorMove[i]) >= 0)
                     newTempPos[i] = newPos[i] + vetorMove[i];
                 else
                     newTempPos[i] = finalPos[i];
+            
+            if (((int) newTempPos[0]) != getX() || ((int) newTempPos[1]) != getY() || ((int) newTempPos[2]) != getZ())
+                if (getAmbiente().estaOcupado((int) newTempPos[0], (int) newTempPos[1], (int) newTempPos[2])) {
 
+                    getAmbiente().moverEntidade(this, (int) newPos[0], (int) newPos[1], (int) newPos[2]);
 
-            for (Obstaculo obstaculo : obstaculosPresentes)
-                if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(newTempPos[0], newTempPos[1], newTempPos[2])) {
-                    setPosX((int) newPos[0]);
-                    setPosY((int) newPos[1]);
-                    setPosZ((int) newPos[2]);
-
-                    // Arredonda para cima
-                    if (vetorMove[0] < 0) setPosX(getX() + 1);
-                    if (vetorMove[1] < 0) setPosY(getY() + 1);
-                    if (vetorMove[2] < 0) setPosZ(getZ() + 1);
-
-                    throw new ColisaoException("O robo colidiu com um obstáculo " + obstaculo.getTipoObstaculo() + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
+                    throw new ColisaoException("O robo colidiu com uma entidade " + getAmbiente().estaOcupado((int) newTempPos[0], (int) newTempPos[1], (int) newTempPos[2]) + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
 
                 }
 
@@ -180,12 +172,9 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
         }
 
-        setPosX(finalPos[0]);
-        setPosY(finalPos[1]);
-        setPosY(finalPos[2]);
+        getAmbiente().moverEntidade(this, finalPos[0], finalPos[1], finalPos[2]);
 
     }
-
 
 
     // Metodo para exibiar a posição do robo:
@@ -201,22 +190,22 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     }
 
     // Metodo para identificar robos proximos:
-    public ArrayList<Robo> identificarRobosProximos(){
-        if (estado == Estado.DESLIGADO){
+    public ArrayList<Robo> identificarRobosProximos() {
+        if (estado == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null){
+        if (sensores == null) {
             System.out.println("O robô solicitado não possui sensores");
             return null;
         }
         ArrayList<Robo> robosProximos = new ArrayList<>();
-        for (Sensor sensor : getSensores()){
-            ArrayList<Robo> identificados = sensor.listaRobosEncontrados(getAmbiente(),this);
-            for (Robo robo : identificados){
-                if (!robosProximos.contains(robo)){
+        for (Sensor sensor : getSensores()) {
+            ArrayList<Robo> identificados = sensor.listaRobosEncontrados(getAmbiente(), this);
+            for (Robo robo : identificados) {
+                if (!robosProximos.contains(robo)) {
                     robosProximos.add(robo);
                 }
             }
@@ -226,13 +215,13 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
     // Metodo para identificar obstaculos no ambiente:
     public void identificarObstaculosProximos() {
-        if (estado == Estado.DESLIGADO){
+        if (estado == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null){
+        if (sensores == null) {
             System.out.println("O robô solicitado não possui sensores");
             return;
         }
@@ -240,12 +229,12 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         sensores = getSensores();
         ArrayList<Obstaculo> obstaculosProximos = new ArrayList<>();
         // Para cada sensor diferente de sensorClasse, lista obstáculos encontrados e adiciona na lista de obstáculos próximos os que ainda não estão.
-        for (Sensor sensor : sensores){
-            if(sensor.getClass() != SensorClasse.class){
+        for (Sensor sensor : sensores) {
+            if (sensor.getClass() != SensorClasse.class) {
                 ArrayList<Obstaculo> obstaculoSensor = sensor.listaObstaculosEncontrados(this.getAmbiente(), this);
 
-                for (Obstaculo obstaculo : obstaculoSensor){
-                    if (!obstaculosProximos.contains(obstaculo)){
+                for (Obstaculo obstaculo : obstaculoSensor) {
+                    if (!obstaculosProximos.contains(obstaculo)) {
                         obstaculosProximos.add(obstaculo);
                     }
                 }
@@ -253,50 +242,50 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
-    public void acionarSensores(){
+    public void acionarSensores() {
         int count = 1;
-        if (estado == Estado.DESLIGADO){
+        if (estado == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
         }
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null){
+        if (sensores == null) {
             System.out.println("O robô solicitado não possui sensores");
             return;
         }
-        for (Sensor sensor : getSensores()){
+        for (Sensor sensor : getSensores()) {
             System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
-            sensor.monitorar(getAmbiente(),this);
+            sensor.monitorar(getAmbiente(), this);
             System.out.println();
             count++;
         }
         System.out.println("Monitoramente finalizado.");
     }
 
-    public void ligar(){
-        if (estado == Estado.LIGADO){
+    public void ligar() {
+        if (estado == Estado.LIGADO) {
             System.out.printf("O robô %s já está ligado.\n", getNome());
-        }else{
+        } else {
             estado = Estado.LIGADO;
             System.out.printf("O robô %s foi ligado.\n", getNome());
         }
     }
 
-    public void desligar(){
-        if(estado == Estado.DESLIGADO) {
+    public void desligar() {
+        if (estado == Estado.DESLIGADO) {
             System.out.printf("O robô %s já está desligado.\n", getNome());
-        } else{
+        } else {
             estado = Estado.DESLIGADO;
             System.out.printf("O robô %s foi desligado.\n", getNome());
         }
     }
 
     public void enviarMensagem(Comunicavel destinatario, String mensagem) {
-        if (this.estado == Estado.DESLIGADO){
+        if (this.estado == Estado.DESLIGADO) {
             throw new ErroComunicacaoException("Mensagem não enviada. O robô que tentou enviar está desligado.");
         }
-        if (((Robo)(destinatario)).getEstado() == Estado.DESLIGADO){
+        if (((Robo) (destinatario)).getEstado() == Estado.DESLIGADO) {
             throw new ErroComunicacaoException("Mensagem não enviada. O robô destinatário está desligado.");
         }
 
