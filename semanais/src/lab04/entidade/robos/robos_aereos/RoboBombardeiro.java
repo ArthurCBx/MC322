@@ -1,6 +1,7 @@
 package lab04.entidade.robos.robos_aereos;
 
 import lab04.Ambiente;
+import lab04.entidade.robos.Autonomo;
 import lab04.excecoes.RoboDesligadoException;
 import lab04.entidade.robos.Estado;
 import lab04.entidade.robos.Robo;
@@ -18,7 +19,7 @@ Bombas: quantidade de bombas que o RoboBombardeiro possui.
 CapacidadeBombas: quantidade máxima de bombas que o RoboBombardeiro pode carregar.
 */
 
-public class RoboBombardeiro extends RoboAereo implements Explosivos{
+public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
     private int bombas;
     private final int capacidadeBombas;
 
@@ -46,7 +47,6 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos{
         this.bombas = bombas;
     }
 
-
     public String getDescricao() {
         return "Robo Bombardeiro: " + getNome() + "\n" +
                 "id: " + this.getId() + "\n" +
@@ -68,12 +68,11 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos{
 
 
     // Metodo que bombardeia robos na mesma posição (x, y) e altitude igual ou inferior.
-
     public List<Robo> explodir() {
-        if (getAmbiente() == null){
+        if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
         }
-        if (getEstado() == Estado.DESLIGADO){
+        if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
         }
 
@@ -118,16 +117,33 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos{
 
     }
 
+
+    // Metodo do movimento autonomo XY (move uma direção aleatoria com norma maxima do movimento definido em norma)
     @Override
-    public void executarTarefa() {
-        if (getAmbiente() == null){
-            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
-        }
-        if (getEstado() == Estado.DESLIGADO){
-            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
-        }
+    public void moveAutomatico(double norma) {
+
+        int[] move = {  (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1)),
+                        (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1))};
+
+        moverPara(move[0], move[1], 0);
     }
 
 
+    // Tarefa para o bombardeiro bombardear 5 posições aleatorias
+    @Override
+    public void executarTarefa() {
+        if (getAmbiente() == null) {
+            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode bombardear.");
+        }
+        if (getEstado() == Estado.DESLIGADO) {
+            throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
+        }
 
+        for (int i = 0; i < 5; i++) {   // Bombardeia 5 posições aleatorias (ou até colidir)
+            carregarBombas(1);
+            explodir();
+            moveAutomatico(5);
+        }
+
+    }
 }

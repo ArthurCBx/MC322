@@ -123,6 +123,7 @@ public class Obstaculo implements Entidade {
         this.altura = altura;
     }
 
+    // Metodo para verificar se um ponto esta dentro do obstaculo
     public boolean contemPonto(double x, double y, double z) {
         // Verifica se o ponto (x,y,z) está dentro do obstáculo
         return (x >= posX1 && x <= posX2 && y >= posY1 && y <= posY2 && z >= base && z <= (base + altura));

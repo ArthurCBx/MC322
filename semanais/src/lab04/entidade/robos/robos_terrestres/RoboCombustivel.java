@@ -43,7 +43,6 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
 
     // Metodo para abastecer o robo:
-
     public void carregar(double gasolina) {
         if (gasolina >= 0)      // Não se remove gasolina do robo no abastecimento
             setCombustivel(getCombustivel() + gasolina);
@@ -52,6 +51,7 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     }
 
+    // Metodo para remover gasolina do robo:
     public void descarregar(double gasolina) {
         if (gasolina >= 0)      // Não se adiciona gasolina do robo no abastecimento
             setCombustivel(Math.max(getCombustivel() - gasolina, 0));
@@ -62,7 +62,6 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     // Sobreescrita do metodo Mover do robo Terrestre para acomodar o uso de gasolina
     // O robo precisa ter no minimo uma quantia igual à distância total percorrida (similar à velocidade maxima)
-
     @Override
     public void moverPara(int deltaX, int deltaY, int deltaZ) {
         double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
@@ -83,6 +82,7 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     }
 
+    // Tarefa do robo combustivel para aumentar sua propria velocidade maxima em troca de uma quantia imediata de gasolina
     @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {
@@ -91,5 +91,14 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
         if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô está desligado, não pode bombardear.");
         }
+
+        if (getCombustivel() >= 100) {  // Custa 100 de gasolina para o incremento da velocidade
+            descarregar(100);
+            setVelocidadeMaxima(getVelocidadeMaxima() * 1.25);  // Aumento de 25%
+            System.out.printf("Velocidade maxima incrementada em 25% (de %d para %d)\n", getVelocidadeMaxima() * 0.8, getVelocidadeMaxima());
+        } else {
+            throw new SemCombustivelException("O robo Combustivel não possui gasolina suficiente (" + getCombustivel() + " de 100) para aumentar sua velocidade maxima\n");
+        }
     }
+
 }

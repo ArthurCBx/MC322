@@ -84,10 +84,6 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
-    public void addSensor(Sensor sensor) {
-        sensores.add(sensor);
-    }
-
     public Estado getEstado() {
         return estado;
     }
@@ -113,8 +109,14 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     }
 
 
+    // Metodo para adicionar sensor no robo
+
+    public void addSensor(Sensor sensor) {
+        sensores.add(sensor);
+    }
+
     // Metodo para mover o robo em deltaX, deltaY e deltaZ, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
-    // A linha é feita por uma verificação de seções de 0.25*sqrt(2) do vetor unitario que representa o vetor de movimento
+    // A linha é feita por uma verificação de seções de 0.2 do vetor unitario que representa o vetor de movimento
     // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
     public void moverPara(int deltaX, int deltaY, int deltaZ) {
@@ -125,35 +127,38 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode movimentar-se.");
         }
 
-        int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};
+        int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};   // Posição final ideal do robo
 
-        getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2]);
+        getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2]);  // Verifica se o movimento ideal não sai do ambiente
 
-        // REFAZER PELO AMBIENTE SER DIFERENTE
-        // ArrayList<Obstaculo> obstaculosPresentes = getAmbiente().detectarEntidades(getX(), getY(), getZ(), finalPos[0], finalPos[1], finalPos[2]);
-
+        // Variaveis para a verificação de colisão no caminho do robo
         double norma = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
-
         double[] vetorMove = {
-                (norma != 0) ? 0.25 * ((double) deltaX / norma) : 0,
-                (norma != 0) ? 0.25 * ((double) deltaY / norma) : 0,
-                (norma != 0) ? 0.25 * ((double) deltaZ / norma) : 0
+                (norma != 0) ? 0.2 * ((double) deltaX / norma) : 0,
+                (norma != 0) ? 0.2 * ((double) deltaY / norma) : 0,
+                (norma != 0) ? 0.2 * ((double) deltaZ / norma) : 0
         };
-
         double[] newPos = {getX(), getY(), getZ()};
         double[] newTempPos = {0, 0, 0};
 
+        // Funcionamento do movimento: se verifica se uma posição logo a frente [newTempPos](posição atual + vetorMove) não colide com nada
+        // Se não colidir a nova posição sem colisão é atualizada [newPos], se repete esse processo até que uma posição logo a frente colida
+        // ou chegue na posição final ideal
+
         while (true) {
 
-            // O if dentro do for abaixo é utilizados para verificar se o movimento não extrapola o ponto final do movimento
+            // O if dentro do for abaixo é utilizado para verificar se o movimento não extrapola o ponto final do movimento
             // Que, por sua vez, é indicado pela diferença de sinal do vetor que liga o ponto final ao ponto proximo do movimento
+            // Além disso também calcula a posição logo a frente para teste
 
             for (int i = 0; i < 3; i++)
                 if ((finalPos[i] - (newPos[i] + vetorMove[i]) * vetorMove[i]) >= 0)
                     newTempPos[i] = newPos[i] + vetorMove[i];
                 else
                     newTempPos[i] = finalPos[i];
-            
+
+                // Verificação de colisão entre outros robos e obstaculos (não pode ser o proprio robo[primeiro if])
+
             if (((int) newTempPos[0]) != getX() || ((int) newTempPos[1]) != getY() || ((int) newTempPos[2]) != getZ())
                 if (getAmbiente().estaOcupado((int) newTempPos[0], (int) newTempPos[1], (int) newTempPos[2])) {
 
@@ -163,15 +168,19 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
                 }
 
+            // Como não houve colisões, a nova posição sem colisão é atualizada
+
             newPos[0] = newTempPos[0];
             newPos[1] = newTempPos[1];
             newPos[2] = newTempPos[2];
 
+            // Se chegou no destino
             if (newPos[0] == finalPos[0] && newPos[1] == finalPos[1] && newPos[2] == finalPos[2])
                 break;
 
         }
 
+        // Como não há colisões no movimento do robo, é seguro utilizar o metodo sem verificação do ambiente
         getAmbiente().moverEntidade(this, finalPos[0], finalPos[1], finalPos[2]);
 
     }
@@ -242,6 +251,8 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
+
+    // Metodo para acionar todos os sensores do robo
     public void acionarSensores() {
         int count = 1;
         if (estado == Estado.DESLIGADO) {
@@ -254,7 +265,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
             System.out.println("O robô solicitado não possui sensores");
             return;
         }
-        for (Sensor sensor : getSensores()) {
+        for (Sensor sensor : getSensores()) {   // Para todos os sensores:
             System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
             sensor.monitorar(getAmbiente(), this);
             System.out.println();
@@ -263,6 +274,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         System.out.println("Monitoramente finalizado.");
     }
 
+    // Metodo para ligar o robo
     public void ligar() {
         if (estado == Estado.LIGADO) {
             System.out.printf("O robô %s já está ligado.\n", getNome());
@@ -272,6 +284,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
+    // Metodo para desligar o robo
     public void desligar() {
         if (estado == Estado.DESLIGADO) {
             System.out.printf("O robô %s já está desligado.\n", getNome());
@@ -281,6 +294,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
+    // Metodo para enviar mensagem a outro robo
     public void enviarMensagem(Comunicavel destinatario, String mensagem) {
         if (this.estado == Estado.DESLIGADO) {
             throw new ErroComunicacaoException("Mensagem não enviada. O robô que tentou enviar está desligado.");
@@ -295,11 +309,13 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         ((Robo) destinatario).receberMensagem(mensagem);
     }
 
+    // Metodo para o recebimento de mensagens e leitura
     public void receberMensagem(String mensagem) {
         // Não exige verificação de estado, pois o robô que enviou a mensagem já fez a verificação.
         System.out.printf("Robô %s recebeu a seguinte mensagem:%s\n", getNome(), mensagem);
     }
 
+    // Metodo abstrato para a execução de uma tarefa generica
     public abstract void executarTarefa();
 
 }

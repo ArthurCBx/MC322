@@ -56,9 +56,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
     }
 
 
-    // Metodo para carregar a bateria do Robo Solar (só carrega durante o dia [atributo do ambiente])
-
-
+    // Metodo para carregar a bateria do Robo Solar
     public void carregar(double carga) {
         if (carga >= 0)                         // Não se remove carga ao carregar
             setBateria(getBateria() + carga);   // O robo ganha uma carga igual a carga
@@ -67,6 +65,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     }
 
+    // Metodo para carregar a bateria do Robo Solar a partir de seu painel solar (só carrega durante o dia [atributo do ambiente])
     public void carregar() {
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, não pode carregar.");
@@ -79,6 +78,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     }
 
+    // Metodo para descarregar a bateria do robo solar
     public void descarregar(double carga) {
         setBateria(Math.max(getBateria() - carga, 0));
         if (carga >= 0)                                     // Não se adiciona carga ao carregar
@@ -90,11 +90,10 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     // Sobrescrita do metodo mover do robo terrestre considerando bateria e periodo do dia
     // O robo utiliza bateria conforme a distância total que se move (similar a velocidade maxima)
-
     @Override
     public void moverPara(int deltaX, int deltaY, int deltaZ) {
-        if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {     // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
-            super.moverPara(deltaX, deltaY, 0);                                // Assim o robo pode se mover independentemente da sua bateria durante o dia
+        if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {        // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
+            super.moverPara(deltaX, deltaY, 0);                     // Assim o robo pode se mover independentemente da sua bateria durante o dia
 
         } else {    // Caso não esteja no período diurno, a bateria será utilizada para mover
 
@@ -114,16 +113,18 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     }
 
+    // Metodo do movimento autonomo em XY (move uma direção aleatoria com norma maxima do movimento definido em norma)
     @Override
-    public void moveAutomatico() {
+    public void moveAutomatico(double norma) {
 
-        int[] move = {  (int) (20 * (2 * Math.random() - 1)),
-                        (int) (20 * (2 * Math.random() - 1))};
+        int[] move = {  (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1)),
+                        (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1))};
 
         moverPara(move[0], move[1], 0);
 
     }
 
+    // Tarefa do robo solar para a exploração automatica do ambiente, utilizando seus sensores ou apenas se movendo
     @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {
@@ -138,15 +139,14 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
             return;
         }
 
-        for (int i = 0; i < 5; i++) {
-            if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))
+        for (int i = 0; i < 5; i++) {   // Explora 5 vezes o ambiente (ou até colidir // acabar bateria)
+            if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))  // Se está dia, o robo aproveita para carregar sua bateria
                 carregar();
-
-            moveAutomatico();
 
             if (getSensores() != null)
                 acionarSensores();
 
+            moveAutomatico(getVelocidadeMaxima() / 2);
         }
     }
 

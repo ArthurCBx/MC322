@@ -16,7 +16,7 @@ Ele possui os métodos subir e descer, que alteram a altitude do robo, verifican
 public abstract class RoboAereo extends Robo {
     private int altitudeMaxima;
 
-    // Metodos construtores para Robo Aereo
+    // Metodo construtor para Robo Aereo
 
     public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima) {
         super(ambiente, nome, posX, posY);

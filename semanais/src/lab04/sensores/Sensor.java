@@ -30,9 +30,8 @@ public class Sensor {
 
 
     // Função basica de monitoramento do ambiente:
-
     public void monitorar(Ambiente ambiente, Robo mestre) {
-        // Verifica no ambiente se existe algum robo dentro do raio do sensor
+        // Verifica no ambiente se existe algum robo dentro do raio do sensor (XY)
         ArrayList<Entidade> listaEntidade = ambiente.getListaEntidades();
         ArrayList<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
 
@@ -63,7 +62,7 @@ public class Sensor {
         }
     }
 
-    // Função para retornar listas de robôs se estão dentro do raio:
+    // Função para retornar listas de robôs se estão dentro do raio(XY):
     public ArrayList<Robo> listaRobosEncontrados(Ambiente ambiente, Robo mestre){
         List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
         ArrayList<Robo> listaRobosEncontrados = new ArrayList<>();
@@ -77,7 +76,7 @@ public class Sensor {
         return listaRobosEncontrados;
     }
 
-    // Função para retornar listas de obstáculos se estão dentro do raio:
+    // Função para retornar listas de obstáculos se estão dentro do raio(XY):
     public ArrayList<Obstaculo> listaObstaculosEncontrados(Ambiente ambiente, Robo mestre){
         List<Obstaculo> obstaculos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList();
         ArrayList<Obstaculo> listaObstaculosEncontrados = new ArrayList<>();

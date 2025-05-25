@@ -28,6 +28,7 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
 
     }
 
+    // Getters e Setters:
 
     public int getRaioExplosao() {
         return raioExplosao;
@@ -42,8 +43,8 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
                 "Posicao Atual: (" + getX() + ", " + getY() + ", " + getZ() + ")";
     }
 
-    // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
 
+    // Metodo para se autodestruir e levar consigo os robos num raio de explosao.
     public List<Robo> explodir() {
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode explodir.");
@@ -77,23 +78,25 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
         return robosAtingidos;
     }
 
+    // Metodo do movimento autonomo em XYZ (move uma direção aleatoria com norma maxima do movimento definido em norma)
     @Override
-    public void moveAutomatico() {
+    public void moveAutomatico(double norma) {
 
-        int[] move = {(int) (20 * (2 * Math.random() - 1)),
-                (int) (20 * (2 * Math.random() - 1)),
-                (int) (20 * (2 * Math.random() - 1))};
+        int[] move = {  (int) ((norma / Math.sqrt(3))* (2 * Math.random() - 1)),
+                        (int) ((norma / Math.sqrt(3)) * (2 * Math.random() - 1)),
+                        (int) ((norma / Math.sqrt(3)) * (2 * Math.random() - 1))};
 
+        // Para o robo explosivo em especifico, há o respeito dos limites do ambiente
 
         move[0] = Math.max(0, Math.min(getX() + move[0], getAmbiente().getComprimento()));
-        move[1] = Math.max(0, Math.min(getX() + move[1], getAmbiente().getComprimento()));
-        move[2] = Math.max(0, Math.min(getX() + move[2], getAmbiente().getComprimento()));
+        move[1] = Math.max(0, Math.min(getY() + move[1], getAmbiente().getLargura()));
+        move[2] = Math.max(0, Math.min(getZ() + move[2], getAmbiente().getAltura()));
 
         moverPara(move[0], move[1], move[2]);
 
     }
 
-
+    // Tarefa do robo explosivo para procurar robos automaticamente e os destruir
     @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {
@@ -107,18 +110,19 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
             return;
         }
 
+
         System.out.printf("Executando a busca e destruição de robos\n");
 
         List<Robo> robosencontrados = identificarRobosProximos();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {   // Procura por robos 5 vezes (ou ate colidir)
             if (robosencontrados != null) {
-                Robo roboescolhido = robosencontrados.get((int) (Math.random() * (robosencontrados.size() + 1)));
+                Robo roboescolhido = robosencontrados.get((int) (Math.random() * (robosencontrados.size() + 1)));   // Se encontra mais de um robo, seleciona um aleatorio
                 moverPara(roboescolhido.getX(),roboescolhido.getY(),roboescolhido.getZ());
                 explodir();
 
             } else {
-                moveAutomatico();
+                moveAutomatico(20);
                 robosencontrados = identificarRobosProximos();
 
             }

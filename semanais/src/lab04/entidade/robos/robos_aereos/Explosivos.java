@@ -4,6 +4,8 @@ import lab04.entidade.robos.Robo;
 
 import java.util.List;
 
+// Interface para robos que possuem algum tipo de metodo explosivo
+
 public interface Explosivos {
-    List<Robo> explodir();
+    List<Robo> explodir();  // Retorna robos afetados
 }

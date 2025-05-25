@@ -18,7 +18,6 @@ public class SensorClasse extends Sensor {
         super(raio);
     }
 
-
     @Override
     public void monitorar(Ambiente ambiente, Robo mestre){
         List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
