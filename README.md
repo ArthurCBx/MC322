@@ -64,13 +64,8 @@ MC322
         │   ├── entidade
         │   │   ├── Entidade.java
         │   │   ├── TipoEntidade.java
-        │   │   ├── escavador
-        │   │   │   └── Escavador.java
-        │   │   ├── geografo
-        │   │   │   └── Geografo.java
-        │   │   ├── ladrao
-        │   │   │   └── Ladrao.java
         │   │   └── robos
+        │   │       ├── Autonomo.java
         │   │       ├── Comunicavel.java
         │   │       ├── Estado.java
         │   │       ├── Robo.java
@@ -78,9 +73,11 @@ MC322
         │   │       ├── RoboTerrestre.java
         │   │       ├── Sensoreavel.java
         │   │       ├── robos_aereos
+        │   │       │   ├── Explosivos.java
         │   │       │   ├── RoboBombardeiro.java
         │   │       │   └── RoboExplosivo.java
         │   │       └── robos_terrestres
+        │   │           ├── Energizavel.java
         │   │           ├── RoboCombustivel.java
         │   │           └── RoboSolar.java
         │   ├── excecoes
