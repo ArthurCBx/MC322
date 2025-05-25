@@ -1,5 +1,9 @@
 package lab04;
 
+import lab04.comunicacao.CentralComunicacao;
+import lab04.entidade.Entidade;
+import lab04.entidade.robos.robos_terrestres.Energizavel;
+import lab04.excecoes.*;
 import lab04.obstaculos.Obstaculo;
 import lab04.obstaculos.TipoObstaculo;
 import lab04.entidade.robos.Robo;
@@ -23,7 +27,10 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
 
-        Ambiente ambiente = new Ambiente(100, 100, 100);
+
+        /*
+
+        Ambiente ambiente = new Ambiente(50, 50, 50);
 
         Robo robo1 = new RoboBombardeiro(ambiente, "teste1", 0, 0, 0, 120, 10);
         Robo robo2 = new RoboExplosivo(ambiente, "teste2", 0, 0, 0, 100, 5);
@@ -59,123 +66,259 @@ public class Main {
         String nomeRobo;
         Robo robo = null;
 
+
+ */
         // TESTES: --------------------------------
+
+        Ambiente tambiente = new Ambiente(50, 50, 50);
+
+        Robo roboteste1 = new RoboExplosivo(tambiente, "Teste1", 0, 0, 0, 20, 20);
+        Robo roboteste2 = new RoboBombardeiro(tambiente, "Teste2", 1, 1, 0, 30, 20);
+        Robo roboteste3 = new RoboSolar(tambiente, "Teste3", 2, 2, 30, 40);
+        Robo roboteste4 = new RoboCombustivel(tambiente, "Teste4", 3, 3, 30, 200);
+
+        Sensor tsensorComum20 = new Sensor(20);
+        SensorAltitude tsensorAltitude80XY20 = new SensorAltitude(80,20);
+        SensorClasse tsensorClasse20 = new SensorClasse(20);
+
+        roboteste1.addSensor(tsensorComum20);
+        roboteste1.addSensor(tsensorAltitude80XY20);
+        roboteste1.addSensor(tsensorClasse20);
+
+        roboteste2.addSensor(tsensorComum20);
+
+        roboteste3.addSensor(tsensorClasse20);
+
+        roboteste4.addSensor(tsensorComum20);
+        roboteste4.addSensor(tsensorClasse20);
+
+        Obstaculo obstaculoteste = new Obstaculo(5, 5, 10, 10, 0, 10, TipoObstaculo.ROCHA);
+        tambiente.adicionarEntidade(obstaculoteste);
+
+        ArrayList<Robo> robosteste = new ArrayList<Robo>() {{
+            add(roboteste1);
+            add(roboteste2);
+            add(roboteste3);
+            add(roboteste4);
+
+        }};
 
         System.out.printf("\n------- INICIO DOS TESTES: ---------\n");
 
-        // Movimento novo de robos terrestres: (vel. maxima era unicimensional --> radial):
+        // Vizualização inicial do mapa:
 
-        System.out.printf("MOVIMENTO DO ROBO TERRESTRE (radial com vel. max):\n");
-        System.out.printf("Tenta mover acima da vel. maxima e depois abaixo da vel. maxima\n");
+        System.out.println();
 
-        robo4.exibirPosicao();
-        robo4.moverPara(70,40);
-        robo4.moverPara(70,30);
-        robo4.exibirPosicao();
-        robo4.setPosX(0);
-        robo4.setPosY(0);
+        try {
+            System.out.println("\n\nVIZUALIZAR AMBIENTE:------------");
+            tambiente.vizualizarAmbiente();
+
+            System.out.println("\n\nEXECUTAR SENSORES:------------");
+            tambiente.executarSensores();
+
+            System.out.println("\n\nDENTRO DOS LIMITES:------------");
+            tambiente.dentroDosLimites(-1, -1, -1);
+        } catch (ForaDosLimitesException e){
+            System.out.println(e.getMessage());  // (-1,-1,-1) está fora dos limites
+        }
+
+        try{    // Continuação de dentro dos limites:
+            roboteste1.moverPara(-1,-1,-1);
+        }catch (ForaDosLimitesException e){
+            System.out.println(e.getMessage());  // (-1,-1,0) está fora dos limites [robo aereo so vai ate o chao {0}]
+        }
+
+        System.out.println("\n\nVERIFICAR COLISOES:------------");
+
+        try{
+            tambiente.moverEntidade(roboteste1,1,1,0);   // Posição é a mesma do roboteste2
+            tambiente.verificarColisoes();
+        }catch (ColisaoException e){
+            System.out.println(e.getMessage());  // Colisão esperada
+            tambiente.moverEntidade(roboteste1,0,0,0);   //  retorna para posição inicial
+
+        }
+
+        try{    // Sem colisões:
+            tambiente.verificarColisoes();
+        }catch (ColisaoException e){
+            System.out.println(e.getMessage());  // Colisão esperada
+
+        }
 
 
-        // Robo explosivo novo (explosao unidimensional --> radial):
+        // Funcioalidades de Entidade (fora getX, getY, getZ):
 
-        System.out.printf("\nEXPLOSAO RADIAL:\n");
-        System.out.printf("Robo explosivo consegue atingir apenas um robo em seu raio de 5\n");
+        for (Robo robot : robosteste) {
+            System.out.printf("\nEntidade %s:\nRepresentação: '%c'\nTipoEntidade '%s'\nDescrição:\n%s\n\n", robot.getNome(), robot.getRepresentacao(), robot.getTipoEntidade(), robot.getDescricao());
+        }
 
-        Robo robo5 = new RoboExplosivo(ambiente, "teste5", "sul", 40, 40, 10, 100, 5);
-        Robo robo6 = new RoboExplosivo(ambiente, "teste6", "sul", 43, 43, 13, 100, 5);
-        Robo robo7 = new RoboExplosivo(ambiente, "teste7", "sul", 43, 43, 12, 100, 5);
-        robo5.exibirPosicao();
-        robo6.exibirPosicao();
-        robo7.exibirPosicao();
+        // Novo movimento de robos (atualizado para colisão 3D e com outros robos) [apenas robo aereos já que terrestres são a mesma coisa so que em 2D]
 
-        ((RoboExplosivo)robo5).explodir();
+        try {
+            roboteste1.exibirPosicao();
+            roboteste1.moverPara(4, 4, 4);        // Movimento sem problemas em 3D
+            roboteste1.exibirPosicao();
+
+            roboteste2.exibirPosicao();
+            roboteste2.moverPara(2, 2, 2);        // Teste2 vai para (2,2,2)
+            roboteste2.exibirPosicao();
+
+            roboteste1.exibirPosicao();
+            roboteste1.moverPara(0, 0, 0);     // Teste1 tenta voltar para (0,0,0) mas colide com Teste2 em (2,2,2)
+
+        } catch (ColisaoException e) {
+            System.out.printf("\nColisão com robo como esperado:\n");
+            System.out.printf("Robo que estava se movendo: ");
+            roboteste1.exibirPosicao();
+            System.out.printf("Robo que estava se parado: ");
+            roboteste2.exibirPosicao();
+        }
+
+        // Colisão com obstauclo:
+
+        System.out.printf("\n\nColisão com obstaculo que pussuem dominio de: (5,5,0) a (10,10,10)\n");
+
+        System.out.printf("\nColisão com canto:\n");
+
+        try {
+            roboteste1.moverPara(3, 3, 6);        // Sobe um pouco
+            roboteste1.exibirPosicao();
+            roboteste1.moverPara(5, 5, 6);        // Colisão em um canto do obstaculo
 
 
-        // Colisão com obstaculos para movimento XY:
+        } catch (ColisaoException e) {
+            System.out.println(e.getMessage());
 
-        System.out.printf("\nCOLISAO ENTRE ROBOS E OBSTACULOS EM XY\n");
+        }
 
-        System.out.printf("\nColisao no canto do obstaculo:\n");
-        robo4.moverPara(7,7);
+        System.out.printf("\nColisão com quina:\n");
 
-        System.out.printf("\nColisao no lado inferior do obstaculo:\n");
-        robo4.setPosX(6);
-        robo4.setPosY(0);
-        robo4.exibirPosicao();
-        robo4.moverPara(0,10);
+        try {
+            roboteste1.moverPara(4, 4, 11);
+            roboteste1.exibirPosicao();
+            roboteste1.moverPara(5, 5, 10);     // Colisão em uma quina do obstaculo
 
-        System.out.printf("\nColisao no lado superior do obstaculo:\n");
-        robo4.setPosX(6);
-        robo4.setPosY(10);
-        robo4.exibirPosicao();
-        robo4.moverPara(0,-10);
+        } catch (ColisaoException e) {
+            System.out.println(e.getMessage());
 
-        System.out.printf("\nColisao no lado esquerdo do obstaculo:\n");
-        robo4.setPosX(0);
-        robo4.setPosY(6);
-        robo4.exibirPosicao();
-        robo4.moverPara(10,0);
+        }
 
-        System.out.printf("\nColisao no lado direito do obstaculo:\n");
-        robo4.setPosX(10);
-        robo4.setPosY(6);
-        robo4.exibirPosicao();
-        robo4.moverPara(-10,0);
+        System.out.printf("\n LIGAR//DESLIGAR e EXCEÇAO:\n");
 
-        robo4.setPosX(0);
-        robo4.setPosY(0);
+        try{
+            roboteste1.desligar();
+            roboteste1.moverPara(10,10,10);
 
-        // Colisão com obstaculos em subir/descer:
+        }catch (RoboDesligadoException e){
+            System.out.println(e.getMessage());
+            roboteste1.ligar();
+        }
 
-        System.out.printf("\nCOLISAO COM OBSTACULOS EM SUBIR/DESCER\n");
+        System.out.printf("\n COMUNICAÇAO:\n");
 
-        System.out.printf("\nRobo descendo em um obstaculo:\n");
-        robo1.setPosX(6);
-        robo1.setPosY(6);
-        robo1.setPosZ(10);
-        robo1.exibirPosicao();
-        ((RoboAereo)robo1).descer(10);
 
-        System.out.printf("\nRobo subindo em um obstaculo:\n");
+        try{
 
-        Obstaculo pedra2 = new Obstaculo(5,5,7,7,15, TipoObstaculo.ROCHA);
-        ambiente.adicionarObstaculo(pedra2);
+            roboteste1.enviarMensagem(roboteste2,"Bom dia");
 
-        robo1.setPosX(6);
-        robo1.setPosY(6);
-        robo1.setPosZ(10);
-        robo1.exibirPosicao();
-        ((RoboAereo)robo1).subir(10);
+            System.out.println();
 
-        pedra2 = null;
+            roboteste2.desligar();
+            roboteste1.enviarMensagem(roboteste2,"Boa noite");  // Falha pelo destinatario estar desligado
 
-        // Sensor basico e altitude:
 
-        System.out.printf("\nSENSOR BASICO, SENSOR DE ALTITUDE E DE CLASSE\n");
+        }catch (ErroComunicacaoException e){
+            System.out.println(e.getMessage());
+        }
 
-        robo1.setPosX(1);
-        robo1.setPosY(1);
+        try{
+            System.out.println();
 
-        robo6.setPosX(1);
-        robo6.setPosY(1);
-        robo6.setPosZ(0);
-        robo6.addSensor(sensorComum20);
-        robo6.addSensor(sensorAltitude40XY10);
-        robo6.addSensor(sensorClasse50);
+            roboteste1.desligar();
+            roboteste2.ligar();
+            roboteste1.enviarMensagem(roboteste2,"Boa noite");  // Falha pelo remetente estar desligado
 
-        System.out.printf("\nHá 3 robos em (0,0,0), um em (1,1,14) e o robo com sensores em (1,1,0)\n");
 
-        robo6.monitorar();
+        }catch (ErroComunicacaoException e){
+            System.out.println(e.getMessage());
+        }
 
-        robo1.setPosX(0);
-        robo1.setPosY(0);
-        robo1.setPosZ(0);
+        try{
+            System.out.println();
 
-        robo6.setPosZ(50);
-        ((RoboExplosivo)robo6).explodir();
+            roboteste1.ligar();
+            roboteste1.enviarMensagem(roboteste2,"Boa noite");
 
+
+        }catch (ErroComunicacaoException e){
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("\nMensagens armazenadas na cetral:");
+
+        CentralComunicacao.exibirMensagens();
+
+        System.out.printf("\n TAREFAS ESPECIFICAS DOS ROBOS:\n\n");
+
+        try{
+            System.out.printf("Robo combustivel:\n");
+            roboteste4.executarTarefa();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        try{
+            System.out.printf("\nRobo Solar:\n");
+            tambiente.moverEntidade(roboteste3,30,30,0);
+            tambiente.moverEntidade(roboteste2,30,30,5);
+
+            roboteste3.executarTarefa();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        try{
+            System.out.printf("\nRobo Bombardeiro:(tambem testa a remoção de entidades)\n");
+            tambiente.moverEntidade(roboteste3,30,30,0);
+            tambiente.moverEntidade(roboteste2,30,30,5);
+
+            roboteste2.executarTarefa();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        System.out.printf("\nNumero de entidades presentes(eram 5 inicialmente): %d\n\n",tambiente.getListaEntidades().size());
+
+        try{
+            System.out.printf("\nRobo Explosivo:\n");
+            tambiente.moverEntidade(roboteste1,50,50,5);     // Os robos foram posicionados para que a primeira verificação não encontre robos
+            tambiente.moverEntidade(roboteste2,30,45,20);    // e seja necessario que o robo se locomova automaticamente para os encontrar
+            tambiente.moverEntidade(roboteste4,45,30,0);     // É possivel que o robo não consiga encontrar nenhum outro robo ou colida em outras entidades
+
+            roboteste1.executarTarefa();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        // Deleta os objetos utilizados nos testes:
+
+        for (Entidade entidade : tambiente.getListaEntidades())
+            tambiente.removerEntidade(entidade);
+
+        tsensorComum20 = null;
+        tsensorClasse20 = null;
+        tsensorAltitude80XY20 = null;
+        tambiente = null;
 
         System.out.printf("\n------FIM DOS TESTES------------\n");
+
+
+        /*
 
         System.out.printf("MENU ITERATIVO:");
 
@@ -520,5 +663,7 @@ public class Main {
                     System.out.printf("Opção invalida\n");
             }
         }
+
+ */
     }
 }

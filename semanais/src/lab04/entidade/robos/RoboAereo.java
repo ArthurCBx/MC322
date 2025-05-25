@@ -1,6 +1,7 @@
 package lab04.entidade.robos;
 
 import lab04.Ambiente;
+import lab04.Main;
 import lab04.excecoes.ColisaoException;
 import lab04.excecoes.ForaDosLimitesException;
 import lab04.excecoes.RoboDesligadoException;
@@ -51,8 +52,8 @@ public abstract class RoboAereo extends Robo {
 
     // Metodo mover precisa considerar os limites de altitude e chão (entre 0 e altitude maxima do robo)
     @Override
-    public void moverPara(int deltaX,int deltaY,int deltaZ) {
-        super.moverPara(deltaX,deltaY,Math.max(Math.min(getZ() + deltaZ,getAltitudeMaxima()),0));
+    public void moverPara(int x, int y, int z) {
+        super.moverPara(x, y, Math.max(Math.min(z, getAltitudeMaxima()), 0));
     }
 
 }

@@ -125,7 +125,7 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
         int[] move = {  (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1)),
                         (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1))};
 
-        moverPara(move[0], move[1], 0);
+        moverPara(getX() + move[0], getY() + move[1], getZ());
     }
 
 
@@ -140,9 +140,11 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
         }
 
         for (int i = 0; i < 5; i++) {   // Bombardeia 5 posições aleatorias (ou até colidir)
+            System.out.printf("\nBombardeio numero %d:\n",i+1);
+            exibirPosicao();
             carregarBombas(1);
             explodir();
-            moveAutomatico(5);
+            moveAutomatico(10);
         }
 
     }

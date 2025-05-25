@@ -6,6 +6,7 @@ import lab04.excecoes.ColisaoException;
 import lab04.excecoes.ForaDosLimitesException;
 import lab04.obstaculos.Obstaculo;
 import lab04.entidade.robos.Robo;
+import lab04.obstaculos.TipoObstaculo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,13 @@ public class Ambiente {
         return listaEntidades;
     }
 
+    public TipoEntidade[][][] getMapa() {
+        return mapa;
+    }
+
+    public void setMapa(TipoEntidade[][][] mapa) {
+        this.mapa = mapa;
+    }
 
     // Metodo setPeriodo só pode ser acessado por metodos de classe (mudaTempo) que ira verificar se o argumento foi passado corretamente
     private void setPeriodo(String periodo) {
@@ -88,9 +96,11 @@ public class Ambiente {
         if (mapa != null)
             System.out.printf("O mapa já foi inicializado\n");
 
-        for (int x = 0; x < getComprimento(); x++)
-            for (int y = 0; y < getLargura(); y++)
-                for (int z = 0; z < getAltura(); z++)
+        mapa = new TipoEntidade[comprimento + 1][largura + 1][altura + 1];
+
+        for (int x = 0; x <= getComprimento(); x++)
+            for (int y = 0; y <= getLargura(); y++)
+                for (int z = 0; z <= getAltura(); z++)
                     mapa[x][y][z] = TipoEntidade.VAZIO;
 
     }
@@ -99,8 +109,8 @@ public class Ambiente {
     public void adicionarEntidade(Entidade entidade) {
 
         if (mapa == null) {
-            System.out.printf("O ambiente não possui mapa inicializado, inicialize o mapa primeiro\n");
-            return;
+            System.out.printf("O ambiente não possui mapa inicializado, inicializando o mapa\n");
+            inicializarMapa();
         }
 
         // Tratamento distinto de robos (pontual) e obstaculos (extenso)
@@ -200,7 +210,7 @@ public class Ambiente {
             }
             // Robo-Robo (reporta tanto robo1 colide com robo2 quanto robo2 colide com robo1)
             for (Robo robo2 : listaRobo) {
-                if (roboX == robo2.getX() && roboY == robo2.getY() && roboZ == robo2.getZ()) {
+                if (roboX == robo2.getX() && roboY == robo2.getY() && roboZ == robo2.getZ() && robo2 != robo) {
                     System.out.printf("O robo %s colidiu com o robo %s em (%d,%d,%d).\n",
                             robo.getNome(), robo2.getNome(), roboX, roboY, roboZ);
                     colisao = true;
@@ -224,9 +234,11 @@ public class Ambiente {
     public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ) {
 
         if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+            mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
             ((Robo) entidade).setPosX(novoX);
             ((Robo) entidade).setPosY(novoY);
             ((Robo) entidade).setPosZ(novoZ);
+            mapa[novoX][novoY][novoZ] = TipoEntidade.ROBO;
 
         } else {
             System.out.printf("A posição de entidades do tipo" + entidade.getTipoEntidade() + "não muda\n");
@@ -240,46 +252,60 @@ public class Ambiente {
     public void executarSensores() {
         // Executa sensores de todos os robôs no ambiente.
         for (Entidade entidade : listaEntidades)
-            if (entidade.getTipoEntidade() == TipoEntidade.ROBO)
+            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+                System.out.printf("Monitoramento do Robo %s:\n",((Robo) entidade).getNome());
                 ((Robo) entidade).acionarSensores();
+            }
 
     }
     // Metodo para printar no console a vizualização do mapa do ambiente no nivel z = 0
 
     public void vizualizarAmbiente() {
 
+        if (mapa == null) {
+            System.out.printf("O ambiente não possui mapa inicializado, inicializando o mapa\n");
+            inicializarMapa();
+        }
+
         System.out.printf("Vizualização 2D da camada Z = 0 do Ambiente\n\n");
 
-        for (int x = 0; x <= comprimento + 2; x++)
+        for (int x = 0; x < comprimento + 2; x++)
             System.out.print('_');                  // Imprime uma borda superior para o mapa
+        System.out.println();
 
-        for (int y = largura; y >= 0; y--) {
-            System.out.print('|');                  // Imprime uma borda esquerda para o mapa
-            for (int x = 0; x <= comprimento; x++) {
-                for (Entidade entidade : listaEntidades)    // Para toda entidade
-                    if (entidade.getTipoEntidade() == mapa[x][y][0])    // Se a entidade for do mesmo tipo da localizada no mapa
-                        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {  // Tratamento para robo(pontual)
+        for (int y = largura - 1; y >= 0; y--) {
+            System.out.print("|");                  // Imprime uma borda esquerda para o mapa
+            for (int x = 0; x < comprimento; x++) {
+                if (mapa[x][y][0].equals(TipoEntidade.VAZIO)) {
+                    System.out.printf("´");
+                } else {
+                    for (Entidade entidade : listaEntidades)    // Para toda entidade
+                        if (entidade.getTipoEntidade() == mapa[x][y][0])    // Se a entidade for do mesmo tipo da localizada no mapa
+                            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {  // Tratamento para robo(pontual)
 
-                            if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == 0) { // Verifica se realmente é este robo neste local
-                                System.out.print(entidade.getRepresentacao());
-                                break;
+                                if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == 0) { // Verifica se realmente é este robo neste local
+                                    System.out.print(entidade.getRepresentacao());
+                                    break;
+                                }
+
+                            } else {                                                  // Tratamento para obstaculo(extenso)
+                                if (((Obstaculo) entidade).contemPonto(x, y, 0)) {  // Verifica se realmente é este obstaculo neste local
+                                    System.out.print(entidade.getRepresentacao());
+                                    break;
+                                }
+
                             }
-
-                        } else {                                                  // Tratamento para obstaculo(extenso)
-                            if (((Obstaculo) entidade).contemPonto(x, y, 0)) {  // Verifica se realmente é este obstaculo neste local
-                                System.out.print(entidade.getRepresentacao());
-                                break;
-                            }
-
-                        }
-                System.out.print("|\n");            // Imprime uma borda direita para o mapa
+                }
             }
+            System.out.print("|\n");            // Imprime uma borda direita para o mapa
 
-            for (int x = 0; x <= comprimento + 2; x++)
-                System.out.print('-');              // Imprime uma borda inferior para o mapa
 
-            System.out.printf("\n\n");
         }
+        for (int x = 0; x < comprimento + 2; x++)
+            System.out.print('-');              // Imprime uma borda inferior para o mapa
+
+        System.out.printf("\n\n");
+
     }
 
     // Metodo para detectar obstaculos dentro de uma area delimitada

@@ -119,13 +119,17 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     // A linha é feita por uma verificação de seções de 0.2 do vetor unitario que representa o vetor de movimento
     // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
-    public void moverPara(int deltaX, int deltaY, int deltaZ) {
+    public void moverPara(int x, int y, int z) {
         if (getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
         }
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robo não está em um ambiente, logo não pode movimentar-se.");
         }
+
+        int deltaX = x - getX();
+        int deltaY = y - getY();
+        int deltaZ = z - getZ();
 
         int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};   // Posição final ideal do robo
 
@@ -134,9 +138,9 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         // Variaveis para a verificação de colisão no caminho do robo
         double norma = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
         double[] vetorMove = {
-                (norma != 0) ? 0.2 * ((double) deltaX / norma) : 0,
-                (norma != 0) ? 0.2 * ((double) deltaY / norma) : 0,
-                (norma != 0) ? 0.2 * ((double) deltaZ / norma) : 0
+                (norma != 0) ? 0.5 * ((double) deltaX / norma) : 0,
+                (norma != 0) ? 0.5 * ((double) deltaY / norma) : 0,
+                (norma != 0) ? 0.5 * ((double) deltaZ / norma) : 0
         };
         double[] newPos = {getX(), getY(), getZ()};
         double[] newTempPos = {0, 0, 0};
@@ -152,7 +156,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
             // Além disso também calcula a posição logo a frente para teste
 
             for (int i = 0; i < 3; i++)
-                if ((finalPos[i] - (newPos[i] + vetorMove[i]) * vetorMove[i]) >= 0)
+                if ((finalPos[i] - (newPos[i] + vetorMove[i])) * vetorMove[i] >= 0)
                     newTempPos[i] = newPos[i] + vetorMove[i];
                 else
                     newTempPos[i] = finalPos[i];
@@ -164,7 +168,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
                     getAmbiente().moverEntidade(this, (int) newPos[0], (int) newPos[1], (int) newPos[2]);
 
-                    throw new ColisaoException("O robo colidiu com uma entidade " + getAmbiente().estaOcupado((int) newTempPos[0], (int) newTempPos[1], (int) newTempPos[2]) + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
+                    throw new ColisaoException("O robo colidiu com uma entidade do tipo " + getAmbiente().getMapa()[(int) newTempPos[0]][(int) newTempPos[1]][(int) newTempPos[2]] + "e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
 
                 }
 

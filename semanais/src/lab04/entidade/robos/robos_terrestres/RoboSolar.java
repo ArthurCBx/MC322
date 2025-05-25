@@ -91,18 +91,18 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
     // Sobrescrita do metodo mover do robo terrestre considerando bateria e periodo do dia
     // O robo utiliza bateria conforme a distância total que se move (similar a velocidade maxima)
     @Override
-    public void moverPara(int deltaX, int deltaY, int deltaZ) {
+    public void moverPara(int x, int y, int z) {
         if (Objects.equals(getAmbiente().getPeriodo(), "Dia")) {        // O painel solar disponibiliza o movimento durante o dia sem consumir bateria
-            super.moverPara(deltaX, deltaY, 0);                     // Assim o robo pode se mover independentemente da sua bateria durante o dia
+            super.moverPara(x, y, 0);                     // Assim o robo pode se mover independentemente da sua bateria durante o dia
 
         } else {    // Caso não esteja no período diurno, a bateria será utilizada para mover
 
-            double distancia = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+            double distancia = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
 
             if (distancia <= getBateria()) {
                 int x0 = getX();
                 int y0 = getY();
-                super.moverPara(deltaX, deltaY, 0);
+                super.moverPara(x, y, 0);
                 distancia = Math.sqrt(Math.pow(getX() - x0, 2) + Math.pow(getY() - y0, 2)); // A bateria consumida é calculada depois do mover já que
                 descarregar(distancia);                                                     // o robo pode colidir e se movimentar menos do que o previsto
 
@@ -117,10 +117,10 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
     @Override
     public void moveAutomatico(double norma) {
 
-        int[] move = {  (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1)),
-                        (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1))};
+        int[] move = {(int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1)),
+                (int) ((norma / Math.sqrt(2)) * (2 * Math.random() - 1))};
 
-        moverPara(move[0], move[1], 0);
+        moverPara(getX() + move[0], getY() + move[1], 0);
 
     }
 
@@ -140,8 +140,11 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
         }
 
         for (int i = 0; i < 5; i++) {   // Explora 5 vezes o ambiente (ou até colidir // acabar bateria)
+            System.out.printf("\nExploração numero %d:\n",i+1);
+            exibirPosicao();
             if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))  // Se está dia, o robo aproveita para carregar sua bateria
                 carregar();
+            System.out.printf("O robo Solar possui %.2f de carga\n", getBateria());
 
             if (getSensores() != null)
                 acionarSensores();

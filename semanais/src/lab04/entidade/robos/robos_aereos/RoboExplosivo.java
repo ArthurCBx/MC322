@@ -82,7 +82,7 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
     @Override
     public void moveAutomatico(double norma) {
 
-        int[] move = {  (int) ((norma / Math.sqrt(3))* (2 * Math.random() - 1)),
+        int[] move = {  (int) ((norma / Math.sqrt(3)) * (2 * Math.random() - 1)),
                         (int) ((norma / Math.sqrt(3)) * (2 * Math.random() - 1)),
                         (int) ((norma / Math.sqrt(3)) * (2 * Math.random() - 1))};
 
@@ -113,18 +113,28 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
 
         System.out.printf("Executando a busca e destruição de robos\n");
 
-        List<Robo> robosencontrados = identificarRobosProximos();
+        List<Robo> robosencontrados;
 
         for (int i = 0; i < 5; i++) {   // Procura por robos 5 vezes (ou ate colidir)
-            if (robosencontrados != null) {
-                Robo roboescolhido = robosencontrados.get((int) (Math.random() * (robosencontrados.size() + 1)));   // Se encontra mais de um robo, seleciona um aleatorio
-                moverPara(roboescolhido.getX(),roboescolhido.getY(),roboescolhido.getZ());
+            System.out.printf("\nBusca numero %d:\n\n",i+1);
+
+            robosencontrados = identificarRobosProximos();
+            exibirPosicao();
+            acionarSensores();  // Vizualização da busca por robos no terminal
+
+            if (!robosencontrados.isEmpty()) {
+                System.out.printf("Alvo encontrado\n");
+                Robo roboescolhido = robosencontrados.get((int) (Math.random() * (robosencontrados.size())));   // Se encontra mais de um robo, seleciona um aleatorio
+                int posXadjacente = roboescolhido.getX() + (getX() - roboescolhido.getX())/Math.abs((getX() - roboescolhido.getX()) == 0 ? 1: (getX() - roboescolhido.getX()));
+                int posYadjacente = roboescolhido.getY() + (getY() - roboescolhido.getY())/Math.abs((getY() - roboescolhido.getY()) == 0 ? 1: (getY() - roboescolhido.getY()));
+                int posZadjacente = roboescolhido.getZ() + (getZ() - roboescolhido.getZ())/Math.abs((getZ() - roboescolhido.getZ()) == 0 ? 1: (getZ() - roboescolhido.getZ()));
+                moverPara(posXadjacente, posYadjacente, posZadjacente);
+                exibirPosicao();
                 explodir();
+                return;
 
             } else {
                 moveAutomatico(20);
-                robosencontrados = identificarRobosProximos();
-
             }
         }
 

@@ -30,11 +30,11 @@ public abstract class RoboTerrestre extends Robo {
     // Sobreescrita do metodo Mover para o robo Terrestre:
     // A velocidade maxima é considerada radial, ou seja, pode se mover uma velocidade maxima considerando o raio do movimento [raiz(x^2 + y^2)]
     @Override
-    public void moverPara(int deltaX, int deltaY, int deltaZ) {
-        if (Math.pow(deltaX,2) + Math.pow(deltaY,2) > Math.pow(getVelocidadeMaxima(),2))
+    public void moverPara(int x, int y, int z) {
+        if (Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2) > Math.pow(getVelocidadeMaxima(), 2))
             System.out.printf("O movimento de %s excede a velocidade maxima, operação cancelada\n", getNome());
         else
-            super.moverPara(deltaX, deltaY,getZ());
+            super.moverPara(x, y, getZ());
 
     }
 
