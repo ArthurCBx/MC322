@@ -10,10 +10,9 @@ import lab04.obstaculos.Obstaculo;
 
 import java.util.ArrayList;
 
-/*
-Subclasse de Robo que possui os atributos próprios altitude e altitudeMaxima.
-Ele possui os métodos subir e descer, que alteram a altitude do robo, verificando se ele não sairá do ambiente.
- */
+/* Subclasse de Robo que possui os atributos próprios altitude e altitudeMaxima.
+   Subclasses que herdam de robo aéreo agora podem se mover em três dimensões (x, y, z).
+    */
 public abstract class RoboAereo extends Robo {
     private int altitudeMaxima;
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-Subclasse de RoboAereo que possui a habilidade de se autodestruir, levando consigo os robos num raio de explosão (raio deve ser indicado no construtor).
+ Subclasse de RoboAereo que possui a habilidade de se autodestruir, levando consigo os robos num raio de explosão (raio deve ser indicado no construtor).
  Para isso, ele possui o metodo explodir, que recebe o ambiente em que está inserido como atributo.
  */
 

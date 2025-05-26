@@ -2,9 +2,10 @@ package lab04.entidade.robos;
 
 import lab04.Ambiente;
 
+/* Subclasse para implementar um robo que é exclusivamente terrestre e possui uma velocidade maxima.
+   O atributo velocidadeMaxima pode ser um limitador para o movimento do robo.
+ */
 public abstract class RoboTerrestre extends Robo {
-
-    // Subclasse para implementar um robo que é exclusivamente terrestre e possui uma velocidade maxima
 
     private double velocidadeMaxima;
 
@@ -27,7 +28,7 @@ public abstract class RoboTerrestre extends Robo {
     }
 
 
-    // Sobreescrita do metodo Mover para o robo Terrestre:
+    // Sobrescrita do metodo Mover para o robo Terrestre:
     // A velocidade maxima é considerada radial, ou seja, pode se mover uma velocidade maxima considerando o raio do movimento [raiz(x^2 + y^2)]
     @Override
     public void moverPara(int x, int y, int z) {

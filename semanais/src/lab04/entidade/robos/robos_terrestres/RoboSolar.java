@@ -10,13 +10,12 @@ import lab04.excecoes.SemCombustivelException;
 
 import java.util.Objects;
 
-public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
+// Subclasse de robo terrestre que implementa energia e recarga por painel solar no robo
 
-    // Subclasse de robo terrestre que implementa energia e recarga por painel solar no robo
+public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     private double bateria;
     private double potenciaPainelSolar;
-
 
     // Construtor para o robo Solar, considera que começa descarregado e possui uma potência de painel solar (sempre positiva)
 
@@ -124,7 +123,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     }
 
-    // Tarefa do robo solar para a exploração automatica do ambiente, utilizando seus sensores ou apenas se movendo
+    // Tarefa do robo solar para a exploração automática do ambiente, utilizando os seus sensores ou apenas se movendo
     @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {
@@ -151,6 +150,4 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
             moveAutomatico(getVelocidadeMaxima() / 2);
         }
     }
-
-
 }

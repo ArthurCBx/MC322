@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Ambiente {
-    // Criando classe ambiente com variaveis especificadas no enunciado.
+    // Criando classe ambiente com variáveis especificadas no enunciado.
     // Período para atender roboSolar, subclasse de RoboTerrestre
 
     private final int comprimento;

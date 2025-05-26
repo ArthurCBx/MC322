@@ -7,9 +7,9 @@ import lab04.excecoes.RoboDesligadoException;
 import lab04.excecoes.SemAmbienteException;
 import lab04.excecoes.SemCombustivelException;
 
+// Subclasse para lidar com robos que utilizam combustível para locomoção
 public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
-    // Subclasse para lidar com robos que utilizam combustível para locomoção
 
     private double combustivel;    // Se assume que sempre possuem um tanque suficiente para o combustivel
 
@@ -82,7 +82,7 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     }
 
-    // Tarefa do robo combustivel para aumentar sua propria velocidade maxima em troca de uma quantia imediata de gasolina
+    // Tarefa do robo combustivel para aumentar a sua propria velocidade maxima em troca de uma quantia imediata de gasolina
     @Override
     public void executarTarefa() {
         if (getAmbiente() == null) {

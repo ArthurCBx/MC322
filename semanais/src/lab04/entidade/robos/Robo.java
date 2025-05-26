@@ -116,8 +116,8 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     }
 
     // Metodo para mover o robo em deltaX, deltaY e deltaZ, verificando se o movimento é válido (linha ligando posição inicial e final não colide com obstaculos [com uma tolerancia])
-    // A linha é feita por uma verificação de seções de 0.2 do vetor unitario que representa o vetor de movimento
-    // Ou seja, o movimento é dividido em pequenas seções e verificadas as colisões em cada uma, finalizando se alguma colidir
+    // A linha é feita por uma verificação de secções de 0.2 do vetor unitario que representa o vetor de movimento
+    // Ou seja, o movimento é dividido em pequenas secções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
     public void moverPara(int x, int y, int z) {
         if (getEstado() == Estado.DESLIGADO) {

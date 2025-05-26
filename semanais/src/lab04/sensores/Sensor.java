@@ -9,6 +9,11 @@ import lab04.entidade.robos.Robo;
 import java.util.ArrayList;
 import java.util.List;
 
+/*  Classe sensor:
+    Classe responsável por monitorar o ambiente e detectar entidades (robôs e obstáculos) dentro de um raio específico XY.
+    Possui métodos para verificar a presença de robôs e obstáculos, além de retornar listas dessas entidades individualmente.
+ */
+
 public class Sensor {
     private double raio;
 

@@ -11,7 +11,7 @@ import lab04.excecoes.SemAmbienteException;
 import java.util.ArrayList;
 import java.util.List;
 
-/* RoboBombardeiro é uma subclasse de RoboAereo que tem a característica específica de destruir os robos que estão na mesma posição (x,y) que ele e na mesma altitude ou inferior.
+/* RoboBombardeiro é uma subclasse de RoboAereo que tem a característica específica de destruir os robos que estão na mesma posição (x, y) que ele e na mesma altitude ou inferior.
 Caso o RoboBombardeiro esteja na altitude 0, ele também é destruído.
 
 Atributos:

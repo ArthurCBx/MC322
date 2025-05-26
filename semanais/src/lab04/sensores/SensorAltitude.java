@@ -9,10 +9,10 @@ import lab04.entidade.robos.Robo;
 import java.util.ArrayList;
 import java.util.List;
 
+/* Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas também consegue monitorar
+   a altura em um raioZ imediatamente acima ou abaixo da posição do robô ao qual pertence.
+ */
 public class SensorAltitude extends Sensor {
-    /* Subclasse de Sensor que herda o metodo de monitorar bidimensionalmente, mas também consegue monitorar
-     a altura em um raioZ imediatamente acima ou abaixo da posição do robô ao qual pertence.
-     */
 
     private double raioZ;
 
