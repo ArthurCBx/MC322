@@ -1,4 +1,5 @@
-Repositório para os projetos semanais e para o projeto final da disciplina MC322.
+# Introdução
+Repositório para os projetos semanais e para o projeto final da disciplina MC322-1s2025.
 
 Acesso ao código em semanais/src/lab*, assim como o readme relatando as mudanças entre os laboratórios.
 
