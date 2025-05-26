@@ -22,7 +22,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     private int posY;
     protected int posZ = 0; // Altura padrão do robô, que é alterada em robos aéreos.
     private final String id;
-    private Estado estado;
+    private Estado estado = Estado.LIGADO;
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
 
@@ -30,11 +30,12 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     // Construtor para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
 
-    public Robo(Ambiente ambiente, String nome, int posX, int posY) {
+    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ) {
         this.ambiente = ambiente;
         this.nome = nome;
         this.posX = Math.min(Math.max(posX, 0), ambiente.getComprimento());
         this.posY = Math.min(Math.max(posY, 0), ambiente.getLargura());
+        this.posZ = Math.min(Math.max(posZ, 0), ambiente.getAltura());
         this.id = UUID.randomUUID().toString();
 
         ambiente.adicionarEntidade(this);

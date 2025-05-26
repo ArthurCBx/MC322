@@ -7,15 +7,24 @@ import java.util.ArrayList;
 public class CentralComunicacao {
     private static ArrayList<String> mensagens = new ArrayList<String>();
 
-    public CentralComunicacao() {}
+    public CentralComunicacao() {
+    }
 
     public static void registrarMensagem(String remetente, String msg) {
         mensagens.add(remetente + " enviou: " + msg);
     }
 
     public static void exibirMensagens() {
-        for (String msg : mensagens) {
-            System.out.println(msg);
+        if (!mensagens.isEmpty())
+            for (String msg : mensagens) {
+                System.out.println(msg);
+            }
+        else{
+            System.out.println("Central de Comunicação não possui mensagens armazenadas");
         }
+    }
+
+    public static void deletarMensagens() {
+        mensagens.clear();
     }
 }

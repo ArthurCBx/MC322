@@ -253,7 +253,7 @@ public class Ambiente {
         // Executa sensores de todos os robôs no ambiente.
         for (Entidade entidade : listaEntidades)
             if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
-                System.out.printf("Monitoramento do Robo %s:\n",((Robo) entidade).getNome());
+                System.out.printf("Monitoramento do Robo %s:\n", ((Robo) entidade).getNome());
                 ((Robo) entidade).acionarSensores();
             }
 
@@ -267,41 +267,49 @@ public class Ambiente {
             inicializarMapa();
         }
 
-        System.out.printf("Vizualização 2D da camada Z = 0 do Ambiente\n\n");
-
-        for (int x = 0; x < comprimento + 2; x++)
+        for (int x = 0; x <= comprimento + 2; x++)
             System.out.print('_');                  // Imprime uma borda superior para o mapa
         System.out.println();
 
-        for (int y = largura - 1; y >= 0; y--) {
+        char representacao = '´';
+
+        for (int y = largura; y >= 0; y--) {
             System.out.print("|");                  // Imprime uma borda esquerda para o mapa
-            for (int x = 0; x < comprimento; x++) {
-                if (mapa[x][y][0].equals(TipoEntidade.VAZIO)) {
-                    System.out.printf("´");
-                } else {
-                    for (Entidade entidade : listaEntidades)    // Para toda entidade
-                        if (entidade.getTipoEntidade() == mapa[x][y][0])    // Se a entidade for do mesmo tipo da localizada no mapa
-                            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {  // Tratamento para robo(pontual)
+            for (int x = 0; x <= comprimento; x++) {
+                for (int z = altura; z >= 0; z--) {
+                    if (!mapa[x][y][z].equals(TipoEntidade.VAZIO)) {
+                        for (Entidade entidade : listaEntidades)    // Para toda entidade
+                            if (entidade.getTipoEntidade() == mapa[x][y][z])    // Se a entidade for do mesmo tipo da localizada no mapa
+                                if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {  // Tratamento para robo(pontual)
 
-                                if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == 0) { // Verifica se realmente é este robo neste local
-                                    System.out.print(entidade.getRepresentacao());
-                                    break;
+                                    if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == z) { // Verifica se realmente é este robo neste local
+                                        representacao = entidade.getRepresentacao();
+                                        break;
+                                    }
+
+                                } else {                                                  // Tratamento para obstaculo(extenso)
+                                    if (((Obstaculo) entidade).contemPonto(x, y, z)) {  // Verifica se realmente é este obstaculo neste local
+                                        representacao = entidade.getRepresentacao();
+                                        break;
+                                    }
+
                                 }
+                    }
 
-                            } else {                                                  // Tratamento para obstaculo(extenso)
-                                if (((Obstaculo) entidade).contemPonto(x, y, 0)) {  // Verifica se realmente é este obstaculo neste local
-                                    System.out.print(entidade.getRepresentacao());
-                                    break;
-                                }
+                    if(representacao != '´'){
+                        break;
+                    }
 
-                            }
                 }
+
+                System.out.printf("%c",representacao);
+                representacao = '´';
             }
             System.out.print("|\n");            // Imprime uma borda direita para o mapa
 
 
         }
-        for (int x = 0; x < comprimento + 2; x++)
+        for (int x = 0; x <= comprimento + 2; x++)
             System.out.print('-');              // Imprime uma borda inferior para o mapa
 
         System.out.printf("\n\n");
