@@ -1,6 +1,6 @@
 Repositório para os projetos semanais e para o projeto final da disciplina MC322.
 
-Acesso ao código em semanais/src/lab*, assim como o readme relatando as mudanças.
+Acesso ao código em semanais/src/lab*, assim como o readme relatando as mudanças entre os laboratórios.
 
 Alunos: Arthur Costa Barreto (206325), Vitor Benaglia Albertini (206645).
 
@@ -95,4 +95,20 @@ MC322
         │       ├── SensorAltitude.java
         │       └── SensorClasse.java
         └── semanais.iml
+```
+
+# Como compilar e executar nosso código
+## 1. Vá para o diretório raiz do projeto
+Para isso, no terminal faça:
+```bash
+cd ~/MC322
+```
+## 2. Encontre o laboratório de número X e compile o código
+```bash
+find semanais/src/lab0X -name "*.java" > sources.txt
+javac -d out @sources.txt
+```
+## 3. Execute-o
+```bash
+java -cp out lab0X.Main
 ```
