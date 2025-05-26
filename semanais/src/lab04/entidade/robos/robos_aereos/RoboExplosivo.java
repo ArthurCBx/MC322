@@ -106,7 +106,7 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
             throw new RoboDesligadoException("O robô está desligado, não pode realizar sua tarefa.");
         }
         if (getSensores() == null) {
-            System.out.println("O robô solicitado não possui sensores, logo pode realizar sua tarefa.");
+            System.out.println("O robô solicitado não possui sensores, logo não pode realizar sua tarefa.");
             return;
         }
 

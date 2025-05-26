@@ -90,14 +90,11 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
         int vitimas = 0;
 
         for (Robo robo : listaRobos) {
-            if (getX() == robo.getX() && getY() == robo.getY() && robo.getZ() <= getZ()) {
+            if (getX() == robo.getX() && getY() == robo.getY() && robo.getZ() < getZ()) {
                 vitimas++;
                 robosAtingidos.add(robo);
             }
         }
-        // Se remove da lista de robos atingidos.
-        robosAtingidos.remove(this);
-        vitimas--;
 
         // Remove os robos atingidos do ambiente.
         for (Robo robo : robosAtingidos) {
@@ -143,7 +140,8 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
             System.out.printf("\nBombardeio numero %d:\n",i+1);
             exibirPosicao();
             carregarBombas(1);
-            explodir();
+            if(explodir().contains(this))
+                break;
             moveAutomatico(10);
         }
 

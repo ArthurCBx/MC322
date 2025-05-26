@@ -78,7 +78,6 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
     public ArrayList<Sensor> getSensores() {
         if (sensores.isEmpty()) {
-            System.out.printf("O robô %s não possui sensores.\n", getNome());
             return null;
         } else {
             return sensores;
@@ -169,7 +168,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
                     getAmbiente().moverEntidade(this, (int) newPos[0], (int) newPos[1], (int) newPos[2]);
 
-                    throw new ColisaoException("O robo colidiu com uma entidade do tipo " + getAmbiente().getMapa()[(int) newTempPos[0]][(int) newTempPos[1]][(int) newTempPos[2]] + "e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
+                    throw new ColisaoException("O robo colidiu com uma entidade do tipo " + getAmbiente().getMapa()[(int) newTempPos[0]][(int) newTempPos[1]][(int) newTempPos[2]] + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
 
                 }
 
@@ -211,7 +210,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null) {
+        if (getSensores() == null) {
             System.out.println("O robô solicitado não possui sensores");
             return null;
         }
@@ -235,7 +234,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null) {
+        if (getSensores() == null) {
             System.out.println("O robô solicitado não possui sensores");
             return;
         }
@@ -266,7 +265,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         if (getAmbiente() == null) {
             throw new SemAmbienteException("O robô não se encontra em um ambiente.");
         }
-        if (sensores == null) {
+        if (getSensores() == null) {
             System.out.println("O robô solicitado não possui sensores");
             return;
         }

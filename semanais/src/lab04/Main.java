@@ -3,14 +3,12 @@ package lab04;
 import lab04.comunicacao.CentralComunicacao;
 import lab04.entidade.Entidade;
 import lab04.entidade.TipoEntidade;
-import lab04.entidade.robos.Estado;
-import lab04.entidade.robos.RoboTerrestre;
+import lab04.entidade.robos.*;
+import lab04.entidade.robos.robos_aereos.Explosivos;
 import lab04.entidade.robos.robos_terrestres.Energizavel;
 import lab04.excecoes.*;
 import lab04.obstaculos.Obstaculo;
 import lab04.obstaculos.TipoObstaculo;
-import lab04.entidade.robos.Robo;
-import lab04.entidade.robos.RoboAereo;
 import lab04.entidade.robos.robos_aereos.RoboBombardeiro;
 import lab04.entidade.robos.robos_aereos.RoboExplosivo;
 import lab04.entidade.robos.robos_terrestres.RoboCombustivel;
@@ -21,6 +19,7 @@ import lab04.sensores.SensorClasse;
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -309,13 +308,7 @@ public class Main {
         ambiente.adicionarEntidade(obstaculoParede);
         ambiente.adicionarEntidade(obstaculoAnimal);
 
-        ArrayList<Robo> robosVivos = new ArrayList<Robo>() {{
-            add(robo1);
-            add(robo2);
-            add(robo3);
-            add(robo4);
-        }};
-
+        ArrayList<Robo> robosVivos;
 
         String nomeRobo = robo1.getNome();
         Robo robo = null;
@@ -324,6 +317,8 @@ public class Main {
         int comando = 0;
         int selecao = 0;
         int newpos[] = {0, 0, 0};
+        int d = 1;
+        double norma = 0;
 
         while (true) {
 
@@ -338,6 +333,7 @@ public class Main {
                 nomeRobo = robosel.getNome();
             } else {
                 robosel = robosVivos.getFirst();
+                nomeRobo = robosel.getNome();
             }
 
 
@@ -356,12 +352,22 @@ public class Main {
                                     "[7] - Listar mensagens trocadas pelos robos\n" +           //XXXXXXX terminado
                                     "[8] - Selecionar um novo robo\n" +                         //XXXXXXX terminado
                                     "[9] - Finalizar o programa\n" +                            //XXXXXXX terminado
+                                    "[10] - Desativar/Ativar delays entre menus\n" +            //XXXXXXX terminado
                                     "Robo Selecionado: " + nomeRobo);
 
-                    selecao = scanner.nextInt();
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
 
                     switch (selecao) {
-
                         case (1):   // Status do ambiente
 
                             System.out.println("\nVerificando se há colisões presentes ou robos fora dos limites:");
@@ -375,8 +381,10 @@ public class Main {
                                 } catch (ForaDosLimitesException e) {
                                     System.out.println("O robo " + roboaux.getNome() + " está fora dos limites (" + roboaux.getX() + "," + roboaux.getY() + "," + roboaux.getZ() + ")");
                                 }
-
                             System.out.println("\nVerificação do status do ambiente finalizada\n");
+
+                            System.out.println("Digite algo para retornar ao menu principal");
+                            scanner.nextLine();
 
                             break;
 
@@ -385,6 +393,9 @@ public class Main {
                             System.out.println("Vizualização do mapa do ambiente:\n");
                             ambiente.vizualizarAmbiente();
 
+                            System.out.println("Digite algo para retornar ao menu principal");
+                            scanner.nextLine();
+
                             break;
 
                         case (3):   // Status do robo selecionado
@@ -392,7 +403,22 @@ public class Main {
                             System.out.println("\nVerificando o status do robo" + nomeRobo + ":\n" +
                                     robosel.getDescricao());
                             System.out.println("Representação no mapa: " + robosel.getRepresentacao());
+                            System.out.printf("Sensores: ");
+                            if (!(robosel.getSensores() == null)) {
+                                if (robosel.getSensores().contains(sensorComum25))
+                                    System.out.printf("SensorComum25 ");
+                                if (robosel.getSensores().contains(sensorAltitude60XY30))
+                                    System.out.printf("SensorAltitude60XY30 ");
+                                if (robosel.getSensores().contains(sensorClasse50))
+                                    System.out.printf("SensorClasse50");
+                            } else {
+                                System.out.printf("Nenhum");
+                            }
+                            System.out.println();
                             System.out.println("\nVerificação do status do robo finalizada\n");
+
+                            System.out.println("Digite algo para retornar ao menu principal");
+                            scanner.nextLine();
 
                             break;
 
@@ -413,6 +439,9 @@ public class Main {
                             System.out.println("\nMensagens armazenadas na Central de Comunicação:");
                             CentralComunicacao.exibirMensagens();
 
+                            System.out.println("\nDigite algo para retornar ao menu principal");
+                            scanner.nextLine();
+
                             break;
 
                         case (8):   // Selecionar um novo robo
@@ -424,8 +453,13 @@ public class Main {
                             scanner.close();
                             return;
 
+                        case (10):
+                            d = d == 1 ? 0 : 1;
+                            break;
+
                         default:    // Comando inválido
                             System.out.println("\nComando inválido, selecione uma opção válida");
+                            Thread.sleep(1000 * d);
                             break;
 
                     }
@@ -438,35 +472,59 @@ public class Main {
                             "\n[O robo " + nomeRobo + " está em (" + robosel.getX() + "," + robosel.getY() + "," + robosel.getZ() + ")]\n" +
                                     "Digite o valor da nova coordenada X do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getComprimento() + ")]");
 
-                    newpos[0] = scanner.nextInt();
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        newpos[0] = scanner.nextInt();
+                    } else {
+                        newpos[0] = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
                     if (newpos[0] == -1) {
                         System.out.println("\nOperação cancelada, retornando para o menu principal");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
                     if (newpos[0] > ambiente.getComprimento() || newpos[0] < -1) {
                         System.out.println("\nCoordenada fora dos limites do ambiente, cancelando a operação\n");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
                     System.out.println("\nDigite o valor da nova coordenada Y do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getLargura() + ")]");
 
-                    newpos[1] = scanner.nextInt();
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        newpos[1] = scanner.nextInt();
+                    } else {
+                        newpos[1] = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
                     if (newpos[1] == -1) {
                         System.out.println("\nOperação cancelada, retornando para o menu principal");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
                     if (newpos[1] > ambiente.getLargura() || newpos[1] < -1) {
                         System.out.println("\nCoordenada fora dos limites do ambiente, cancelando a operação\n");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
-                    System.out.println("\nDigite o valor da nova coordenada Z do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getAltura() + ")]");
+                    System.out.println("\nDigite o valor da nova coordenada Z do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + Math.min(ambiente.getAltura(), ((RoboAereo) robosel).getAltitudeMaxima()) + ")]");
 
                     if (robosel instanceof RoboTerrestre) {
                         newpos[2] = robosel.getZ();
@@ -475,15 +533,27 @@ public class Main {
                         break;
                     }
 
-                    newpos[2] = scanner.nextInt();
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        newpos[2] = scanner.nextInt();
+                    } else {
+                        newpos[2] = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
                     if (newpos[2] == -1) {
                         System.out.println("\nOperação cancelada, retornando para o menu principal");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
-                    if (newpos[2] > ambiente.getLargura() || newpos[2] < -1) {
-                        System.out.println("\nCoordenada fora dos limites do ambiente, cancelando a operação\n");
+                    if (newpos[2] > Math.min(ambiente.getAltura(), ((RoboAereo) robosel).getAltitudeMaxima()) || newpos[2] < -1) {
+                        System.out.println("\nCoordenada fora dos limites do ambiente ou acima da altitude maxima do robo, cancelando a operação\n");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
@@ -512,16 +582,27 @@ public class Main {
                                 "[8] - Bombardear\n" +
                                 "[9] - Bombardeio Automatico");
 
-                        selecao = scanner.nextInt();
+                        while (scanner.hasNext("\n")) {
+                            scanner.skip("\n");
+                        }
+                        if (scanner.hasNextInt()) {
+                            selecao = scanner.nextInt();
+                        } else {
+                            selecao = -1;
+                            scanner.next();
+                        }
+                        scanner.nextLine();
 
                         if (selecao == 0) {
                             System.out.println("\nOperação cancelada");
+                            Thread.sleep(1000 * d);
                             menu = 0;
                             break;
                         }
 
                         if (selecao > 9 || selecao < 1) {
                             System.out.println("\nComando inválido, selecione uma opção válida");
+                            Thread.sleep(1000 * d);
                             break;
                         }
 
@@ -535,16 +616,27 @@ public class Main {
                                     "[7] - Explodir\n" +
                                     "[8] - Explodir Automaticamente");
 
-                            selecao = scanner.nextInt();
+                            while (scanner.hasNext("\n")) {
+                                scanner.skip("\n");
+                            }
+                            if (scanner.hasNextInt()) {
+                                selecao = scanner.nextInt();
+                            } else {
+                                selecao = -1;
+                                scanner.next();
+                            }
+                            scanner.nextLine();
 
                             if (selecao == 0) {
                                 System.out.println("\nOperação cancelada");
+                                Thread.sleep(1000 * d);
                                 menu = 0;
                                 break;
                             }
 
                             if (selecao > 8 || selecao < 1) {
                                 System.out.println("\nComando inválido, selecione uma opção válida");
+                                Thread.sleep(1000 * d);
                                 break;
                             }
 
@@ -557,16 +649,27 @@ public class Main {
                                         "[6] - Abastecer\n" +
                                         "[7] - Aumentar velocidade maxima (precisa de 100 de combustivel, tem " + ((RoboCombustivel) robosel).getCombustivel() + ")");
 
-                                selecao = scanner.nextInt();
+                                while (scanner.hasNext("\n")) {
+                                    scanner.skip("\n");
+                                }
+                                if (scanner.hasNextInt()) {
+                                    selecao = scanner.nextInt();
+                                } else {
+                                    selecao = -1;
+                                    scanner.next();
+                                }
+                                scanner.nextLine();
 
                                 if (selecao == 0) {
                                     System.out.println("\nOperação cancelada");
+                                    Thread.sleep(1000 * d);
                                     menu = 0;
                                     break;
                                 }
 
                                 if (selecao > 7 || selecao < 1) {
                                     System.out.println("\nComando inválido, selecione uma opção válida");
+                                    Thread.sleep(1000 * d);
                                     break;
                                 }
 
@@ -579,14 +682,27 @@ public class Main {
                                         "[7] - Carregar bateria\n" +
                                         "[8] - Exploração Automatica");
 
+                                while (scanner.hasNext("\n")) {
+                                    scanner.skip("\n");
+                                }
+                                if (scanner.hasNextInt()) {
+                                    selecao = scanner.nextInt();
+                                } else {
+                                    selecao = -1;
+                                    scanner.next();
+                                }
+                                scanner.nextLine();
+
                                 if (selecao == 0) {
                                     System.out.println("\nOperação cancelada");
+                                    Thread.sleep(1000 * d);
                                     menu = 0;
                                     break;
                                 }
 
                                 if (selecao > 8 || selecao < 1) {
                                     System.out.println("\nComando inválido, selecione uma opção válida");
+                                    Thread.sleep(1000 * d);
                                     break;
                                 }
 
@@ -596,7 +712,7 @@ public class Main {
                         }
                     }
 
-                    menu = 0;
+                    menu = -1;
 
                     break;
 
@@ -609,12 +725,22 @@ public class Main {
                             "[3] - Aereos\n" +
                             "[4] - Terrestres");
 
-                    selecao = scanner.nextInt();
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
 
                     switch (selecao) {
 
-                        case(0):
-                            System.out.printf("\nOperação cancelada");
+                        case (0):
+                            System.out.println("\nOperação cancelada");
+                            Thread.sleep(1000 * d);
                             menu = 0;
                             break;
 
@@ -652,46 +778,353 @@ public class Main {
 
                         default:
                             System.out.println("\nComando inválido, selecione uma opção válida");
+                            Thread.sleep(1000 * d);
                             break;
+
+                    }
+
+                    if (selecao > 0 && selecao < 5) {
+                        System.out.println("\nDigite algo para retornar ao menu principal");
+                        scanner.nextLine();
 
                     }
 
                     break;
 
-                case(4):
+                case (4):
 
                     System.out.println("\nQual robo será selecionado?\n" +
                             "[0] - Cancelar Operação");
-                    int i = 1;
+                    int i = 0;
                     for (Robo roboaux : robosVivos) {
-                        System.out.println("[" + i + "] - " + roboaux.getNome());
                         i++;
+                        System.out.println("[" + i + "] - " + roboaux.getNome());
                     }
                     System.out.println("Atual: " + nomeRobo);
 
-                    selecao = scanner.nextInt();
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
 
-                    if(selecao == 0){
+                    if (selecao == 0) {
                         System.out.println("\nOperação cancelada");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                         break;
                     }
 
                     if (selecao < 1 || selecao > i) {
                         System.out.println("\nComando inválido, selecione uma opção válida");
+                        Thread.sleep(1000 * d);
                     } else {
                         robosel = robosVivos.get(selecao - 1);
+
+                        System.out.println("\nRobo " + robosel.getNome() + " selecionado com sucesso");
+                        Thread.sleep(1000 * d);
                         menu = 0;
                     }
 
                     break;
 
                 default:
-                    menu = 0;
                     break;
 
             }
 
+
+            switch (comando) {
+
+                case (0):
+                    break;
+
+                case (1):    // Mover Robo
+
+                    System.out.println("\nExecutando o movimento do robo " + nomeRobo + " para (" + newpos[0] + "," + newpos[1] + "," + newpos[2] + "):");
+
+                    try {
+                        robosel.moverPara(newpos[0], newpos[1], newpos[2]);
+                        System.out.println("Movimentação realizada com sucesso");
+                    } catch (ColisaoException e) {
+                        System.out.println(e.getMessage() + "\n\nMovimentação concluida");
+                        Thread.sleep(2000 * d);
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                    }
+
+                    comando = 0;
+
+                    break;
+
+                case (2):    // Adicionar sensor
+
+                    System.out.println("\nDigite o tipo de sensor que deseja adicionar. Opções:\n" +
+                            "[0] - Cancelar operação\n" +
+                            "[1] - SensorComum25\n" +
+                            "[2] - SensorAltitude60XY30\n" +
+                            "[3] - sensorClasse50\n");
+
+                    // Sensor Comum25: Classe sensor base com raio de 25
+                    // Sensor Altitude80XY20: Classe sensor altitude com raioZ de 60 e raio 30
+                    // Sensor Classe50: Classe sensor classe com raio de 50 (XYZ radial)
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    if (selecao > 3 || selecao < 0) {
+                        System.out.println("\nComando inválido, selecione uma opção válida");
+                        Thread.sleep(1000 * d);
+                        break;
+                    }
+
+                    switch (selecao) {
+
+                        case (1):
+                            robosel.addSensor(sensorComum25);
+                            System.out.println("Sensor adicionado com sucesso");
+                            break;
+
+                        case (2):
+                            robosel.addSensor(sensorAltitude60XY30);
+                            System.out.println("Sensor adicionado com sucesso");
+                            break;
+
+                        case (3):
+                            robosel.addSensor(sensorClasse50);
+                            System.out.println("Sensor adicionado com sucesso");
+                            break;
+
+                        default:
+                            System.out.println("\nOperação cancelada");
+                            break;
+                    }
+
+                    Thread.sleep(1000 * d);
+                    menu = 0;
+                    comando = 0;
+
+                    break;
+
+                case (3):    // Acionar sensor
+                    System.out.println("Acionando sensores do robo " + nomeRobo + ":");
+                    try {
+                        robosel.acionarSensores();
+                    } catch (RoboDesligadoException e) {
+                        System.out.println(e.getMessage());
+                    } finally {
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (4):    // Ligar
+                    robosel.ligar();
+                    Thread.sleep(1000 * d);
+                    menu = 0;
+                    comando = 0;
+                    break;
+
+                case (5):    // Desligar
+                    robosel.desligar();
+                    Thread.sleep(1000 * d);
+                    menu = 0;
+                    comando = 0;
+                    break;
+
+                case (6):    // Enviar mensagem
+                    break;
+
+                case (7):    // Movimento Automatico
+
+                    System.out.println("\nQual a magnitude (norma) do movimento? (ou '-1' para cancelar a operação)");
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextDouble()) {
+                        norma = scanner.nextDouble();
+                    } else {
+                        norma = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    if (norma < 0) {
+                        System.out.println("\nOperação cancelada");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
+                    try {
+                        ((Autonomo) robosel).moveAutomatico(norma);
+                        System.out.println("Movimentação automatica realizada com sucesso");
+                        robosel.exibirPosicao();
+                    } catch (ColisaoException e) {
+                        System.out.println(e.getMessage() + "\n\nMovimentação automatica concluida");
+                        Thread.sleep(2000 * d);
+
+                    } catch (ForaDosLimitesException e) {
+                        System.out.println("O robo " + nomeRobo + " tentou sair do ambiente durante a movimentação automatica, finalizando a movimentação");
+                        Thread.sleep(2000 * d);
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (8):    // Carregar Bombas
+
+                    System.out.println("Quantas bombas deseja carregar? (Bombas: " + ((RoboBombardeiro) robosel).getBombas() + " de " + ((RoboBombardeiro) robosel).getCapacidadeBombas() + ") ('-1' para cancelar a operação)");
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    ((RoboBombardeiro) robosel).carregarBombas(selecao);
+                    Thread.sleep(1000 * d);
+                    menu = 0;
+                    comando = 0;
+                    break;
+
+                case (9):    // Bombardear
+
+                    System.out.println();
+                    try {
+                        if (((RoboBombardeiro) robosel).getBombas() > 0)
+                            System.out.println("Iniciando bombardeio...");
+                        Thread.sleep(750 * d);
+                        ((Explosivos) robosel).explodir();
+
+                    } catch (RoboDesligadoException e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (10):   // Bombardeio Automatico
+
+                    System.out.println("Iniciando bombardeio automatico...");
+
+                    try {
+                        robosel.executarTarefa();
+                        System.out.println("\nBombardeio Automatico realizado com sucesso");
+                    } catch (ColisaoException e) {
+                        System.out.println(e.getMessage() + "\n\nBombardeio automatico concluido");
+                        Thread.sleep(2000 * d);
+
+                    } catch (ForaDosLimitesException e) {
+                        System.out.println("O robo " + nomeRobo + " tentou sair do ambiente durante o bombardeio automatico, finalizando a operação");
+                        Thread.sleep(2000 * d);
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (11):   // Explodir
+
+                    System.out.println("Explodindo...");
+
+                    try {
+                        Thread.sleep(750 * d);
+                        ((Explosivos) robosel).explodir();
+                    } catch (RoboDesligadoException e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (12):   // Explodir automaticamente
+
+                    System.out.println("Iniciando a explosão automatica...\n");
+
+                    try {
+                        robosel.executarTarefa();
+                    } catch (ColisaoException e) {
+                        System.out.println(e.getMessage() + "\n\nExplosão automatica concluido(o robo ainda está vivo)");
+                        Thread.sleep(2000 * d);
+
+                    } catch (RoboDesligadoException e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
+                    break;
+
+                case (13):   // Abastecer
+
+                    
+                    break;
+
+                case (14):   // Aumentar velocidade maxima
+                    break;
+
+                case (15):   // Carregar bateria
+                    break;
+
+                case (16):   // Exploração automatica
+                    break;
+
+                default:
+                    comando = 0;
+                    break;
+
+            }
 
         }
 
