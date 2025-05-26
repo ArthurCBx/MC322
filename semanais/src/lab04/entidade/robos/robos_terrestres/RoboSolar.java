@@ -142,8 +142,7 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
         for (int i = 0; i < 5; i++) {   // Explora 5 vezes o ambiente (ou até colidir // acabar bateria)
             System.out.printf("\nExploração numero %d:\n",i+1);
             exibirPosicao();
-            if (Objects.equals(getAmbiente().getPeriodo(), "Dia"))  // Se está dia, o robo aproveita para carregar sua bateria
-                carregar();
+            carregar();
             System.out.printf("O robo Solar possui %.2f de carga\n", getBateria());
 
             if (getSensores() != null)

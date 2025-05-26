@@ -298,6 +298,11 @@ public class Main {
         SensorAltitude sensorAltitude60XY30 = new SensorAltitude(60, 30);
         SensorClasse sensorClasse50 = new SensorClasse(50);
 
+        robo1.addSensor(sensorAltitude60XY30);
+        robo2.addSensor(sensorClasse50);
+        robo3.addSensor(sensorComum25);
+        robo4.addSensor(sensorComum25);
+
         Obstaculo obstaculoRocha = new Obstaculo(5, 5, 7, 7, 0, TipoObstaculo.ROCHA);
         Obstaculo obstaculoArvore = new Obstaculo(20, 20, 30, 30, 0, TipoObstaculo.ARVORE);
         Obstaculo obstaculoParede = new Obstaculo(70, 70, 90, 90, 0, TipoObstaculo.PAREDE);
@@ -319,6 +324,7 @@ public class Main {
         int newpos[] = {0, 0, 0};
         int d = 1;
         double norma = 0;
+        String mensagem;
 
         while (true) {
 
@@ -345,14 +351,15 @@ public class Main {
                             "\nDigite o comando que será realizado:\n" +
                                     "[1] - Status do ambiente\n" +                              //XXXXXXX terminado
                                     "[2] - Vizualizar o mapa do ambiente\n" +                   //XXXXXXX terminado
-                                    "[3] - Status do robo selecionado\n" +                      //XXXXXXX terminado
-                                    "[4] - Mover o robo selecionado\n" +                        //XXXXXXX falta o comando
-                                    "[5] - Escolher outras funcoes do robo selecionado\n" +     //XXXXXXX faltam os comandos
-                                    "[6] - Listar robos por tipo ou estado\n" +                 //XXXXXXX terminado
-                                    "[7] - Listar mensagens trocadas pelos robos\n" +           //XXXXXXX terminado
-                                    "[8] - Selecionar um novo robo\n" +                         //XXXXXXX terminado
-                                    "[9] - Finalizar o programa\n" +                            //XXXXXXX terminado
-                                    "[10] - Desativar/Ativar delays entre menus\n" +            //XXXXXXX terminado
+                                    "[3] - Alterar periodo do ambiente\n" +                     //XXXXXXX terminado
+                                    "[4] - Status do robo selecionado\n" +                      //XXXXXXX terminado
+                                    "[5] - Mover o robo selecionado\n" +                        //XXXXXXX terminado
+                                    "[6] - Escolher outras funcoes do robo selecionado\n" +     //XXXXXXX faltam os comandos
+                                    "[7] - Listar robos por tipo ou estado\n" +                 //XXXXXXX terminado
+                                    "[8] - Listar mensagens trocadas pelos robos\n" +           //XXXXXXX terminado
+                                    "[9] - Selecionar um novo robo\n" +                         //XXXXXXX terminado
+                                    "[10] - Finalizar o programa\n" +                           //XXXXXXX terminado
+                                    "[11] - Desativar/Ativar delays entre menus\n" +            //XXXXXXX terminado
                                     "Robo Selecionado: " + nomeRobo);
 
 
@@ -381,6 +388,8 @@ public class Main {
                                 } catch (ForaDosLimitesException e) {
                                     System.out.println("O robo " + roboaux.getNome() + " está fora dos limites (" + roboaux.getX() + "," + roboaux.getY() + "," + roboaux.getZ() + ")");
                                 }
+                            System.out.println("\nAlém disso, o periodo do ambiente é " + ambiente.getPeriodo());
+                            System.out.printf("E há " + robosVivos.size() + " robos vivos\n");
                             System.out.println("\nVerificação do status do ambiente finalizada\n");
 
                             System.out.println("Digite algo para retornar ao menu principal");
@@ -398,7 +407,42 @@ public class Main {
 
                             break;
 
-                        case (3):   // Status do robo selecionado
+
+                        case (3):   // Alterar periodo do ambiente
+                            System.out.println("\nQual o novo periodo do ambiente? (atual: " + ambiente.getPeriodo() + "):\n" +
+                                    "[0] - Cancelar Operação\n" +
+                                    "[1] - Dia\n" +
+                                    "[2] - Noite");
+
+                            while (scanner.hasNext("\n")) {
+                                scanner.skip("\n");
+                            }
+                            if (scanner.hasNextInt()) {
+                                selecao = scanner.nextInt();
+                            } else {
+                                selecao = -1;
+                                scanner.next();
+                            }
+                            scanner.nextLine();
+
+                            if (selecao < 1 || selecao > 2) {
+                                System.out.println("\nOperação cancelada, retornando para o menu principal");
+                                Thread.sleep(1000 * d);
+                            } else {
+                                if (selecao == 1) {
+                                    ambiente.mudarTempo("Dia");
+                                    System.out.println("Periodo alterado para Dia");
+                                } else {
+                                    ambiente.mudarTempo("Noite");
+                                    System.out.println("Periodo alterado para Noite");
+                                }
+                            }
+
+                            Thread.sleep(1000 * d);
+
+                            break;
+
+                        case (4):   // Status do robo selecionado
 
                             System.out.println("\nVerificando o status do robo" + nomeRobo + ":\n" +
                                     robosel.getDescricao());
@@ -422,19 +466,19 @@ public class Main {
 
                             break;
 
-                        case (4):   // Mover o robo selecionado
+                        case (5):   // Mover o robo selecionado
                             menu = 1;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (5):   // Escolher outras funcoes do robo selecionado
+                        case (6):   // Escolher outras funcoes do robo selecionado
                             menu = 2;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (6):   // Listar robos por tipo ou estado
+                        case (7):   // Listar robos por tipo ou estado
                             menu = 3;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (7):   // Listar mensagens trocadas pelos robos
+                        case (8):   // Listar mensagens trocadas pelos robos
 
                             System.out.println("\nMensagens armazenadas na Central de Comunicação:");
                             CentralComunicacao.exibirMensagens();
@@ -444,16 +488,16 @@ public class Main {
 
                             break;
 
-                        case (8):   // Selecionar um novo robo
+                        case (9):   // Selecionar um novo robo
                             menu = 4;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (9):   // Finalizar o programa
+                        case (10):   // Finalizar o programa
                             System.out.println("\nFinalizando o programa...");
                             scanner.close();
                             return;
 
-                        case (10):
+                        case (11):
                             d = d == 1 ? 0 : 1;
                             break;
 
@@ -524,14 +568,14 @@ public class Main {
                         break;
                     }
 
-                    System.out.println("\nDigite o valor da nova coordenada Z do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + Math.min(ambiente.getAltura(), ((RoboAereo) robosel).getAltitudeMaxima()) + ")]");
-
                     if (robosel instanceof RoboTerrestre) {
                         newpos[2] = robosel.getZ();
                         comando = 1;
                         menu = 0;
                         break;
                     }
+
+                    System.out.println("\nDigite o valor da nova coordenada Z do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + Math.min(ambiente.getAltura(), ((RoboAereo) robosel).getAltitudeMaxima()) + ")]");
 
                     while (scanner.hasNext("\n")) {
                         scanner.skip("\n");
@@ -924,7 +968,7 @@ public class Main {
                     break;
 
                 case (3):    // Acionar sensor
-                    System.out.println("Acionando sensores do robo " + nomeRobo + ":");
+                    System.out.println("\nAcionando sensores do robo " + nomeRobo + ":");
                     try {
                         robosel.acionarSensores();
                     } catch (RoboDesligadoException e) {
@@ -938,6 +982,7 @@ public class Main {
                     break;
 
                 case (4):    // Ligar
+                    System.out.println();
                     robosel.ligar();
                     Thread.sleep(1000 * d);
                     menu = 0;
@@ -945,6 +990,7 @@ public class Main {
                     break;
 
                 case (5):    // Desligar
+                    System.out.println();
                     robosel.desligar();
                     Thread.sleep(1000 * d);
                     menu = 0;
@@ -952,6 +998,76 @@ public class Main {
                     break;
 
                 case (6):    // Enviar mensagem
+
+                    if(robosVivos.size() < 2){
+                        System.out.println("\nNão há outros robos vivos para receber mensagens");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
+                    System.out.println("\nQual robo receberá a mensagem?\n" +
+                            "[0] - Cancelar Operação");
+
+                    ArrayList<Robo> roboOutros = new ArrayList<Robo>();
+                    for (Robo roboaux : robosVivos) {
+                        if (!roboaux.equals(robosel)) {
+                            roboOutros.add(roboaux);
+                        }
+                    }
+
+                    int i = 0;
+                    for (Robo roboaux : roboOutros) {
+                        i++;
+                        System.out.println("[" + i + "] - " + roboaux.getNome()+" ("+roboaux.getEstado()+")");
+                    }
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    if (selecao == 0) {
+                        System.out.println("\nOperação cancelada");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
+                    if (selecao < 1 || selecao > i) {
+                        System.out.println("\nComando inválido, cancelando operação");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+
+                    }
+
+                    robo = roboOutros.get(selecao - 1);
+
+                    System.out.println("\nRobo " + robo.getNome() + " selecionado com sucesso");
+
+                    System.out.println("\nDigite a mensagem que será enviada:");
+
+                    mensagem = scanner.nextLine();
+                    try {
+                        robosel.enviarMensagem(robo, mensagem);
+                    }catch (ErroComunicacaoException e){
+                        System.out.println(e.getMessage());
+                    }finally {
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
                     break;
 
                 case (7):    // Movimento Automatico
@@ -969,7 +1085,7 @@ public class Main {
                     }
                     scanner.nextLine();
 
-                    if (norma < 0) {
+                    if (norma == -1) {
                         System.out.println("\nOperação cancelada");
                         Thread.sleep(1000 * d);
                         menu = 0;
@@ -977,9 +1093,15 @@ public class Main {
                         break;
                     }
 
+                    if (norma < -1) {
+                        System.out.println("\nComando inválido, selecione uma opção válida");
+                        Thread.sleep(1000 * d);
+                        break;
+                    }
+
                     try {
                         ((Autonomo) robosel).moveAutomatico(norma);
-                        System.out.println("Movimentação automatica realizada com sucesso");
+                        System.out.println("\nMovimentação automatica realizada com sucesso");
                         robosel.exibirPosicao();
                     } catch (ColisaoException e) {
                         System.out.println(e.getMessage() + "\n\nMovimentação automatica concluida");
@@ -1002,7 +1124,7 @@ public class Main {
 
                 case (8):    // Carregar Bombas
 
-                    System.out.println("Quantas bombas deseja carregar? (Bombas: " + ((RoboBombardeiro) robosel).getBombas() + " de " + ((RoboBombardeiro) robosel).getCapacidadeBombas() + ") ('-1' para cancelar a operação)");
+                    System.out.println("\nQuantas bombas deseja carregar? (Bombas: " + ((RoboBombardeiro) robosel).getBombas() + " de " + ((RoboBombardeiro) robosel).getCapacidadeBombas() + ") ('-1' para cancelar a operação)");
 
                     while (scanner.hasNext("\n")) {
                         scanner.skip("\n");
@@ -1026,7 +1148,7 @@ public class Main {
                     System.out.println();
                     try {
                         if (((RoboBombardeiro) robosel).getBombas() > 0)
-                            System.out.println("Iniciando bombardeio...");
+                            System.out.println("\nIniciando bombardeio...");
                         Thread.sleep(750 * d);
                         ((Explosivos) robosel).explodir();
 
@@ -1043,7 +1165,7 @@ public class Main {
 
                 case (10):   // Bombardeio Automatico
 
-                    System.out.println("Iniciando bombardeio automatico...");
+                    System.out.println("\nIniciando bombardeio automatico...");
 
                     try {
                         robosel.executarTarefa();
@@ -1069,7 +1191,7 @@ public class Main {
 
                 case (11):   // Explodir
 
-                    System.out.println("Explodindo...");
+                    System.out.println("\nExplodindo...");
 
                     try {
                         Thread.sleep(750 * d);
@@ -1087,7 +1209,7 @@ public class Main {
 
                 case (12):   // Explodir automaticamente
 
-                    System.out.println("Iniciando a explosão automatica...\n");
+                    System.out.println("\nIniciando a explosão automatica...\n");
 
                     try {
                         robosel.executarTarefa();
@@ -1108,16 +1230,78 @@ public class Main {
 
                 case (13):   // Abastecer
 
-                    
+                    System.out.println("\nPor quanto combustivel o robo será abastecido? (Combustivel: " + ((RoboCombustivel) robosel).getCombustivel() + ") ('-1' para cancelar a operação)");
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextDouble()) {
+                        norma = scanner.nextDouble();
+                    } else {
+                        norma = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    ((Energizavel) robosel).carregar(norma);
+                    Thread.sleep(1000 * d);
+                    menu = 0;
+                    comando = 0;
+
                     break;
 
                 case (14):   // Aumentar velocidade maxima
+
+                    System.out.println("\nAumentando a velocidade maxima:");
+                    try {
+                        robosel.executarTarefa();
+                    } catch (SemCombustivelException e) {
+                        System.out.printf(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
+
                     break;
 
                 case (15):   // Carregar bateria
+
+                    System.out.println("\nUtilizando os paineis solares para carregar a bateria...");
+                    Thread.sleep(1000 * d);
+
+                    ((RoboSolar) robosel).carregar();
+                    System.out.println("\nO robo carregou " + ((RoboSolar) robosel).getPotenciaPainelSolar() + " de energia e está com " + ((RoboSolar) robosel).getBateria());
+                    Thread.sleep(2000 * d);
+                    menu = 0;
+                    comando = 0;
+
                     break;
 
                 case (16):   // Exploração automatica
+
+                    System.out.println("\nIniciando a exploração automatica...");
+
+                    try {
+                        robosel.executarTarefa();
+                        System.out.println("\nExploração automatica realizado com sucesso");
+                    } catch (ColisaoException e) {
+                        System.out.println(e.getMessage() + "\n\nExploração automatica concluida");
+                        Thread.sleep(2000 * d);
+
+                    } catch (ForaDosLimitesException e) {
+                        System.out.println("O robo " + nomeRobo + " tentou sair do ambiente durante a exploração automatica, finalizando a operação");
+                        Thread.sleep(2000 * d);
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        Thread.sleep(2000 * d);
+                    } finally {
+                        Thread.sleep(2250 * d);
+                        menu = 0;
+                        comando = 0;
+                    }
                     break;
 
                 default:
@@ -1128,391 +1312,5 @@ public class Main {
 
         }
 
-        /*
-        Ambiente ambiente = new Ambiente(100, 100, 100);
-
-        Robo robo1 = new RoboBombardeiro(ambiente, "teste1", 0, 0, 0, 120, 10);
-        Robo robo2 = new RoboExplosivo(ambiente, "teste2", 0, 0, 0, 100, 5);
-        Robo robo3 = new RoboCombustivel(ambiente, "teste3", 0, 0, 50, 100);
-        Robo robo4 = new RoboSolar(ambiente, "teste4", 0, 0, 80, 20);
-
-        Sensor sensorComum20 = new Sensor(20);
-        Sensor sensorComum50 = new Sensor(50);
-        SensorAltitude sensorAltitude80XY20 = new SensorAltitude(80,20);
-        SensorAltitude sensorAltitude40XY10 = new SensorAltitude(40,10);
-        SensorClasse sensorClasse50 = new SensorClasse(50);
-        SensorClasse sensorClasse100 = new SensorClasse(100);
-
-        Obstaculo obstaculoRocha = new Obstaculo(5, 5, 7, 7, 0, TipoObstaculo.ROCHA);
-        Obstaculo obstaculoArvore = new Obstaculo(20, 20, 30, 30, 0, TipoObstaculo.ARVORE);
-        Obstaculo obstaculoNuvem = new Obstaculo(50, 50, 90, 90, 95, TipoObstaculo.NUVEM);
-        Obstaculo obstaculoParede = new Obstaculo(70, 70, 90, 90, 0, TipoObstaculo.PAREDE);
-        Obstaculo obstaculoAnimal = new Obstaculo(30, 30, 32, 32, 0, TipoObstaculo.ANIMAL);
-
-        ambiente.adicionarObstaculo(obstaculoRocha);
-        ambiente.adicionarObstaculo(obstaculoArvore);
-        ambiente.adicionarObstaculo(obstaculoNuvem);
-        ambiente.adicionarObstaculo(obstaculoParede);
-        ambiente.adicionarObstaculo(obstaculoAnimal);
-
-        ArrayList<Robo> robosVivos = new ArrayList<Robo>() {{
-            add(robo1);
-            add(robo2);
-            add(robo3);
-            add(robo4);
-        }};
-
-        String nomeRobo;
-        Robo robo = null;
-
-
-*/
-
-
-
-
-
-        /*
-        while (true) {
-            String nomes = robosVivos.stream()
-                    .map(Robo::getNome)
-                    .collect(Collectors.joining(", "));
-            if (nomes.isEmpty()) {
-                System.out.println("\nTodos os robôs foram destruídos. Finalizando o programa...");
-                return;
-            }
-
-            // Menu principal:
-
-            System.out.println("\nDigite o comando que será realizado:\n" +
-                    "[1] - Adicionar Sensor em um robô\n" +
-                    "[2] - Comandar um robo para monitorar seu arredor\n" +
-                    "[3] - Comandar um robo para exibir sua posição\n" +
-                    "[4] - Comandar um robo para mover-se\n" +
-                    "[5] - Usar habilidade específica da classe de robô\n" +
-                    "[6] - Mudar o periodo do ambiente\n" +
-                    "[7] - Verificar colisões no ambiente\n" +
-                    "[8] - Finalizar o programa\n");
-
-            // Leitura de comando e switch para determinar o que acontece
-
-            int comando = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (comando) {
-                case 1: // Adicionar sensor
-                    System.out.printf("Digite o nome do robô que receberá o sensor. Opções: %s\n",nomes);
-                    nomeRobo = scanner.nextLine();
-
-                    robo = null;
-                    switch (nomeRobo) { // Em qual robo se coloca o sensor
-                        case "teste1":
-                            if (robosVivos.contains(robo1))
-                                robo = robo1;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste2":
-                            if (robosVivos.contains(robo2))
-                                robo = robo2;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste3":
-                            if (robosVivos.contains(robo3))
-                                robo = robo3;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste4":
-                            if (robosVivos.contains(robo4))
-                                robo = robo4;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        default:
-                            System.out.println("Nome de robô inválido.");
-                            continue;
-                    }
-                    if (robo != null) {
-
-                        // Tipos de sensor
-                        System.out.println("Digite o tipo de sensor que deseja adicionar. Opções:\n" +
-                                "[1] - SensorComum20\n" +
-                                "[2] - SensorComum50\n" +
-                                "[3] - SensorAltitude80XY20\n" +
-                                "[4] - SensorAltitude40XY10\n" +
-                                "[5] - SensorClasse50\n" +
-                                "[6] - SensorClasse100");
-                        // Sensor Comum20: Classe sensor base com raio de 20
-                        // Sensor Comum50: Classe sensor base com raio de 50
-                        // Sensor Altitude80XY20: Classe sensor altitude com raioZ de 80 e raio 20
-                        // Sensor Altitude40XY10: Classe sensor altitude com raioZ de 40 e raio 10
-                        // Sensor Classe50: Classe sensor classe com raio de 50 (XYZ radial)
-                        // Sensor Classe100: Classe sensor classe com raio de 100 (XYZ radial)
-
-                        int comando2 = scanner.nextInt();
-                        scanner.nextLine();
-
-                        switch (comando2) {
-                            case 1:
-                                robo.addSensor(sensorComum20);
-                                break;
-                            case 2:
-                                robo.addSensor(sensorComum50);
-                                break;
-                            case 3:
-                                robo.addSensor(sensorAltitude80XY20);
-                                break;
-                            case 4:
-                                robo.addSensor(sensorAltitude40XY10);
-                                break;
-                            case 5:
-                                robo.addSensor(sensorClasse50);
-                                break;
-                            case 6:
-                                robo.addSensor(sensorClasse100);
-                                break;
-                            default:
-                                System.out.printf("Opção invalida\n");
-
-                        }
-                        System.out.printf("Sensor adicionado ao robô %s com sucesso\n", robo.getNome());
-                        break;
-                    }
-
-                case 2: // Monitorar ambiente
-                    System.out.printf("Digite o nome do robô que irá monitorar seu arredor. Opções: %s\n", nomes);
-                    nomeRobo = scanner.nextLine();
-
-                    robo = null;
-                    switch (nomeRobo) { // Escolha do robo
-                        case "teste1":
-                            if (robosVivos.contains(robo1))
-                                robo = robo1;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste2":
-                            if (robosVivos.contains(robo2))
-                                robo = robo2;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste3":
-                            if (robosVivos.contains(robo3))
-                                robo = robo3;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste4":
-                            if (robosVivos.contains(robo4))
-                                robo = robo4;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        default:
-                            System.out.println("Nome de robô inválido.");
-                            continue;
-                    }
-                    if (robo != null) {
-                        robo.monitorar();
-                    }
-                    break;
-
-                case 3: // Exibir posição de um robo
-                    System.out.printf("Digite o nome do robô que irá exibir sua posição. Opções: %s\n", nomes);
-                    nomeRobo = scanner.nextLine();
-
-                    robo = null;
-                    switch (nomeRobo) { // Escolha do robo
-                        case "teste1":
-                            if (robosVivos.contains(robo1))
-                                robo = robo1;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste2":
-                            if (robosVivos.contains(robo2))
-                                robo = robo2;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste3":
-                            if (robosVivos.contains(robo3))
-                                robo = robo3;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste4":
-                            if (robosVivos.contains(robo4))
-                                robo = robo4;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        default:
-                            System.out.println("Nome de robô inválido.");
-                            continue;
-                    }
-                    if (robo != null)
-                        robo.exibirPosicao();
-
-                    break;
-
-                case 4: // Movimento em XYZ (subir/descer depois XY)
-                    System.out.printf("Digite o nome do robô que irá se mover. Opções: %s\n",nomes);
-                    nomeRobo = scanner.nextLine();
-
-                    robo = null;
-                    switch (nomeRobo) { // Escolha do robo
-                        case "teste1":
-                            if (robosVivos.contains(robo1))
-                                robo = robo1;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste2":
-                            if (robosVivos.contains(robo2))
-                                robo = robo2;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste3":
-                            if (robosVivos.contains(robo3))
-                                robo = robo3;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste4":
-                            if (robosVivos.contains(robo4))
-                                robo = robo4;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        default:
-                            System.out.println("Nome de robô inválido.");
-                            continue;
-                    }
-
-                    if (robo != null) { // Coordenadas XY
-                        System.out.printf("Digite o valor de deltaX que deseja mover o robô %s: ", robo.getNome());
-                        int deltaX = scanner.nextInt();
-                        System.out.printf("Digite o valor de deltaY que deseja mover o robô %s: ", robo.getNome());
-                        int deltaY = scanner.nextInt();
-
-                        // Se for robo aereo pode mover em Z
-
-                        if (robo instanceof RoboAereo) {
-                            System.out.printf("Digite o valor de deltaZ que deseja mover o robô %s: ", robo.getNome());
-                            int deltaZ = scanner.nextInt();
-                            if (deltaZ >= 0) {
-                                ((RoboAereo) robo).subir(deltaZ);
-                            } else {
-                                ((RoboAereo) robo).descer(Math.abs(deltaZ));
-                            }
-                        }
-
-                        robo.moverPara(deltaX, deltaY);
-
-                        System.out.printf("Robo parou em (%d,%d,%d)\n",robo.getPosX(),robo.getPosY(),robo.getAltitude());
-                    }
-                    break;
-                case 5: // Metodos especificos de robos (explodir/bombardear/carregar....)
-                    System.out.printf("Digite o nome do robô que irá usar a habilidade específica. Opções: %s\n",nomes);
-                    nomeRobo = scanner.nextLine();
-                    robo = null;
-                    switch (nomeRobo) { // Escolha do robo
-                        case "teste1":
-                            if (robosVivos.contains(robo1))
-                                robo = robo1;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste2":
-                            if (robosVivos.contains(robo2))
-                                robo = robo2;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste3":
-                            if (robosVivos.contains(robo3))
-                                robo = robo3;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        case "teste4":
-                            if (robosVivos.contains(robo4))
-                                robo = robo4;
-                            else
-                                System.out.println("Robô foi morto.");
-                            break;
-                        default:
-                            System.out.println("Nome de robô inválido.");
-                            continue;
-                    }
-                    if (robo != null) {
-                        switch (robo.getNome()){
-                            case "teste1":  // Robo bombardeiro pode bombardear ou carregar bombas
-                                System.out.println("Se deseja bombardear digite [1] ou [2] para carregar bombas");
-                                int comandoBombas = scanner.nextInt();
-                                if (comandoBombas == 1){
-                                    List<Robo> robosAtingidos = ((RoboBombardeiro) robo).bombardear();
-                                    if (robosAtingidos != null)
-                                        for (Robo roboAtingido : robosAtingidos) {
-                                            robosVivos.remove(roboAtingido);
-                                        }
-                                }else{
-                                    System.out.printf("Digite a quantidade de bombas que deseja carregar o robô %s: ", robo.getNome());
-                                    int bombas = scanner.nextInt();
-                                    ((RoboBombardeiro) robo).carregarBombas(bombas);
-                                }
-                                break;
-
-                            case "teste2":  // Robo explosivo explode
-                                System.out.printf("O robô %s está prestes a explodir...\n", robo.getNome());
-                                Thread.sleep(2000);
-                                List<Robo> robosAtingidos = ((RoboExplosivo) robo).explodir();
-                                for (Robo roboAtingido : robosAtingidos) {
-                                    robosVivos.remove(roboAtingido);
-                                }
-                                break;
-
-                            case "teste3":  // Robo combustivel abastece combustivel
-                                System.out.printf("Digite a quantidade de gasolina que deseja abastecer o robô %s: ", robo.getNome());
-                                int gasolina = scanner.nextInt();
-                                ((RoboCombustivel) robo).abastecer(gasolina);
-                                break;
-
-                            case "teste4":  // Robo solar carrega a bateria com o sol
-                                System.out.printf("O robô %s está prestes a carregar %.2f energia pelo painel solar\n", robo.getNome(), ((RoboSolar) robo).getPotenciaPainelSolar());
-                                ((RoboSolar) robo).carregar();
-                                break;
-                        }
-                    }
-                    break;
-                case 6: // Muda o periodo do ambiente
-                    System.out.printf("Digite o novo periodo do dia do ambiente: 'Dia', 'Noite'\n");
-                    nomeRobo = scanner.nextLine();
-                    if(nomeRobo.equals("Dia") || nomeRobo.equals("Noite")) {
-                        ambiente.mudarTempo(nomeRobo);
-                        System.out.printf("O período do ambiente é %s\n",nomeRobo);
-                    }else{
-                        System.out.printf("\"%s\" não corresponde a uma das opções dadas, tente inserir uma opção válida.\n",nomeRobo);
-                    }
-                    break;
-
-                case 7:
-                    ambiente.verificarColisoes();
-                    break;
-                case 8:
-                    System.out.println("Finalizando o programa...");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.printf("Opção invalida\n");
-            }
-        }
-
- */
     }
 }
