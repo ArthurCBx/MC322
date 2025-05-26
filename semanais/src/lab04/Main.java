@@ -18,10 +18,7 @@ import lab04.sensores.SensorAltitude;
 import lab04.sensores.SensorClasse;
 import org.w3c.dom.ls.LSOutput;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -447,18 +444,22 @@ public class Main {
                             System.out.println("\nVerificando o status do robo" + nomeRobo + ":\n" +
                                     robosel.getDescricao());
                             System.out.println("Representação no mapa: " + robosel.getRepresentacao());
-                            System.out.printf("Sensores: ");
-                            if (!(robosel.getSensores() == null)) {
-                                if (robosel.getSensores().contains(sensorComum25))
-                                    System.out.printf("SensorComum25 ");
-                                if (robosel.getSensores().contains(sensorAltitude60XY30))
-                                    System.out.printf("SensorAltitude60XY30 ");
-                                if (robosel.getSensores().contains(sensorClasse50))
-                                    System.out.printf("SensorClasse50");
-                            } else {
-                                System.out.printf("Nenhum");
+
+                            if (robosel instanceof Sensoreavel) {
+                                System.out.printf("Sensores: ");
+                                if (!(robosel.getSensores() == null)) {
+                                    if (robosel.getSensores().contains(sensorComum25))
+                                        System.out.printf("SensorComum25 ");
+                                    if (robosel.getSensores().contains(sensorAltitude60XY30))
+                                        System.out.printf("SensorAltitude60XY30 ");
+                                    if (robosel.getSensores().contains(sensorClasse50))
+                                        System.out.printf("SensorClasse50");
+                                } else {
+                                    System.out.printf("Nenhum");
+                                }
+                                System.out.println();
                             }
-                            System.out.println();
+
                             System.out.println("\nVerificação do status do robo finalizada\n");
 
                             System.out.println("Digite algo para retornar ao menu principal");
@@ -767,7 +768,12 @@ public class Main {
                             "[1] - Ligados\n" +
                             "[2] - Desligados\n" +
                             "[3] - Aereos\n" +
-                            "[4] - Terrestres");
+                            "[4] - Terrestres\n" +
+                            "[5] - Sensoreaveis\n" +
+                            "[6] - Comunicaveis\n" +
+                            "[7] - Autonomos\n" +
+                            "[8] - Explosivos\n" +
+                            "[9] - Energizaveis");
 
                     while (scanner.hasNext("\n")) {
                         scanner.skip("\n");
@@ -820,6 +826,46 @@ public class Main {
                             menu = 0;
                             break;
 
+                        case (5):
+                            System.out.println("\nRobos Sensoreaveis:");
+                            for (Robo roboaux : robosVivos.stream().filter(entidade2 -> entidade2 instanceof Sensoreavel).map(entidade -> (Robo) entidade).toList())
+                                System.out.println(roboaux.getNome());
+
+                            menu = 0;
+                            break;
+
+                        case (6):
+                            System.out.println("\nRobos Comunicaveis:");
+                            for (Robo roboaux : robosVivos.stream().filter(entidade2 -> entidade2 instanceof Comunicavel).map(entidade -> (Robo) entidade).toList())
+                                System.out.println(roboaux.getNome());
+
+                            menu = 0;
+                            break;
+
+                        case (7):
+                            System.out.println("\nRobos Autonomos:");
+                            for (Robo roboaux : robosVivos.stream().filter(entidade2 -> entidade2 instanceof Autonomo).map(entidade -> (Robo) entidade).toList())
+                                System.out.println(roboaux.getNome());
+
+                            menu = 0;
+                            break;
+
+                        case (8):
+                            System.out.println("\nRobos Explosivos:");
+                            for (Robo roboaux : robosVivos.stream().filter(entidade2 -> entidade2 instanceof Explosivos).map(entidade -> (Robo) entidade).toList())
+                                System.out.println(roboaux.getNome());
+
+                            menu = 0;
+                            break;
+
+                        case (9):
+                            System.out.println("\nRobos Energizaveis:");
+                            for (Robo roboaux : robosVivos.stream().filter(entidade2 -> entidade2 instanceof Energizavel).map(entidade -> (Robo) entidade).toList())
+                                System.out.println(roboaux.getNome());
+
+                            menu = 0;
+                            break;
+
                         default:
                             System.out.println("\nComando inválido, selecione uma opção válida");
                             Thread.sleep(1000 * d);
@@ -827,7 +873,7 @@ public class Main {
 
                     }
 
-                    if (selecao > 0 && selecao < 5) {
+                    if (selecao > 0 && selecao < 10) {
                         System.out.println("\nDigite algo para retornar ao menu principal");
                         scanner.nextLine();
 
@@ -912,6 +958,14 @@ public class Main {
 
                 case (2):    // Adicionar sensor
 
+                    if (!(robosel instanceof Sensoreavel)) {
+                        System.out.println("\nO robo selecionado não é Sensoreavel");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
                     System.out.println("\nDigite o tipo de sensor que deseja adicionar. Opções:\n" +
                             "[0] - Cancelar operação\n" +
                             "[1] - SensorComum25\n" +
@@ -968,6 +1022,15 @@ public class Main {
                     break;
 
                 case (3):    // Acionar sensor
+
+                    if (!(robosel instanceof Sensoreavel)) {
+                        System.out.println("\nO robo selecionado não é Sensoreavel");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
                     System.out.println("\nAcionando sensores do robo " + nomeRobo + ":");
                     try {
                         robosel.acionarSensores();
@@ -999,7 +1062,15 @@ public class Main {
 
                 case (6):    // Enviar mensagem
 
-                    if(robosVivos.size() < 2){
+                    if (!(robosel instanceof Comunicavel)) {
+                        System.out.println("\nO robo selecionado não é Comunicavel");
+                        Thread.sleep(1000 * d);
+                        menu = 0;
+                        comando = 0;
+                        break;
+                    }
+
+                    if (robosVivos.size() < 2) {
                         System.out.println("\nNão há outros robos vivos para receber mensagens");
                         Thread.sleep(1000 * d);
                         menu = 0;
@@ -1020,7 +1091,7 @@ public class Main {
                     int i = 0;
                     for (Robo roboaux : roboOutros) {
                         i++;
-                        System.out.println("[" + i + "] - " + roboaux.getNome()+" ("+roboaux.getEstado()+")");
+                        System.out.println("[" + i + "] - " + roboaux.getNome() + " (" + roboaux.getEstado() + ")");
                     }
 
                     while (scanner.hasNext("\n")) {
@@ -1060,9 +1131,9 @@ public class Main {
                     mensagem = scanner.nextLine();
                     try {
                         robosel.enviarMensagem(robo, mensagem);
-                    }catch (ErroComunicacaoException e){
+                    } catch (ErroComunicacaoException e) {
                         System.out.println(e.getMessage());
-                    }finally {
+                    } finally {
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
