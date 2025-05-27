@@ -29,16 +29,16 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
         return combustivel;
     }
 
+    protected void setCombustivel(double combustivel) {
+        this.combustivel = combustivel;
+    }
+
     public String getDescricao() {
         return "Robo Combustivel: " + getNome() + "\n" +
                 "id: " + this.getId() + "\n" +
                 "Combustivel disponivel: " + getCombustivel() + "\n" +
                 "Velocidade Maxima: " + getVelocidadeMaxima() + "\n" +
                 "Posicao Atual: (" + getX() + ", " + getY() + ")";
-    }
-
-    protected void setCombustivel(double combustivel) {
-        this.combustivel = combustivel;
     }
 
 

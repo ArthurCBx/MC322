@@ -83,6 +83,17 @@ public class Ambiente {
     }
 
 
+    // Metodo para acionar todos os sensores de todos os robos no ambiente
+    public void executarSensores() {
+        // Executa sensores de todos os robôs no ambiente.
+        for (Entidade entidade : listaEntidades)
+            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+                System.out.printf("Monitoramento do Robo %s:\n", ((Robo) entidade).getNome());
+                ((Robo) entidade).acionarSensores();
+            }
+
+    }
+
     // Metodo para verificar se uma coordenada esta dentro dos limites do ambiente:
     public void dentroDosLimites(int x, int y, int z) {
         if (!(x >= 0 && x <= getComprimento() && y >= 0 && y <= getLargura() && z >= 0 && z <= getAltura()))
@@ -90,20 +101,73 @@ public class Ambiente {
 
     }
 
-    // Metodo para inicializar o mapa vazio
-    public void inicializarMapa() {
 
-        if (mapa != null)
-            System.out.printf("O mapa já foi inicializado\n");
+    // Metodo para a verificação de ocupação da coordenada a partir do mapa
+    public boolean estaOcupado(int x, int y, int z) {
+        return mapa[x][y][z] != TipoEntidade.VAZIO;
+    }
 
-        mapa = new TipoEntidade[comprimento + 1][largura + 1][altura + 1];
 
-        for (int x = 0; x <= getComprimento(); x++)
-            for (int y = 0; y <= getLargura(); y++)
-                for (int z = 0; z <= getAltura(); z++)
-                    mapa[x][y][z] = TipoEntidade.VAZIO;
+    // Metodo para verificar se uma ou mais entidades estão em colisão
+    public void verificarColisoes() {
+
+        boolean colisao = false;    // Flag para colisão
+        // Lista de robos:
+        List<Robo> listaRobo = getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
+
+        int roboX;
+        int roboY;
+        int roboZ;
+
+        // Verificação entre robo-robo e robo-obstaculo (já que obstaculos são imoveis e não podem colidir entre si [criação desses previne a colisão])
+        for (Robo robo : listaRobo) {
+
+            roboX = robo.getX();
+            roboY = robo.getY();
+            roboZ = robo.getZ();
+
+            // Robo-obstaculo
+            for (Obstaculo obstaculo : getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList()) {
+                if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(roboX, roboY, roboZ)) {
+                    System.out.printf("O robo %s colidiu com um obstáculo %s em (%d,%d,%d).\n",
+                            robo.getNome(), obstaculo.getTipoObstaculo().getNome(), roboX, roboY, roboZ);
+                    colisao = true;
+                }
+            }
+            // Robo-Robo (reporta tanto robo1 colide com robo2 quanto robo2 colide com robo1)
+            for (Robo robo2 : listaRobo) {
+                if (roboX == robo2.getX() && roboY == robo2.getY() && roboZ == robo2.getZ() && robo2 != robo) {
+                    System.out.printf("O robo %s colidiu com o robo %s em (%d,%d,%d).\n",
+                            robo.getNome(), robo2.getNome(), roboX, roboY, roboZ);
+                    colisao = true;
+                }
+            }
+        }
+
+        if (!colisao) {
+            System.out.printf("Não foram verificadas colisões no ambiente %s\n", this);
+        } else {
+            throw new ColisaoException("Uma ou mais colisões foram detectadas");
+        }
+    }
+
+
+    // Metodo para mover forçadamente (sem verificação) uma entidade para uma coordenada
+    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ) {
+
+        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
+            mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
+            ((Robo) entidade).setPosX(novoX);
+            ((Robo) entidade).setPosY(novoY);
+            ((Robo) entidade).setPosZ(novoZ);
+            mapa[novoX][novoY][novoZ] = TipoEntidade.ROBO;
+
+        } else {
+            System.out.printf("A posição de entidades do tipo" + entidade.getTipoEntidade() + "não muda\n");
+        }
 
     }
+
 
     // Metodo para adiconar entidade à lista e mapa de entidades do ambiente:
     public void adicionarEntidade(Entidade entidade) {
@@ -152,6 +216,7 @@ public class Ambiente {
         }
     }
 
+
     // Metodo para remover uma entidade do ambiente
     public void removerEntidade(Entidade entidade) {
         if (mapa == null) {
@@ -182,84 +247,24 @@ public class Ambiente {
         }
     }
 
-    // Metodo para verificar se uma ou mais entidades estão em colisão
-    public void verificarColisoes() {
 
-        boolean colisao = false;    // Flag para colisão
-        // Lista de robos:
-        List<Robo> listaRobo = getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
+    // Metodo para inicializar o mapa vazio
+    public void inicializarMapa() {
 
-        int roboX;
-        int roboY;
-        int roboZ;
+        if (mapa != null)
+            System.out.printf("O mapa já foi inicializado\n");
 
-        // Verificação entre robo-robo e robo-obstaculo (já que obstaculos são imoveis e não podem colidir entre si [criação desses previne a colisão])
-        for (Robo robo : listaRobo) {
+        mapa = new TipoEntidade[comprimento + 1][largura + 1][altura + 1];
 
-            roboX = robo.getX();
-            roboY = robo.getY();
-            roboZ = robo.getZ();
-
-            // Robo-obstaculo
-            for (Obstaculo obstaculo : getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.OBSTACULO).map(entidade -> (Obstaculo) entidade).toList()) {
-                if (obstaculo.getTipoObstaculo().bloqueiaPassagem() && obstaculo.contemPonto(roboX, roboY, roboZ)) {
-                    System.out.printf("O robo %s colidiu com um obstáculo %s em (%d,%d,%d).\n",
-                            robo.getNome(), obstaculo.getTipoObstaculo().getNome(), roboX, roboY, roboZ);
-                    colisao = true;
-                }
-            }
-            // Robo-Robo (reporta tanto robo1 colide com robo2 quanto robo2 colide com robo1)
-            for (Robo robo2 : listaRobo) {
-                if (roboX == robo2.getX() && roboY == robo2.getY() && roboZ == robo2.getZ() && robo2 != robo) {
-                    System.out.printf("O robo %s colidiu com o robo %s em (%d,%d,%d).\n",
-                            robo.getNome(), robo2.getNome(), roboX, roboY, roboZ);
-                    colisao = true;
-                }
-            }
-        }
-
-        if (!colisao) {
-            System.out.printf("Não foram verificadas colisões no ambiente %s\n", this);
-        } else {
-            throw new ColisaoException("Uma ou mais colisões foram detectadas");
-        }
-    }
-
-    // Metodo para a verificação de ocupação da coordenada a partir do mapa
-    public boolean estaOcupado(int x, int y, int z) {
-        return mapa[x][y][z] != TipoEntidade.VAZIO;
-    }
-
-    // Metodo para mover forçadamente (sem verificação) uma entidade para uma coordenada
-    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ) {
-
-        if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
-            mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
-            ((Robo) entidade).setPosX(novoX);
-            ((Robo) entidade).setPosY(novoY);
-            ((Robo) entidade).setPosZ(novoZ);
-            mapa[novoX][novoY][novoZ] = TipoEntidade.ROBO;
-
-        } else {
-            System.out.printf("A posição de entidades do tipo" + entidade.getTipoEntidade() + "não muda\n");
-        }
+        for (int x = 0; x <= getComprimento(); x++)
+            for (int y = 0; y <= getLargura(); y++)
+                for (int z = 0; z <= getAltura(); z++)
+                    mapa[x][y][z] = TipoEntidade.VAZIO;
 
     }
 
 
-    // Metodo para acionar todos os sensores de todos os robos no ambiente
-
-    public void executarSensores() {
-        // Executa sensores de todos os robôs no ambiente.
-        for (Entidade entidade : listaEntidades)
-            if (entidade.getTipoEntidade() == TipoEntidade.ROBO) {
-                System.out.printf("Monitoramento do Robo %s:\n", ((Robo) entidade).getNome());
-                ((Robo) entidade).acionarSensores();
-            }
-
-    }
     // Metodo para printar no console a vizualização do mapa do ambiente no nivel z = 0
-
     public void vizualizarAmbiente() {
 
         if (mapa == null) {
@@ -296,13 +301,13 @@ public class Ambiente {
                                 }
                     }
 
-                    if(representacao != '´'){
+                    if (representacao != '´') {
                         break;
                     }
 
                 }
 
-                System.out.printf("%c",representacao);
+                System.out.printf("%c", representacao);
                 representacao = '´';
             }
             System.out.print("|\n");            // Imprime uma borda direita para o mapa
