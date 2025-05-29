@@ -42,7 +42,7 @@ Alterações feitas do lab03 para o lab04:
 
 Com as implementações das interfaces, foi-se necessario alterar a maior parte das classes presentes para acomodar tais mudanças:
 
-## Robo e subclasses:
+### Robo e subclasses:
 
 - Teve a implementação dos metodos de diversas interfaces (como descrito no diagrama do codigo);
 - Criação de diversas propriedades, como Estado (e sua enumeração), Id e TipoEntidade;
@@ -50,14 +50,14 @@ Com as implementações das interfaces, foi-se necessario alterar a maior parte 
 - Classes que herdam de RoboTerrestre e RoboAereo são concretas na medida que implementam todos os metodos necessarios e constroem um executarTarefa() proprio e personalizado para cada robo;
 - Metodo mover(...) tornou-se moverPara(...) e é implmenetado em Robo com movimentação em XYZ e detecção de colisão entre robos e obstaculos e robos com robos, RoboTerrestre da override no metodo para limitar a movimentação em XY.
 
-## Ambiente:
+### Ambiente:
 
 - Troca-se as listas de Robos e obstaculos para uma lista polimorfica de Entidades, englobando quaisqueres componentes do ambiente;
 - Se alteram os metodos de adicionar robos/obstaculos para lidar com entidades;
 - Se cria o mapa do ambiente, armazenando cada tipo de entidade em cada coordenada XYZ, além disso pode-se observar o mapa de uma visão aerea por meio do metodo vizualizarMapa();
 - Outros metodos para facilitar impmenetação de metodos mais complexos como moverPara(...), por exemplo, como estaOcupado(...), dentroDosLimites(...) ou verificarColisões(...).
 
-## Sensores:
+### Sensores:
 
 - Alterações minimas para acomodar a interface Entidade.
 
