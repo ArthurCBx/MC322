@@ -68,7 +68,7 @@ Foram implementadas diversas exceções durantes os métodos e alterações desc
   - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
 
   #### SemAmbienteException:
-  - moverPara(...) de robos que implement a interface Energizavel (ambos robôs terrestres);
+  - moverPara(...) de robos que implementam a interface Energizavel (ambos robôs terrestres);
   - Método executarTarefa() do robô combustível.
  
 Além disso, o menu interativo apresenta tratamento considerável de todas as exceções (várias vezes constituindo do cancelamento da operação)
