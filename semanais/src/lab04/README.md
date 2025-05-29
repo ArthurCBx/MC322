@@ -67,7 +67,7 @@ Foram implementadas diversas exceções durantes os métodos e alterações desc
   - A maior parte dos métodos dos Robôs e suas subclasses, similar a RoboDesligadoException;
   - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
 
-  #### SemAmbienteException:
+  #### SemCombustivelException:
   - moverPara(...) de robos que implementam a interface Energizavel (ambos robôs terrestres);
   - Método executarTarefa() do robô combustível.
  
