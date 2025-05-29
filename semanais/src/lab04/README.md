@@ -53,7 +53,7 @@ Foram implementadas diversas exceções durantes os métodos e alterações desc
 
   #### ForaDosLimitesException:
   - dentroDosLimites(...)[Ambiente];
-  - Metodos que impl menem tam dentroDosLimites(...):
+  - Métodos que implementam dentroDosLimites(...):
   - moverPara(...) e os métodos citados acima, adicionarEntidade(...).
 
   #### ErroComunicacaoException:
