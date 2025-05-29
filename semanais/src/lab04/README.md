@@ -21,20 +21,20 @@ Alterações feitas do lab03 para o lab04:
 
 # Implementação de diversas interfaces:
 
-## Entidade:
+### Entidade:
 
 - Disponibiliza metodos de caracterização basica dos componentes do ambiente, como getXYZ, descrição ou representação no mapa do ambiente;
 - Cria-se uma nova enumeração para definir o tipo de entidade, TipoEntidade (Robo, obstaculo, vazio...).
 
-## Sensoreavel:
+### Sensoreavel:
 
 - Interface para robos com sensores, lidando com a listagem e utilização de sensores de maneira padronizada.
 
-## Comunicavel e Central de comunicação:
+### Comunicavel e Central de comunicação:
 
 - Interface que habilita a comunicação entre robos via a nova classe CentralComunicao, que, por sua vez, trata mensagens entre robos e as armazena por meio de metodos estaticos.
 
-## Autonomo, Explosivo e Energizavel:
+### Autonomo, Explosivo e Energizavel:
 
 - Interfaces que disponibilizam metodos para funções autonomas, movimentações que envolvam algum tipo de energia e metodos que envolvem explosões que afetam outros componentes do ambiente.
 
