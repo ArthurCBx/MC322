@@ -44,8 +44,34 @@ Com as implementações das interfaces, foi-se necessario alterar a maior parte 
 
 # Exceções:
 
-- Foram implementadas diversas exceções durantes os métodos e alterações descritos acima para personalizar e facilitar o tratamento de casos únicos;
-- Exceções são tratadas na main dentro do menu interativo.
+Foram implementadas diversas exceções durantes os métodos e alterações descritos acima para personalizar e facilitar o tratamento de casos únicos:
+
+  #### ColisaoException:
+  - verificarColisoes()[Ambiente] e moverPara(...)[Robo];
+  - Métodos que implementan moverPara(...):
+  - moverPara(...) herdados dos robos, moveAutomatico(...) e executarTarefa() para alguns robos.
+
+  #### ForaDosLimitesException:
+  - dentroDosLimites(...)[Ambiente];
+  - Metodos que impl menem tam dentroDosLimites(...):
+  - moverPara(...) e os métodos citados acima, adicionarEntidade(...).
+
+  #### ErroComunicacaoException:
+  - enviarMensagem(...)[Robo].
+   
+  #### RoboDesligadoException:
+  - A maior parte dos métodos dos Robôs e suas subclasses;
+  - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
+
+  #### SemAmbienteException:
+  - A maior parte dos métodos dos Robôs e suas subclasses, similar a RoboDesligadoException;
+  - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
+
+  #### SemAmbienteException:
+  - moverPara(...) de robos que implement a interface Energizavel (ambos robôs terrestres);
+  - Método executarTarefa() do robô combustível.
+ 
+Além disso, o menu interativo apresenta tratamento considerável de todas as exceções (várias vezes constituindo do cancelamento da operação)
 
 # Menu Interativo e Main:
 
