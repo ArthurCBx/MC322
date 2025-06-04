@@ -1,24 +1,23 @@
-package lab04;
+package lab05;
 
-import lab04.comunicacao.CentralComunicacao;
-import lab04.entidade.Entidade;
-import lab04.entidade.TipoEntidade;
-import lab04.entidade.robos.*;
-import lab04.entidade.robos.robos_aereos.Explosivos;
-import lab04.entidade.robos.robos_terrestres.Energizavel;
-import lab04.excecoes.*;
-import lab04.obstaculos.Obstaculo;
-import lab04.obstaculos.TipoObstaculo;
-import lab04.entidade.robos.robos_aereos.RoboBombardeiro;
-import lab04.entidade.robos.robos_aereos.RoboExplosivo;
-import lab04.entidade.robos.robos_terrestres.RoboCombustivel;
-import lab04.entidade.robos.robos_terrestres.RoboSolar;
-import lab04.sensores.Sensor;
-import lab04.sensores.SensorAltitude;
-import lab04.sensores.SensorClasse;
-import org.w3c.dom.ls.LSOutput;
+import lab05.comunicacao.CentralComunicacao;
+import lab05.entidade.TipoEntidade;
+import lab05.entidade.robos.*;
+import lab05.entidade.robos.robos_aereos.Explosivos;
+import lab05.entidade.robos.robos_aereos.RoboBombardeiro;
+import lab05.entidade.robos.robos_aereos.RoboExplosivo;
+import lab05.entidade.robos.robos_terrestres.Energizavel;
+import lab05.entidade.robos.robos_terrestres.RoboCombustivel;
+import lab05.entidade.robos.robos_terrestres.RoboSolar;
+import lab05.excecoes.*;
+import lab05.obstaculos.Obstaculo;
+import lab05.obstaculos.TipoObstaculo;
+import lab05.sensores.Sensor;
+import lab05.sensores.SensorAltitude;
+import lab05.sensores.SensorClasse;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
