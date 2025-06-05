@@ -1,4 +1,4 @@
-package lab05.obstaculos;
+package lab05.entidade.obstaculos;
 
 import lab05.entidade.Entidade;
 import lab05.entidade.TipoEntidade;

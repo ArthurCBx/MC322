@@ -1,4 +1,4 @@
-package lab05.obstaculos;
+package lab05.entidade.obstaculos;
 
 public enum TipoObstaculo {
     PAREDE("Parede",5,true),

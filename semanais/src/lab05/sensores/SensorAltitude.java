@@ -4,7 +4,7 @@ import lab05.Ambiente;
 import lab05.entidade.Entidade;
 import lab05.entidade.TipoEntidade;
 import lab05.entidade.robos.Robo;
-import lab05.obstaculos.Obstaculo;
+import lab05.entidade.obstaculos.Obstaculo;
 
 import java.util.ArrayList;
 import java.util.List;

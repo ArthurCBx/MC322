@@ -8,7 +8,7 @@ import lab05.excecoes.ColisaoException;
 import lab05.excecoes.ErroComunicacaoException;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
-import lab05.obstaculos.Obstaculo;
+import lab05.entidade.obstaculos.Obstaculo;
 import lab05.sensores.Sensor;
 import lab05.sensores.SensorClasse;
 
