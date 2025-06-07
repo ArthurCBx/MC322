@@ -19,15 +19,17 @@ public class SensorClasse extends Sensor {
     }
 
     @Override
-    public void monitorar(Ambiente ambiente, Robo mestre){
+    public StringBuilder monitorar(Ambiente ambiente, Robo mestre){
         List<Robo> listaRobos = ambiente.getListaEntidades().stream().filter(entidade -> entidade.getTipoEntidade() == TipoEntidade.ROBO).map(entidade -> (Robo) entidade).toList();
-
+        StringBuilder s = new StringBuilder();
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt((Math.pow(robo.getX() - mestre.getX(), 2) + Math.pow(robo.getY() - mestre.getY(), 2) + Math.pow(robo.getZ() - mestre.getZ(), 2)));
             if (distancia <= getRaio() && !robo.equals(mestre)){
                 System.out.printf("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n", robo.getClass(), robo.getX(), robo.getY(), robo.getZ());
+                s.append(("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n".formatted(robo.getClass(), robo.getX(), robo.getY(), robo.getZ())));
             }
         }
+        return s;
     }
 
     @Override

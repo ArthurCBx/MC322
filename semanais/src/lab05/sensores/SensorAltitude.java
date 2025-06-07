@@ -35,15 +35,19 @@ public class SensorAltitude extends Sensor {
     // Sobrescreve as 3 funções desenvolvidas em sensor para considerar agora o raio z:
 
     @Override
-    public void monitorar(Ambiente ambiente, Robo mestre) {
+    public StringBuilder monitorar(Ambiente ambiente, Robo mestre) {
+        StringBuilder s = new StringBuilder();
         System.out.println("Monitoramento em XY:");
-        super.monitorar(ambiente, mestre);
+        s.append("Monitoramento em XY:\n");
+        s.append(super.monitorar(ambiente, mestre));
         System.out.println("Monitoramento em altitude:");
+        s.append("Monitoramento em altitude:\n");
         ArrayList<Entidade> listaEntidades = ambiente.getListaEntidades();
         for (Entidade entidade : listaEntidades) {
             int distancia = Math.abs(entidade.getZ() - mestre.getZ());
             if (distancia <= raioZ && (mestre.getX() == entidade.getX()) && (mestre.getY() == entidade.getY()) && !entidade.equals(mestre)) {
-                System.out.printf("Entidade %s encontrada na posição (%d,%d,%d)", entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY(), entidade.getZ());
+                System.out.printf("Entidade %s encontrada na posição (%d,%d,%d)\n", entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY(), entidade.getZ());
+                s.append(("Entidade %s encontrada na posição (%d,%d,%d)\n".formatted(entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY(), entidade.getZ())));
             }
         }
 
@@ -56,13 +60,17 @@ public class SensorAltitude extends Sensor {
             if (distancia == 0) {
                 if ((mestre.getZ() >= obstaculo.getBase()) && (mestre.getZ() <= obstaculo.getBase() + obstaculo.getAltura())) {
                     System.out.printf("Robo está dentro do obstáculo %s.\n", obstaculo.getTipoObstaculo().getNome());
+                    s.append("Robo está dentro do obstáculo %s.\n".formatted(obstaculo.getTipoObstaculo().getNome()));
                 } else if (mestre.getZ() > obstaculo.getBase() + obstaculo.getAltura()) {
                     System.out.printf("Robo está acima do obstáculo %s.\n", obstaculo.getTipoObstaculo().getNome());
+                    s.append(("Robo está acima do obstáculo %s.\n".formatted(obstaculo.getTipoObstaculo().getNome())));
                 } else if(mestre.getZ() < obstaculo.getBase()) {
                     System.out.printf("Robo está abaixo do obstáculo %s.\n", obstaculo.getTipoObstaculo().getNome());
+                    s.append(("Robo está abaixo do obstáculo %s.\n".formatted(obstaculo.getTipoObstaculo().getNome())));
                 }
             }
         }
+        return s;
     }
 
 

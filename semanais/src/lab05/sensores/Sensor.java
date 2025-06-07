@@ -35,10 +35,12 @@ public class Sensor {
 
 
     // Função basica de monitoramento do ambiente:
-    public void monitorar(Ambiente ambiente, Robo mestre) {
+    public StringBuilder monitorar(Ambiente ambiente, Robo mestre) {
         // Verifica no ambiente se existe algum robo dentro do raio do sensor (XY)
         ArrayList<Entidade> listaEntidade = ambiente.getListaEntidades();
         ArrayList<Obstaculo> obstaculos = new ArrayList<Obstaculo>();
+
+        StringBuilder s = new StringBuilder();
 
         for (Entidade entidade : listaEntidade){
             if (entidade.getTipoEntidade() == TipoEntidade.OBSTACULO) obstaculos.add((Obstaculo) entidade);
@@ -48,6 +50,7 @@ public class Sensor {
             double distancia = Math.sqrt(Math.pow(entidade.getX() - mestre.getX(), 2) + Math.pow(entidade.getY() - mestre.getY(), 2));
             if (distancia <= raio && !entidade.equals(mestre) && (entidade.getZ() == mestre.getZ())) {
                 System.out.printf("Entidade %s encontrada na posição (%d,%d)\n",entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY());
+                s.append("Entidade %s encontrada na posição (%d,%d)\n".formatted(entidade.getTipoEntidade().getNome(), entidade.getX(), entidade.getY()));
             }
         }
 
@@ -60,11 +63,14 @@ public class Sensor {
             if ((mestre.getZ() >= obstaculo.getBase()) && (mestre.getZ() <= (obstaculo.getBase() + obstaculo.getAltura()) )){
                 if (distancia == 0) {
                     System.out.printf("Robô está dentro do obstáculo %s\n", obstaculo.getTipoObstaculo().getNome());
+                    s.append("Robô está dentro do obstáculo %s\n".formatted(obstaculo.getTipoObstaculo().getNome()));
                 } else if (distancia <= raio) {
                     System.out.printf("Obstáculo %s encontrado a %.2f metros\n", obstaculo.getTipoObstaculo().getNome(), distancia);
+                    s.append("Obstáculo %s encontrado a %.2f metros\n".formatted(obstaculo.getTipoObstaculo().getNome(), distancia));
                 }
             }
         }
+        return s;
     }
 
     // Função para retornar listas de robôs se estão dentro do raio(XY):
