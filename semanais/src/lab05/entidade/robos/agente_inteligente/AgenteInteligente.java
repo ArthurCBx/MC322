@@ -15,6 +15,10 @@ public abstract class AgenteInteligente extends Robo {
         this.missao = missao;
     }
 
+    public void encerrarMissao(){
+        setMissao(null);
+    }
+
     public boolean temMissao(){
         return this.missao != null;
     }
