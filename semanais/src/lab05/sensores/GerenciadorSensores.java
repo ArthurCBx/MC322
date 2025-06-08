@@ -8,6 +8,12 @@ import lab05.excecoes.SemAmbienteException;
 
 import java.util.ArrayList;
 
+/*
+   GerenciadorSensores é um módulo responsável por controlar as funções atribuídas aos sensores em robôs.
+   Ele permite que os sensores monitorem o ambiente, identifiquem robôs próximos e obstáculos próximos.
+   Robôs agora tem por propriedade um GerenciadorSensores, instanciado no construtor do robô.
+ */
+
 public class GerenciadorSensores {
     private Robo robo;
 

@@ -4,6 +4,12 @@ import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
 import lab05.excecoes.ErroComunicacaoException;
 
+/*
+  Classe que implementa o módulo de comunicação dos robôs.
+  Permite o envio e recebimento de mensagens entre robôs.
+  Robôs agora possuem um módulo de comunicação por propriedade passado no construtor.
+ */
+
 public class ModuloComunicacao implements Comunicavel {
     private Robo robo;
 
