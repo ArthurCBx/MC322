@@ -30,11 +30,11 @@ public class Teste2 {
         agente.addSensor(tsensorAltitude80XY20);
         agente.addSensor(tsensorClasse20);
         MissaoMonitorar monitora = new MissaoMonitorar();
-        MissaoComunicar comunica = new MissaoComunicar();
+        MissaoComunicar comunica = new MissaoComunicar("RECEBA",roboteste1);
 
         try {
             monitora.executar(agente, tambiente);
-            comunica.executar(agente, tambiente, roboteste1, "RECEBA");
+            comunica.executar(agente, tambiente);
         } catch (Exception e) {
             e.printStackTrace();
         }

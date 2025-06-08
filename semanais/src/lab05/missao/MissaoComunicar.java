@@ -24,10 +24,32 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class MissaoComunicar implements Missao{
-    public void executar(Robo r, Ambiente a) {
+    private String mensagem; // Conteúdo da mensagem a ser enviada
+    private Robo outroRobo;  // Robo com o qual o robô que possui a missão irá se comunicar
+
+    public MissaoComunicar(String msg, Robo outroRobo) {
+        this.mensagem = msg;
+        this.outroRobo = outroRobo;
     }
 
-    public void executar(Robo r, Ambiente a, Robo outroRobo, String mensagem) {
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    public Robo getOutroRobo() {
+        return outroRobo;
+    }
+
+    public void setOutroRobo(Robo outroRobo) {
+        this.outroRobo = outroRobo;
+    }
+
+    @Override
+    public void executar(Robo r, Ambiente a) {
         String file = "semanais/src/lab05/log.txt";
         File logFile = new File(file);
 
@@ -83,14 +105,16 @@ public class MissaoComunicar implements Missao{
             s.append("Ele enviou a mensagem: \n").append(mensagem).append(" para o robô ").append(outroRobo.getNome()).append("\n");
             outroRobo.receberMensagem(mensagem);
             s.append("O robô ").append(r.getNome()).append(" finalizou a missão de comunicação em: ").append(LocalDateTime.now().format(formatter)).append("\n\n");
+            ((AgenteInteligente) r).encerrarMissao();
+        }else {
+            s.append("O robô ").append(r.getNome()).append(" não é um Agente Inteligente e não pode executar a missão de comunicação.\n");
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
                 writer.write(s.toString());
                 writer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            ((AgenteInteligente) r).encerrarMissao();
         }
     }
 }

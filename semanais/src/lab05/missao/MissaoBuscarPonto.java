@@ -24,11 +24,32 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class MissaoBuscarPonto implements Missao{
-    @Override
-    public void executar(Robo r, Ambiente a) {
+    private int x;
+    private int y;
+
+    public MissaoBuscarPonto(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void executar(Robo r, Ambiente a, int x, int y){
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public void executar(Robo r, Ambiente a){
         String file = "semanais/src/lab05/log.txt";
         File logFile = new File(file);
 
