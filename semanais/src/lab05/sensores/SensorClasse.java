@@ -6,6 +6,7 @@ import lab05.entidade.robos.Robo;
 import lab05.entidade.obstaculos.Obstaculo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SensorClasse extends Sensor {
@@ -25,8 +26,10 @@ public class SensorClasse extends Sensor {
         for (Robo robo : listaRobos) {
             double distancia = Math.sqrt((Math.pow(robo.getX() - mestre.getX(), 2) + Math.pow(robo.getY() - mestre.getY(), 2) + Math.pow(robo.getZ() - mestre.getZ(), 2)));
             if (distancia <= getRaio() && !robo.equals(mestre)){
-                System.out.printf("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n", robo.getClass(), robo.getX(), robo.getY(), robo.getZ());
-                s.append(("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n".formatted(robo.getClass(), robo.getX(), robo.getY(), robo.getZ())));
+                List<String> a = new ArrayList<>(Arrays.asList(robo.toString().split("\\.")));
+                String classe = a.getLast().split("@")[0];
+                System.out.printf("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n",classe, robo.getX(), robo.getY(), robo.getZ());
+                s.append(("Robo da classe %s foi encontrado na posicao (%d, %d, %d).\n".formatted(classe, robo.getX(), robo.getY(), robo.getZ())));
             }
         }
         return s;
