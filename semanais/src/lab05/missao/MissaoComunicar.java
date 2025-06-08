@@ -1,4 +1,96 @@
 package lab05.missao;
 
-public class MissaoComunicar {
+import lab04.excecoes.ErroComunicacaoException;
+import lab04.excecoes.SemAmbienteException;
+import lab05.Ambiente;
+import lab05.entidade.robos.Estado;
+import lab05.entidade.robos.Robo;
+import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
+import lab05.excecoes.RoboDesligadoException;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/*
+    Classe MissaoComunicar fornece ao robô a obrigação de se comunicar com outro robô.
+    Se o robô estiver desligado ou não tiver um ambiente associado, a missão não poderá ser executada.
+    Quando a missão for executada, os dados de execução serão registrados num log.
+    Somente Agentes Inteligentes podem executar essa missão.
+    Após a sua execução, o robô encerra a missão automaticamente.
+ */
+
+public class MissaoComunicar implements Missao{
+    public void executar(Robo r, Ambiente a) {
+    }
+
+    public void executar(Robo r, Ambiente a, Robo outroRobo, String mensagem) {
+        String file = "semanais/src/lab05/log.txt";
+        File logFile = new File(file);
+
+        if(!logFile.exists() || !logFile.isFile()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        StringBuilder s = new StringBuilder();
+        if (r.getEstado() == Estado.DESLIGADO ) {
+            s.append("O robô ").append(r.getNome()).append(" não conseguiu executar sua missão porque está desligado.\n");
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                writer.write(s.toString());
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new RoboDesligadoException("O robô está desligado e não pode monitorar o ambiente.");
+        }
+
+        if (r.getAmbiente() == null) {
+            s.append("O robô ").append(r.getNome()).append(" não conseguiu executar sua missão porque não está associado a um ambiente.\n");
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                writer.write(s.toString());
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new SemAmbienteException("O robô não está associado a um ambiente.");
+        }
+
+        if (outroRobo.getEstado() == Estado.DESLIGADO){
+            s.append("Houve uma falha na comunicação com o robô ").append(outroRobo.getNome()).append(" porque ele está desligado.\n");
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                writer.write(s.toString());
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new ErroComunicacaoException("Houve uma falha na comunicação com o robô " + outroRobo.getNome() + " porque ele está desligado.");
+        }
+
+        if(r instanceof AgenteInteligente){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
+            s.append("O robô ").append(r.getNome()).append(" começou a missão de comunicação em: ").append(LocalDateTime.now().format(formatter)).append("\n");
+            r.enviarMensagem(outroRobo, mensagem);
+            s.append("Ele enviou a mensagem: \n").append(mensagem).append(" para o robô ").append(outroRobo.getNome()).append("\n");
+            outroRobo.receberMensagem(mensagem);
+            s.append("O robô ").append(r.getNome()).append(" finalizou a missão de comunicação em: ").append(LocalDateTime.now().format(formatter)).append("\n\n");
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                writer.write(s.toString());
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ((AgenteInteligente) r).encerrarMissao();
+        }
+    }
 }
