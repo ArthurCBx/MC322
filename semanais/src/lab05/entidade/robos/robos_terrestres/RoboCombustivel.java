@@ -105,6 +105,8 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     @Override
     public void executarMissao() {
-
+        if(temMissao()){
+            missao.executar(this, getAmbiente());
+        }
     }
 }

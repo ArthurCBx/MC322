@@ -142,6 +142,8 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
 
     @Override
     public void executarMissao() {
-
+        if(temMissao()){
+            missao.executar(this, getAmbiente());
+        }
     }
 }

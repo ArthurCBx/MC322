@@ -155,6 +155,8 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     @Override
     public void executarMissao() {
-
+        if(temMissao()){
+            missao.executar(this, getAmbiente());
+        }
     }
 }
