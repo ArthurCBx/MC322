@@ -1,11 +1,12 @@
 package lab05.entidade.robos;
 
 import lab05.Ambiente;
+import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
 
 /* Subclasse de Robo que possui os atributos próprios altitude e altitudeMaxima.
    Subclasses que herdam de robo aéreo agora podem se mover em três dimensões (x, y, z).
     */
-public abstract class RoboAereo extends Robo {
+public abstract class RoboAereo extends AgenteInteligente {
     private int altitudeMaxima;
 
     // Metodo construtor para Robo Aereo

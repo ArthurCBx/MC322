@@ -150,4 +150,9 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
             moveAutomatico(getVelocidadeMaxima() / 2);
         }
     }
+
+    @Override
+    public void executarMissao() {
+
+    }
 }

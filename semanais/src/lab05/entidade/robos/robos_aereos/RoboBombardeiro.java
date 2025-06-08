@@ -5,6 +5,7 @@ import lab05.entidade.robos.Autonomo;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
 import lab05.entidade.robos.RoboAereo;
+import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
 
@@ -144,6 +145,11 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
                 break;
             moveAutomatico(10);
         }
+
+    }
+
+    @Override
+    public void executarMissao() {
 
     }
 }

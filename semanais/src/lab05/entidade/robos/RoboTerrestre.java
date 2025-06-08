@@ -1,11 +1,12 @@
 package lab05.entidade.robos;
 
 import lab05.Ambiente;
+import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
 
 /* Subclasse para implementar um robo que é exclusivamente terrestre e possui uma velocidade maxima.
    O atributo velocidadeMaxima pode ser um limitador para o movimento do robo.
  */
-public abstract class RoboTerrestre extends Robo {
+public abstract class RoboTerrestre extends AgenteInteligente {
 
     private double velocidadeMaxima;
 
