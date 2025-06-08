@@ -11,6 +11,7 @@ import lab05.excecoes.ErroComunicacaoException;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
 import lab05.entidade.obstaculos.Obstaculo;
+import lab05.sensores.GerenciadorSensores;
 import lab05.sensores.Sensor;
 import lab05.sensores.SensorClasse;
 
@@ -31,11 +32,12 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
     private ModuloComunicacao comunicacao;
+    private GerenciadorSensores gerenciadorSensores;
 
     // Construtor para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
 
-    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ, ModuloComunicacao comunicacao) {
+    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
         this.ambiente = ambiente;
         this.nome = nome;
         this.posX = Math.min(Math.max(posX, 0), ambiente.getComprimento());
@@ -43,6 +45,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.posZ = Math.min(Math.max(posZ, 0), ambiente.getAltura());
         this.id = UUID.randomUUID().toString();
         this.comunicacao = comunicacao;
+        this.gerenciadorSensores = gerenciadorSensores;
 
         ambiente.adicionarEntidade(this);
 
@@ -96,6 +99,14 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
     public String getId() {
         return id;
+    }
+
+    public ModuloComunicacao getModuloComunicacao() {
+        return comunicacao;
+    }
+
+    public void setModuloComunicacao(ModuloComunicacao comunicacao) {
+        this.comunicacao = comunicacao;
     }
 
     public void setAmbiente(Ambiente ambiente) {
@@ -210,78 +221,18 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
 
     // Metodo para identificar robos proximos:
     public ArrayList<Robo> identificarRobosProximos() {
-        if (estado == Estado.DESLIGADO) {
-            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
-        }
-        if (getAmbiente() == null) {
-            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
-        }
-        if (getSensores() == null) {
-            System.out.println("O robô solicitado não possui sensores");
-            return null;
-        }
-        ArrayList<Robo> robosProximos = new ArrayList<>();
-        for (Sensor sensor : getSensores()) {
-            ArrayList<Robo> identificados = sensor.listaRobosEncontrados(getAmbiente(), this);
-            for (Robo robo : identificados) {
-                if (!robosProximos.contains(robo)) {
-                    robosProximos.add(robo);
-                }
-            }
-        }
-        return robosProximos;
+        return gerenciadorSensores.identificarRobosProximos();
     }
 
     // Metodo para identificar obstaculos no ambiente:
-    public void identificarObstaculosProximos() {
-        if (estado == Estado.DESLIGADO) {
-            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
-        }
-        if (getAmbiente() == null) {
-            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
-        }
-        if (getSensores() == null) {
-            System.out.println("O robô solicitado não possui sensores");
-            return;
-        }
-
-        sensores = getSensores();
-        ArrayList<Obstaculo> obstaculosProximos = new ArrayList<>();
-        // Para cada sensor diferente de sensorClasse, lista obstáculos encontrados e adiciona na lista de obstáculos próximos os que ainda não estão.
-        for (Sensor sensor : sensores) {
-            if (sensor.getClass() != SensorClasse.class) {
-                ArrayList<Obstaculo> obstaculoSensor = sensor.listaObstaculosEncontrados(this.getAmbiente(), this);
-
-                for (Obstaculo obstaculo : obstaculoSensor) {
-                    if (!obstaculosProximos.contains(obstaculo)) {
-                        obstaculosProximos.add(obstaculo);
-                    }
-                }
-            }
-        }
+    public ArrayList<Obstaculo> identificarObstaculosProximos() {
+        return gerenciadorSensores.identificarObstaculosProximos();
     }
 
 
     // Metodo para acionar todos os sensores do robo
     public void acionarSensores() {
-        int count = 1;
-        if (estado == Estado.DESLIGADO) {
-            throw new RoboDesligadoException("O robô está desligado. Não pode executar qualquer ação.");
-        }
-        if (getAmbiente() == null) {
-            throw new SemAmbienteException("O robô não se encontra em um ambiente.");
-        }
-        if (getSensores() == null) {
-            System.out.println("O robô solicitado não possui sensores");
-            return;
-        }
-        for (Sensor sensor : getSensores()) {   // Para todos os sensores:
-            System.out.printf("O sensor %d está monitorando o ambiente %s\n", count, getAmbiente());
-            sensor.monitorar(getAmbiente(), this);
-            System.out.println();
-            count++;
-        }
-        System.out.println("Monitoramente finalizado.");
+        gerenciadorSensores.acionarSensores();
     }
 
     // Metodo para ligar o robo
@@ -318,7 +269,3 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     public abstract void executarTarefa();
 
 }
-
-
-
-
