@@ -1,4 +1,4 @@
-package lab05.entidade.robos;
+package lab05.comunicacao;
 
 // Metodo para robos que possuem algum tipo de aparato de comunicação
 

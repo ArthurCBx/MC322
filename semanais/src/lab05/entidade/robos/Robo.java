@@ -2,6 +2,8 @@ package lab05.entidade.robos;
 
 import lab05.Ambiente;
 import lab05.comunicacao.CentralComunicacao;
+import lab05.comunicacao.Comunicavel;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.Entidade;
 import lab05.entidade.TipoEntidade;
 import lab05.excecoes.ColisaoException;
@@ -28,18 +30,19 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     private Estado estado = Estado.LIGADO;
     private ArrayList<Sensor> sensores = new ArrayList<Sensor>();
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
-
+    private ModuloComunicacao comunicacao;
 
     // Construtor para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
 
-    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ) {
+    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ, ModuloComunicacao comunicacao) {
         this.ambiente = ambiente;
         this.nome = nome;
         this.posX = Math.min(Math.max(posX, 0), ambiente.getComprimento());
         this.posY = Math.min(Math.max(posY, 0), ambiente.getLargura());
         this.posZ = Math.min(Math.max(posZ, 0), ambiente.getAltura());
         this.id = UUID.randomUUID().toString();
+        this.comunicacao = comunicacao;
 
         ambiente.adicionarEntidade(this);
 
@@ -301,25 +304,14 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         }
     }
 
-    // Metodo para enviar mensagem a outro robo
-    public void enviarMensagem(Comunicavel destinatario, String mensagem) {
-        if (this.estado == Estado.DESLIGADO) {
-            throw new ErroComunicacaoException("Mensagem não enviada. O robô que tentou enviar está desligado.");
-        }
-        if (((Robo) (destinatario)).getEstado() == Estado.DESLIGADO) {
-            throw new ErroComunicacaoException("Mensagem não enviada. O robô destinatário está desligado.");
-        }
-
-        String remetente = String.format("%s(id:%s)", getNome(), getId());
-        CentralComunicacao.registrarMensagem(remetente, mensagem);
-
-        ((Robo) destinatario).receberMensagem(mensagem);
+    @Override
+    public void receberMensagem(String mensagem) {
+        comunicacao.receberMensagem(mensagem);
     }
 
-    // Metodo para o recebimento de mensagens e leitura
-    public void receberMensagem(String mensagem) {
-        // Não exige verificação de estado, pois o robô que enviou a mensagem já fez a verificação.
-        System.out.printf("Robô %s recebeu a seguinte mensagem:%s\n", getNome(), mensagem);
+    @Override
+    public void enviarMensagem(Comunicavel destinatario, String mensagem) {
+        comunicacao.enviarMensagem(destinatario, mensagem);
     }
 
     // Metodo abstrato para a execução de uma tarefa generica

@@ -1,6 +1,7 @@
 package lab05;
 
 import lab05.comunicacao.CentralComunicacao;
+import lab05.comunicacao.Comunicavel;
 import lab05.entidade.TipoEntidade;
 import lab05.entidade.robos.*;
 import lab05.entidade.robos.robos_aereos.Explosivos;
