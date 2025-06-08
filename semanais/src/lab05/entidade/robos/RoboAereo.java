@@ -1,7 +1,9 @@
 package lab05.entidade.robos;
 
 import lab05.Ambiente;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
+import lab05.sensores.GerenciadorSensores;
 
 /* Subclasse de Robo que possui os atributos próprios altitude e altitudeMaxima.
    Subclasses que herdam de robo aéreo agora podem se mover em três dimensões (x, y, z).
@@ -11,8 +13,8 @@ public abstract class RoboAereo extends AgenteInteligente {
 
     // Metodo construtor para Robo Aereo
 
-    public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima) {
-        super(ambiente, nome, posX, posY, Math.min(posZ, Math.abs(altitudeMaxima)));
+    public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+        super(ambiente, nome, posX, posY, Math.min(posZ, Math.abs(altitudeMaxima)), comunicacao, gerenciadorSensores);
 
         // A posZ é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);

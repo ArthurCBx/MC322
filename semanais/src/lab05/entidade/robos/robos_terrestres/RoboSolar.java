@@ -1,12 +1,14 @@
 package lab05.entidade.robos.robos_terrestres;
 
 import lab05.Ambiente;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.robos.Autonomo;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.RoboTerrestre;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
 import lab05.excecoes.SemCombustivelException;
+import lab05.sensores.GerenciadorSensores;
 
 import java.util.Objects;
 
@@ -19,8 +21,8 @@ public class RoboSolar extends RoboTerrestre implements Energizavel, Autonomo {
 
     // Construtor para o robo Solar, considera que começa descarregado e possui uma potência de painel solar (sempre positiva)
 
-    public RoboSolar(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double potenciaPainelSolar) {
-        super(ambiente, nome, posX, posY, velocidadeMaxima);
+    public RoboSolar(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double potenciaPainelSolar, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+        super(ambiente, nome, posX, posY, velocidadeMaxima, comunicacao, gerenciadorSensores);
         this.potenciaPainelSolar = Math.abs(potenciaPainelSolar);
         this.bateria = 0;
 

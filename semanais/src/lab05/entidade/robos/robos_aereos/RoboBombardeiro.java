@@ -1,6 +1,7 @@
 package lab05.entidade.robos.robos_aereos;
 
 import lab05.Ambiente;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.robos.Autonomo;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
@@ -8,6 +9,7 @@ import lab05.entidade.robos.RoboAereo;
 import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
+import lab05.sensores.GerenciadorSensores;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,8 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
     private int bombas;
     private final int capacidadeBombas;
 
-    public RoboBombardeiro(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, int capacidadeBombas) {
-        super(ambiente, nome, posX, posY, posZ, altitudeMaxima);
+    public RoboBombardeiro(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, int capacidadeBombas, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+        super(ambiente, nome, posX, posY, posZ, altitudeMaxima, comunicacao, gerenciadorSensores);
         this.bombas = 0;
         this.capacidadeBombas = Math.abs(capacidadeBombas);
 

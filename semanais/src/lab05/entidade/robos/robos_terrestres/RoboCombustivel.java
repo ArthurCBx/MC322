@@ -1,11 +1,13 @@
 package lab05.entidade.robos.robos_terrestres;
 
 import lab05.Ambiente;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.RoboTerrestre;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
 import lab05.excecoes.SemCombustivelException;
+import lab05.sensores.GerenciadorSensores;
 
 // Subclasse para lidar com robos que utilizam combustível para locomoção
 public class RoboCombustivel extends RoboTerrestre implements Energizavel {
@@ -16,8 +18,8 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
 
     // Contrutor do robo Combustivel, considera o combustivel presente no robo (minimo de zero)
 
-    public RoboCombustivel(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double combustivel) {
-        super(ambiente, nome, posX, posY, velocidadeMaxima);
+    public RoboCombustivel(Ambiente ambiente, String nome, int posX, int posY, int velocidadeMaxima, double combustivel, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+        super(ambiente, nome, posX, posY, velocidadeMaxima, comunicacao, gerenciadorSensores);
         this.combustivel = Math.max(0, combustivel);
 
     }

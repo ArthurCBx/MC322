@@ -1,12 +1,14 @@
 package lab05.entidade.robos.robos_aereos;
 
 import lab05.Ambiente;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.robos.Autonomo;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
 import lab05.entidade.robos.RoboAereo;
 import lab05.excecoes.RoboDesligadoException;
 import lab05.excecoes.SemAmbienteException;
+import lab05.sensores.GerenciadorSensores;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,8 @@ public class RoboExplosivo extends RoboAereo implements Explosivos, Autonomo {
     private final int raioExplosao;
 
 
-    public RoboExplosivo(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao) {
-        super(ambiente, nome, posX, posY, altitude, altitudeMaxima);
+    public RoboExplosivo(Ambiente ambiente, String nome, int posX, int posY, int altitude, int altitudeMaxima, int raioExplosao, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+        super(ambiente, nome, posX, posY, altitude, altitudeMaxima, comunicacao, gerenciadorSensores);
         this.raioExplosao = Math.abs(raioExplosao);
 
     }
