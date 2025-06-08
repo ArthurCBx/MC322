@@ -7,6 +7,18 @@ import lab05.excecoes.ErroComunicacaoException;
 public class ModuloComunicacao implements Comunicavel {
     private Robo robo;
 
+    public ModuloComunicacao(Robo robo) {
+        this.robo = robo;
+    }
+
+    public Robo getRobo() {
+        return robo;
+    }
+
+    public void setRobo(Robo robo) {
+        this.robo = robo;
+    }
+
     // Metodo para enviar mensagem a outro robo
     @Override
     public void enviarMensagem(Comunicavel destinatario, String mensagem) {
