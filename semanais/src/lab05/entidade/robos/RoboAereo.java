@@ -13,8 +13,8 @@ public abstract class RoboAereo extends AgenteInteligente {
 
     // Metodo construtor para Robo Aereo
 
-    public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
-        super(ambiente, nome, posX, posY, Math.min(posZ, Math.abs(altitudeMaxima)), comunicacao, gerenciadorSensores);
+    public RoboAereo(Ambiente ambiente, String nome, int posX, int posY, int posZ, int altitudeMaxima, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores, ControleMovimento controleMovimento) {
+        super(ambiente, nome, posX, posY, Math.min(posZ, Math.abs(altitudeMaxima)), comunicacao, gerenciadorSensores, controleMovimento);
 
         // A posZ é sempre positiva e menor ou igual a altitudeMaxima.
         this.altitudeMaxima = Math.abs(altitudeMaxima);

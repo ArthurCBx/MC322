@@ -8,7 +8,7 @@ import lab05.Ambiente;
 public class AgenteTeste extends AgenteInteligente {
 
     public AgenteTeste(Ambiente ambiente, String nome, int posX, int posY, int posZ) {
-        super(ambiente, nome, posX, posY, posZ, null, null);
+        super(ambiente, nome, posX, posY, posZ, null, null,null);
     }
 
     @Override

@@ -15,8 +15,8 @@ public abstract class RoboTerrestre extends AgenteInteligente {
 
     // Metodo construtor para o robo Terrestre consideram a velocidade maxima em módulo
 
-    public RoboTerrestre(Ambiente ambiente, String nome, int posX, int posY, double velocidadeMaxima, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
-        super(ambiente, nome, posX, posY,0, comunicacao, gerenciadorSensores);
+    public RoboTerrestre(Ambiente ambiente, String nome, int posX, int posY, double velocidadeMaxima, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores, ControleMovimento controleMovimento) {
+        super(ambiente, nome, posX, posY,0, comunicacao, gerenciadorSensores, controleMovimento);
         this.velocidadeMaxima = Math.abs(velocidadeMaxima); // Velocidade maxima sempre positiva
     }
 

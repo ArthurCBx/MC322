@@ -33,11 +33,12 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     private final TipoEntidade tipoEntidade = TipoEntidade.ROBO;
     private ModuloComunicacao comunicacao;
     private GerenciadorSensores gerenciadorSensores;
+    private ControleMovimento controleMovimento;
 
     // Construtor para robo:
     // Não permite coordenadas negativas, atribui 0 caso necessário.
 
-    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores) {
+    public Robo(Ambiente ambiente, String nome, int posX, int posY, int posZ, ModuloComunicacao comunicacao, GerenciadorSensores gerenciadorSensores, ControleMovimento controleMovimento) {
         this.ambiente = ambiente;
         this.nome = nome;
         this.posX = Math.min(Math.max(posX, 0), ambiente.getComprimento());
@@ -46,6 +47,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.id = UUID.randomUUID().toString();
         this.comunicacao = comunicacao;
         this.gerenciadorSensores = gerenciadorSensores;
+        this.controleMovimento = controleMovimento;
 
         ambiente.adicionarEntidade(this);
 
@@ -109,6 +111,14 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.comunicacao = comunicacao;
     }
 
+    public ControleMovimento getControleMovimento() {
+        return controleMovimento;
+    }
+
+    public void setControleMovimento(ControleMovimento controleMovimento) {
+        this.controleMovimento = controleMovimento;
+    }
+
     public void setAmbiente(Ambiente ambiente) {
         this.ambiente = ambiente;
     }
@@ -137,73 +147,7 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
     // Ou seja, o movimento é dividido em pequenas secções e verificadas as colisões em cada uma, finalizando se alguma colidir
 
     public void moverPara(int x, int y, int z) {
-        if (getEstado() == Estado.DESLIGADO) {
-            throw new RoboDesligadoException("O robô " + getNome() + " está desligado, não pode se mover.");
-        }
-        if (getAmbiente() == null) {
-            throw new SemAmbienteException("O robo não está em um ambiente, logo não pode movimentar-se.");
-        }
-
-        int deltaX = x - getX();
-        int deltaY = y - getY();
-        int deltaZ = z - getZ();
-
-        int[] finalPos = {getX() + deltaX, getY() + deltaY, getZ() + deltaZ};   // Posição final ideal do robo
-
-        getAmbiente().dentroDosLimites(finalPos[0], finalPos[1], finalPos[2]);  // Verifica se o movimento ideal não sai do ambiente
-
-        // Variaveis para a verificação de colisão no caminho do robo
-        double norma = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
-        double[] vetorMove = {
-                (norma != 0) ? 0.5 * ((double) deltaX / norma) : 0,
-                (norma != 0) ? 0.5 * ((double) deltaY / norma) : 0,
-                (norma != 0) ? 0.5 * ((double) deltaZ / norma) : 0
-        };
-        double[] newPos = {getX(), getY(), getZ()};
-        double[] newTempPos = {0, 0, 0};
-
-        // Funcionamento do movimento: se verifica se uma posição logo a frente [newTempPos](posição atual + vetorMove) não colide com nada
-        // Se não colidir a nova posição sem colisão é atualizada [newPos], se repete esse processo até que uma posição logo a frente colida
-        // ou chegue na posição final ideal
-
-        while (true) {
-
-            // O if dentro do for abaixo é utilizado para verificar se o movimento não extrapola o ponto final do movimento
-            // Que, por sua vez, é indicado pela diferença de sinal do vetor que liga o ponto final ao ponto proximo do movimento
-            // Além disso também calcula a posição logo a frente para teste
-
-            for (int i = 0; i < 3; i++)
-                if ((finalPos[i] - (newPos[i] + vetorMove[i])) * vetorMove[i] >= 0)
-                    newTempPos[i] = newPos[i] + vetorMove[i];
-                else
-                    newTempPos[i] = finalPos[i];
-
-                // Verificação de colisão entre outros robos e obstaculos (não pode ser o proprio robo[primeiro if])
-
-            if (((int) newTempPos[0]) != getX() || ((int) newTempPos[1]) != getY() || ((int) newTempPos[2]) != getZ())
-                if (getAmbiente().estaOcupado((int) newTempPos[0], (int) newTempPos[1], (int) newTempPos[2])) {
-
-                    getAmbiente().moverEntidade(this, (int) newPos[0], (int) newPos[1], (int) newPos[2]);
-
-                    throw new ColisaoException("O robo colidiu com uma entidade do tipo " + getAmbiente().getMapa()[(int) newTempPos[0]][(int) newTempPos[1]][(int) newTempPos[2]] + " e foi realocado para a posição (" + getX() + "," + getY() + "," + getZ() + ")");
-
-                }
-
-            // Como não houve colisões, a nova posição sem colisão é atualizada
-
-            newPos[0] = newTempPos[0];
-            newPos[1] = newTempPos[1];
-            newPos[2] = newTempPos[2];
-
-            // Se chegou no destino
-            if (newPos[0] == finalPos[0] && newPos[1] == finalPos[1] && newPos[2] == finalPos[2])
-                break;
-
-        }
-
-        // Como não há colisões no movimento do robo, é seguro utilizar o metodo sem verificação do ambiente
-        getAmbiente().moverEntidade(this, finalPos[0], finalPos[1], finalPos[2]);
-
+        controleMovimento.moverPara(x, y, z);
     }
 
 
