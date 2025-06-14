@@ -16,6 +16,10 @@ public class ControleMovimento {
         this.robo = robo;
     }
 
+    public void setRobo(Robo robo) {
+        this.robo = robo;
+    }
+
     public void moverPara(int x, int y, int z){
         if (robo.getEstado() == Estado.DESLIGADO) {
             throw new RoboDesligadoException("O robô " + robo.getNome() + " está desligado, não pode se mover.");

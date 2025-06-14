@@ -1,12 +1,12 @@
 package lab05.missao;
 
-import lab04.excecoes.ColisaoException;
-import lab04.excecoes.SemAmbienteException;
 import lab05.Ambiente;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
 import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
+import lab05.excecoes.ColisaoException;
 import lab05.excecoes.RoboDesligadoException;
+import lab05.excecoes.SemAmbienteException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -50,7 +50,7 @@ public class MissaoBuscarPonto implements Missao{
 
     @Override
     public void executar(Robo r, Ambiente a){
-        String file = "semanais/src/lab05/log.txt";
+        String file = "lab05/log.txt";
         File logFile = new File(file);
 
         if(!logFile.exists() || !logFile.isFile()) {
@@ -71,7 +71,7 @@ public class MissaoBuscarPonto implements Missao{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            throw new RoboDesligadoException("O robô está desligado e não pode monitorar o ambiente.");
+            throw new RoboDesligadoException("O robô está desligado e não pode se realizar a busca.");
         }
         if (r.getAmbiente() == null) {
             s.append("O robô ").append(r.getNome()).append(" não conseguiu executar sua missão porque não está associado a um ambiente.\n");
@@ -91,8 +91,8 @@ public class MissaoBuscarPonto implements Missao{
             s.append("Ele tentará se mover até o ponto (").append(x).append(", ").append(y).append(", ").append(r.getZ()).append(")\n");
             try{
                 r.moverPara(x,y, r.getZ());
-            }catch(ColisaoException e){
-                s.append("Ele não conseguiu se mover para o ponto determinado por colidir com um obstáculo e retornará à posição inicial.\n");
+            } catch(ColisaoException e){
+                s.append("Ele não conseguiu se mover para o ponto determinado por colidir com um obstáculo.\n");
             }
             s.append("O robô ").append(r.getNome()).append(" finalizou a missão de buscar ponto em: ").append(LocalDateTime.now().format(formatter)).append("\n\n");
 

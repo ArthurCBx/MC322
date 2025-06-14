@@ -21,6 +21,10 @@ public class GerenciadorSensores {
         this.robo = robo;
     }
 
+    public void setRobo(Robo robo) {
+        this.robo = robo;
+    }
+
     public void acionarSensores(){
         int count = 1;
         if (robo.getEstado() == Estado.DESLIGADO) {

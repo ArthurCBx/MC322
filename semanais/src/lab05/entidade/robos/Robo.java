@@ -48,6 +48,9 @@ public abstract class Robo implements Entidade, Sensoreavel, Comunicavel {
         this.comunicacao = comunicacao;
         this.gerenciadorSensores = gerenciadorSensores;
         this.controleMovimento = controleMovimento;
+        comunicacao.setRobo(this);
+        gerenciadorSensores.setRobo(this);
+        controleMovimento.setRobo(this);
 
         ambiente.adicionarEntidade(this);
 

@@ -1,0 +1,32 @@
+O robô Teste1 começou a missão de buscar ponto em: 14/06/2025 - 17:52:56
+Ele tentará se mover até o ponto (10, 0, 10)
+O robô Teste1 finalizou a missão de buscar ponto em: 14/06/2025 - 17:52:56
+
+O robô Teste1 não conseguiu executar sua missão porque está desligado.
+O robô Teste1 não conseguiu executar sua missão porque não está associado a um ambiente.
+O robô Teste1 começou a missão de buscar ponto em: 14/06/2025 - 17:52:56
+Ele tentará se mover até o ponto (6, 6, 5)
+Ele não conseguiu se mover para o ponto determinado por colidir com um obstáculo.
+O robô Teste1 finalizou a missão de buscar ponto em: 14/06/2025 - 17:52:56
+
+O robô Teste1 começou a monitorar em: 14/06/2025 - 17:52:56
+Sensor 1: 
+Entidade Obstáculo encontrada na posição (7,7)
+Obstáculo Rocha encontrado a 1.41 metros
+Sensor 2: 
+Monitoramento em XY:
+Entidade Obstáculo encontrada na posição (7,7)
+Obstáculo Rocha encontrado a 1.41 metros
+Monitoramento em altitude:
+Sensor 3: 
+Robo da classe RoboBombardeiro foi encontrado na posicao (2, 2, 2).
+Robo da classe RoboSolar foi encontrado na posicao (2, 2, 0).
+Robo da classe RoboCombustivel foi encontrado na posicao (3, 3, 0).
+O robô Teste1 finalizou a missão de monitorar em: 14/06/2025 - 17:52:56
+
+O robô Teste1 não conseguiu executar sua missão porque está desligado.
+O robô Teste1 não conseguiu executar sua missão porque não está associado a um ambiente.
+O robô Teste2 não conseguiu executar sua missão porque não possui sensores.
+O robô Teste1 não conseguiu executar sua missão porque está desligado.
+O robô Teste1 não conseguiu executar sua missão porque não está associado a um ambiente.
+Houve uma falha na comunicação com o robô Teste2 porque ele está desligado.

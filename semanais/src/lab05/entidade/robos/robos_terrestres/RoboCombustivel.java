@@ -109,5 +109,8 @@ public class RoboCombustivel extends RoboTerrestre implements Energizavel {
         if(temMissao()){
             missao.executar(this, getAmbiente());
         }
+        else{
+            System.out.printf("O robo não possui missão\n");
+        }
     }
 }

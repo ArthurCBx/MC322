@@ -1,7 +1,7 @@
 package lab05.missao;
 
 import lab04.excecoes.ErroComunicacaoException;
-import lab04.excecoes.SemAmbienteException;
+import lab05.excecoes.SemAmbienteException;
 import lab05.Ambiente;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
@@ -50,7 +50,7 @@ public class MissaoComunicar implements Missao{
 
     @Override
     public void executar(Robo r, Ambiente a) {
-        String file = "semanais/src/lab05/log.txt";
+        String file = "lab05/log.txt";
         File logFile = new File(file);
 
         if(!logFile.exists() || !logFile.isFile()) {
@@ -71,7 +71,7 @@ public class MissaoComunicar implements Missao{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            throw new RoboDesligadoException("O robô está desligado e não pode monitorar o ambiente.");
+            throw new RoboDesligadoException("O robô está desligado e não pode se comunicar.");
         }
 
         if (r.getAmbiente() == null) {

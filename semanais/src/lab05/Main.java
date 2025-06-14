@@ -2,8 +2,10 @@ package lab05;
 
 import lab05.comunicacao.CentralComunicacao;
 import lab05.comunicacao.Comunicavel;
+import lab05.comunicacao.ModuloComunicacao;
 import lab05.entidade.TipoEntidade;
 import lab05.entidade.robos.*;
+import lab05.entidade.robos.agente_inteligente.AgenteInteligente;
 import lab05.entidade.robos.robos_aereos.Explosivos;
 import lab05.entidade.robos.robos_aereos.RoboBombardeiro;
 import lab05.entidade.robos.robos_aereos.RoboExplosivo;
@@ -13,11 +15,16 @@ import lab05.entidade.robos.robos_terrestres.RoboSolar;
 import lab05.excecoes.*;
 import lab05.entidade.obstaculos.Obstaculo;
 import lab05.entidade.obstaculos.TipoObstaculo;
+import lab05.missao.MissaoBuscarPonto;
+import lab05.missao.MissaoComunicar;
+import lab05.missao.MissaoMonitorar;
+import lab05.sensores.GerenciadorSensores;
 import lab05.sensores.Sensor;
 import lab05.sensores.SensorAltitude;
 import lab05.sensores.SensorClasse;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -31,20 +38,37 @@ public class Main {
 
         Ambiente tambiente = new Ambiente(50, 50, 50);
 
-        Robo roboteste1 = new RoboExplosivo(tambiente, "Teste1", 0, 0, 0, 20, 20);
-        Robo roboteste2 = new RoboBombardeiro(tambiente, "Teste2", 1, 1, 0, 30, 20);
-        Robo roboteste3 = new RoboSolar(tambiente, "Teste3", 2, 2, 30, 40);
-        Robo roboteste4 = new RoboCombustivel(tambiente, "Teste4", 3, 3, 30, 200);
+        ControleMovimento tcontrol1 = new ControleMovimento(null);
+        ControleMovimento tcontrol2 = new ControleMovimento(null);
+        ControleMovimento tcontrol3 = new ControleMovimento(null);
+        ControleMovimento tcontrol4 = new ControleMovimento(null);
+
+        GerenciadorSensores tgens1 = new GerenciadorSensores(null);
+        GerenciadorSensores tgens2 = new GerenciadorSensores(null);
+        GerenciadorSensores tgens3 = new GerenciadorSensores(null);
+        GerenciadorSensores tgens4 = new GerenciadorSensores(null);
+
+        ModuloComunicacao tcom1 = new ModuloComunicacao(null);
+        ModuloComunicacao tcom2 = new ModuloComunicacao(null);
+        ModuloComunicacao tcom3 = new ModuloComunicacao(null);
+        ModuloComunicacao tcom4 = new ModuloComunicacao(null);
 
         Sensor tsensorComum20 = new Sensor(20);
         SensorAltitude tsensorAltitude80XY20 = new SensorAltitude(80, 20);
         SensorClasse tsensorClasse20 = new SensorClasse(20);
 
+        MissaoBuscarPonto tbusca = new MissaoBuscarPonto(10,0);
+        MissaoComunicar tcom = new MissaoComunicar(null,null);
+        MissaoMonitorar tmon = new MissaoMonitorar();
+
+        Robo roboteste1 = new RoboExplosivo(tambiente, "Teste1", 0, 0, 0, 20, 20,tcom1,tgens1,tcontrol1);
+        Robo roboteste2 = new RoboBombardeiro(tambiente, "Teste2", 1, 1, 0, 30, 20,tcom2,tgens2,tcontrol2);
+        Robo roboteste3 = new RoboSolar(tambiente, "Teste3", 2, 2, 30, 40,tcom3,tgens3,tcontrol3);
+        Robo roboteste4 = new RoboCombustivel(tambiente, "Teste4", 3, 3, 30, 200,tcom4,tgens4,tcontrol4);
+
         roboteste1.addSensor(tsensorComum20);
         roboteste1.addSensor(tsensorAltitude80XY20);
         roboteste1.addSensor(tsensorClasse20);
-
-        roboteste2.addSensor(tsensorComum20);
 
         roboteste3.addSensor(tsensorClasse20);
 
@@ -64,55 +88,14 @@ public class Main {
 
         System.out.printf("\n------- INICIO DOS TESTES: ---------\n");
 
-        // Vizualização inicial do mapa:
+        // Teste dos novos modulos (movimento, sensor e comunicação):
 
         System.out.println();
 
-        try {
-            System.out.println("\n\nVIZUALIZAR AMBIENTE:------------");
-            tambiente.vizualizarAmbiente();
+        System.out.printf("\n Mover com ControleMovimento:\n");
 
-            System.out.println("\n\nEXECUTAR SENSORES:------------");
-            tambiente.executarSensores();
-
-            System.out.println("\n\nDENTRO DOS LIMITES:------------");
-            tambiente.dentroDosLimites(-1, -1, -1);
-        } catch (ForaDosLimitesException e) {
-            System.out.println(e.getMessage());  // (-1,-1,-1) está fora dos limites
-        }
-
-        try {    // Continuação de dentro dos limites:
-            roboteste1.moverPara(-1, -1, -1);
-        } catch (ForaDosLimitesException e) {
-            System.out.println(e.getMessage());  // (-1,-1,0) está fora dos limites [robo aereo so vai ate o chao {0}]
-        }
-
-        System.out.println("\n\nVERIFICAR COLISOES:------------");
-
-        try {
-            tambiente.moverEntidade(roboteste1, 1, 1, 0);   // Posição é a mesma do roboteste2
-            tambiente.verificarColisoes();
-        } catch (ColisaoException e) {
-            System.out.println(e.getMessage());  // Colisão esperada
-            tambiente.moverEntidade(roboteste1, 0, 0, 0);   //  retorna para posição inicial
-
-        }
-
-        try {    // Sem colisões:
-            tambiente.verificarColisoes();
-        } catch (ColisaoException e) {
-            System.out.println(e.getMessage());  // Colisão esperada
-
-        }
-
-
-        // Funcioalidades de Entidade (fora getX, getY, getZ):
-
-        for (Robo robot : robosteste) {
-            System.out.printf("\nEntidade %s:\nRepresentação: '%c'\nTipoEntidade '%s'\nDescrição:\n%s\n\n", robot.getNome(), robot.getRepresentacao(), robot.getTipoEntidade(), robot.getDescricao());
-        }
-
-        // Novo movimento de robos (atualizado para colisão 3D e com outros robos) [apenas robo aereos já que terrestres são a mesma coisa so que em 2D]
+        // Como o movimento de robos o codigo de movimentação dos robos é mais complexo, serão testados dos mesmos jeitos os movimentos distintos
+        // que um robo pode fazer
 
         try {
             roboteste1.exibirPosicao();
@@ -163,106 +146,189 @@ public class Main {
 
         }
 
-        System.out.printf("\n LIGAR//DESLIGAR e EXCEÇAO:\n");
+        System.out.printf("\n Sensorear com GerenciadorSensores:\n");
 
-        try {
-            roboteste1.desligar();
-            roboteste1.moverPara(10, 10, 10);
+        // Como o codigo apenas foi já utilizado so foi passado para a nova classe GerenciadorSoensores,
+        // não há a necessidade de testar metodos ou exceções que já funcionavam previamente
 
-        } catch (RoboDesligadoException e) {
-            System.out.println(e.getMessage());
-            roboteste1.ligar();
+        try{
+            roboteste1.acionarSensores();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
-        System.out.printf("\n COMUNICAÇAO:\n");
 
+        System.out.printf("\n Comunicação com ModuloComunicação:\n");
+
+        // Pelo mesmo argumento da ausencia da necessidade de teste intenso dos sensores, a comunicação não será testada visto que ja funcionava
 
         try {
 
             roboteste1.enviarMensagem(roboteste2, "Bom dia");
 
-            System.out.println();
-
-            roboteste2.desligar();
-            roboteste1.enviarMensagem(roboteste2, "Boa noite");  // Falha pelo destinatario estar desligado
-
-
-        } catch (ErroComunicacaoException e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
-        try {
-            System.out.println();
+        // Teste dos novos modulos (movimento, sensor e comunicação):
 
+        System.out.println();
+
+        System.out.printf("\n Teste das 3 missões disponiveis:\n");
+
+        System.out.printf("\nBuscar Ponto:\n");
+
+        System.out.printf("\nBuscar com sucesso\n");
+
+        try{
+            tambiente.moverEntidade(roboteste1,0,0,10); // Move o roboteste 1 para posição (0,0,10)
+            ((AgenteInteligente)roboteste1).setMissao(tbusca);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção
+        }
+
+
+        System.out.printf("\nBuscar desligado:\n");
+
+        try{
             roboteste1.desligar();
-            roboteste2.ligar();
-            roboteste1.enviarMensagem(roboteste2, "Boa noite");  // Falha pelo remetente estar desligado
-
-
-        } catch (ErroComunicacaoException e) {
-            System.out.println(e.getMessage());
+            ((AgenteInteligente)roboteste1).setMissao(tbusca);
+            ((AgenteInteligente)roboteste1).executarMissao();
         }
-
-        try {
-            System.out.println();
-
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de desligado
             roboteste1.ligar();
-            roboteste1.enviarMensagem(roboteste2, "Boa noite");
-
-
-        } catch (ErroComunicacaoException e) {
-            System.out.println(e.getMessage());
         }
 
-        System.out.println("\nMensagens armazenadas na cetral:");
+        System.out.printf("\nBuscar sem ambiente:\n");
 
-        CentralComunicacao.exibirMensagens();
-
-        System.out.printf("\n TAREFAS ESPECIFICAS DOS ROBOS:\n\n");
-
-        try {
-            System.out.printf("Robo combustivel:\n");
-            roboteste4.executarTarefa();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        try{
+            roboteste1.setAmbiente(null);
+            ((AgenteInteligente)roboteste1).setMissao(tbusca);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de sem Ambiente;
+            roboteste1.setAmbiente(tambiente);
         }
 
-        try {
-            System.out.printf("\nRobo Solar:\n");
-            tambiente.moverEntidade(roboteste3, 30, 30, 0);
-            tambiente.moverEntidade(roboteste2, 30, 30, 5);
+        System.out.printf("\nBuscar com colisão\n");
 
-            roboteste3.executarTarefa();
+        tbusca.setX(6);
+        tbusca.setY(6);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        try{
+            tambiente.moverEntidade(roboteste1,0,0,5); // Move o roboteste 1 para posição (0,0,10)
+            ((AgenteInteligente)roboteste1).setMissao(tbusca);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção, mas hávera uma colisão
         }
 
-        try {
-            System.out.printf("\nRobo Bombardeiro:(tambem testa a remoção de entidades)\n");
-            tambiente.moverEntidade(roboteste3, 30, 30, 0);
-            tambiente.moverEntidade(roboteste2, 30, 30, 5);
 
-            roboteste2.executarTarefa();
+        System.out.printf("\nMonitorar:\n");
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        System.out.printf("\nMonitorar com sucesso:\n");
+
+        try{
+            ((AgenteInteligente)roboteste1).setMissao(tmon);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
-        System.out.printf("\nNumero de entidades presentes(eram 5 inicialmente): %d\n\n", tambiente.getListaEntidades().size());
+        System.out.printf("\nMonitorar desligado:\n");
 
-        try {
-            System.out.printf("\nRobo Explosivo:\n");
-            tambiente.moverEntidade(roboteste1, 50, 50, 5);     // Os robos foram posicionados para que a primeira verificação não encontre robos
-            tambiente.moverEntidade(roboteste2, 30, 45, 20);    // e seja necessario que o robo se locomova automaticamente para os encontrar
-            tambiente.moverEntidade(roboteste4, 45, 30, 0);     // É possivel que o robo não consiga encontrar nenhum outro robo ou colida em outras entidades
-
-            roboteste1.executarTarefa();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        try{
+            roboteste1.desligar();
+            ((AgenteInteligente)roboteste1).setMissao(tmon);
+            ((AgenteInteligente)roboteste1).executarMissao();
         }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de desligado
+            roboteste1.ligar();
+        }
+
+        System.out.printf("\nMonitorar sem ambiente:\n");
+
+        try{
+            roboteste1.setAmbiente(null);
+            ((AgenteInteligente)roboteste1).setMissao(tmon);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de sem Ambiente;
+            roboteste1.setAmbiente(tambiente);
+        }
+
+        System.out.printf("\nMonitorar sem sensor:\n");
+
+        try{
+            ((AgenteInteligente)roboteste2).setMissao(tmon);
+            ((AgenteInteligente)roboteste2).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Sem exceção mas se espera que o robo2 não consiga completar a missão por não ter sensores
+        }
+
+
+        System.out.printf("\nComunicar:\n");
+
+        System.out.printf("\nComunicar com sucesso:\n");
+
+        tcom.setMensagem("Teste123");
+        tcom.setOutroRobo(roboteste2);
+
+        try{
+            ((AgenteInteligente)roboteste1).setMissao(tcom);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Não se espera nenhuma exceção
+        }
+
+        System.out.printf("\nComunicar desligado:\n");
+
+        try{
+            roboteste1.desligar();
+            ((AgenteInteligente)roboteste1).setMissao(tcom);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de desligado
+            roboteste1.ligar();
+        }
+
+        System.out.printf("\nComunicar sem ambiente:\n");
+
+        try{
+            roboteste1.setAmbiente(null);
+            ((AgenteInteligente)roboteste1).setMissao(tcom);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de sem Ambiente;
+            roboteste1.setAmbiente(tambiente);
+        }
+
+        System.out.printf("\nComunicar com outro robo desligado:\n");
+
+        roboteste2.desligar();
+
+        try{
+            ((AgenteInteligente)roboteste1).setMissao(tcom);
+            ((AgenteInteligente)roboteste1).executarMissao();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); // Exceção de erro de comunicação pelo outro robo estar desligado
+        }
+
+
 
         // Deleta os objetos utilizados nos testes:
 
@@ -274,10 +340,26 @@ public class Main {
         tsensorAltitude80XY20 = null;
         tambiente = null;
         CentralComunicacao.deletarMensagens();
+        tgens1 = null;
+        tgens2 = null;
+        tgens3 = null;
+        tgens4 = null;
+        tcom1 = null;
+        tcom2 = null;
+        tcom3 = null;
+        tcom4 = null;
+        tcontrol1 = null;
+        tcontrol2 = null;
+        tcontrol3 = null;
+        tcontrol4 = null;
+        tcom = null;
+        tbusca = null;
+        tmon = null;
+
 
         System.out.printf("\n------FIM DOS TESTES------------\n");
 
-
+/*
         System.out.printf("\nMENU ITERATIVO:-------------------\n\n");
 
         // MENU INTERATIVO: ------------------------------------
@@ -1381,7 +1463,7 @@ public class Main {
 
             }
 
-        }
+        }*/
 
     }
 }

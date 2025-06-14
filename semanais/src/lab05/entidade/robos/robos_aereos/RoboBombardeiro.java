@@ -152,5 +152,8 @@ public class RoboBombardeiro extends RoboAereo implements Explosivos, Autonomo {
         if(temMissao()){
             missao.executar(this, getAmbiente());
         }
+        else{
+            System.out.printf("O robo não possui missão\n");
+        }
     }
 }

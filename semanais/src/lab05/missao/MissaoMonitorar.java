@@ -8,7 +8,7 @@ package lab05.missao;
     Após a sua execução, o robô encerra a missão automaticamente.
  */
 
-import lab04.excecoes.SemAmbienteException;
+import lab05.excecoes.SemAmbienteException;
 import lab05.Ambiente;
 import lab05.entidade.robos.Estado;
 import lab05.entidade.robos.Robo;
@@ -21,11 +21,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class MissaoMonitorar {
+public class MissaoMonitorar implements  Missao{
 
     public void executar(Robo r, Ambiente ambiente) {
 
-        String file = "semanais/src/lab05/log.txt";
+        String file = "lab05/log.txt";
         File logFile = new File(file);
 
         if(!logFile.exists() || !logFile.isFile()) {
