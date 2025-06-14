@@ -57,14 +57,14 @@ public class Main {
         SensorAltitude tsensorAltitude80XY20 = new SensorAltitude(80, 20);
         SensorClasse tsensorClasse20 = new SensorClasse(20);
 
-        MissaoBuscarPonto tbusca = new MissaoBuscarPonto(10,0);
-        MissaoComunicar tcom = new MissaoComunicar(null,null);
+        MissaoBuscarPonto tbusca = new MissaoBuscarPonto(10, 0);
+        MissaoComunicar tcom = new MissaoComunicar(null, null);
         MissaoMonitorar tmon = new MissaoMonitorar();
 
-        Robo roboteste1 = new RoboExplosivo(tambiente, "Teste1", 0, 0, 0, 20, 20,tcom1,tgens1,tcontrol1);
-        Robo roboteste2 = new RoboBombardeiro(tambiente, "Teste2", 1, 1, 0, 30, 20,tcom2,tgens2,tcontrol2);
-        Robo roboteste3 = new RoboSolar(tambiente, "Teste3", 2, 2, 30, 40,tcom3,tgens3,tcontrol3);
-        Robo roboteste4 = new RoboCombustivel(tambiente, "Teste4", 3, 3, 30, 200,tcom4,tgens4,tcontrol4);
+        Robo roboteste1 = new RoboExplosivo(tambiente, "Teste1", 0, 0, 0, 20, 20, tcom1, tgens1, tcontrol1);
+        Robo roboteste2 = new RoboBombardeiro(tambiente, "Teste2", 1, 1, 0, 30, 20, tcom2, tgens2, tcontrol2);
+        Robo roboteste3 = new RoboSolar(tambiente, "Teste3", 2, 2, 30, 40, tcom3, tgens3, tcontrol3);
+        Robo roboteste4 = new RoboCombustivel(tambiente, "Teste4", 3, 3, 30, 200, tcom4, tgens4, tcontrol4);
 
         roboteste1.addSensor(tsensorComum20);
         roboteste1.addSensor(tsensorAltitude80XY20);
@@ -151,7 +151,7 @@ public class Main {
         // Como o codigo apenas foi já utilizado so foi passado para a nova classe GerenciadorSoensores,
         // não há a necessidade de testar metodos ou exceções que já funcionavam previamente
 
-        try{
+        try {
             roboteste1.acionarSensores();
 
         } catch (Exception e) {
@@ -181,36 +181,33 @@ public class Main {
 
         System.out.printf("\nBuscar com sucesso\n");
 
-        try{
-            tambiente.moverEntidade(roboteste1,0,0,10); // Move o roboteste 1 para posição (0,0,10)
-            ((AgenteInteligente)roboteste1).setMissao(tbusca);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            tambiente.moverEntidade(roboteste1, 0, 0, 10); // Move o roboteste 1 para posição (0,0,10)
+            ((AgenteInteligente) roboteste1).setMissao(tbusca);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
 
         System.out.printf("\nBuscar desligado:\n");
 
-        try{
+        try {
             roboteste1.desligar();
-            ((AgenteInteligente)roboteste1).setMissao(tbusca);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tbusca);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de desligado
             roboteste1.ligar();
         }
 
         System.out.printf("\nBuscar sem ambiente:\n");
 
-        try{
+        try {
             roboteste1.setAmbiente(null);
-            ((AgenteInteligente)roboteste1).setMissao(tbusca);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tbusca);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de sem Ambiente;
             roboteste1.setAmbiente(tambiente);
         }
@@ -220,12 +217,11 @@ public class Main {
         tbusca.setX(6);
         tbusca.setY(6);
 
-        try{
-            tambiente.moverEntidade(roboteste1,0,0,5); // Move o roboteste 1 para posição (0,0,10)
-            ((AgenteInteligente)roboteste1).setMissao(tbusca);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            tambiente.moverEntidade(roboteste1, 0, 0, 5); // Move o roboteste 1 para posição (0,0,10)
+            ((AgenteInteligente) roboteste1).setMissao(tbusca);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Não se espera nenhuma exceção, mas hávera uma colisão
         }
 
@@ -234,45 +230,41 @@ public class Main {
 
         System.out.printf("\nMonitorar com sucesso:\n");
 
-        try{
-            ((AgenteInteligente)roboteste1).setMissao(tmon);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            ((AgenteInteligente) roboteste1).setMissao(tmon);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
         System.out.printf("\nMonitorar desligado:\n");
 
-        try{
+        try {
             roboteste1.desligar();
-            ((AgenteInteligente)roboteste1).setMissao(tmon);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tmon);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de desligado
             roboteste1.ligar();
         }
 
         System.out.printf("\nMonitorar sem ambiente:\n");
 
-        try{
+        try {
             roboteste1.setAmbiente(null);
-            ((AgenteInteligente)roboteste1).setMissao(tmon);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tmon);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de sem Ambiente;
             roboteste1.setAmbiente(tambiente);
         }
 
         System.out.printf("\nMonitorar sem sensor:\n");
 
-        try{
-            ((AgenteInteligente)roboteste2).setMissao(tmon);
-            ((AgenteInteligente)roboteste2).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            ((AgenteInteligente) roboteste2).setMissao(tmon);
+            ((AgenteInteligente) roboteste2).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Sem exceção mas se espera que o robo2 não consiga completar a missão por não ter sensores
         }
 
@@ -284,34 +276,31 @@ public class Main {
         tcom.setMensagem("Teste123");
         tcom.setOutroRobo(roboteste2);
 
-        try{
-            ((AgenteInteligente)roboteste1).setMissao(tcom);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            ((AgenteInteligente) roboteste1).setMissao(tcom);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Não se espera nenhuma exceção
         }
 
         System.out.printf("\nComunicar desligado:\n");
 
-        try{
+        try {
             roboteste1.desligar();
-            ((AgenteInteligente)roboteste1).setMissao(tcom);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tcom);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de desligado
             roboteste1.ligar();
         }
 
         System.out.printf("\nComunicar sem ambiente:\n");
 
-        try{
+        try {
             roboteste1.setAmbiente(null);
-            ((AgenteInteligente)roboteste1).setMissao(tcom);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+            ((AgenteInteligente) roboteste1).setMissao(tcom);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de sem Ambiente;
             roboteste1.setAmbiente(tambiente);
         }
@@ -320,14 +309,12 @@ public class Main {
 
         roboteste2.desligar();
 
-        try{
-            ((AgenteInteligente)roboteste1).setMissao(tcom);
-            ((AgenteInteligente)roboteste1).executarMissao();
-        }
-        catch (Exception e){
+        try {
+            ((AgenteInteligente) roboteste1).setMissao(tcom);
+            ((AgenteInteligente) roboteste1).executarMissao();
+        } catch (Exception e) {
             System.out.println(e.getMessage()); // Exceção de erro de comunicação pelo outro robo estar desligado
         }
-
 
 
         // Deleta os objetos utilizados nos testes:
@@ -359,7 +346,7 @@ public class Main {
 
         System.out.printf("\n------FIM DOS TESTES------------\n");
 
-/*
+
         System.out.printf("\nMENU ITERATIVO:-------------------\n\n");
 
         // MENU INTERATIVO: ------------------------------------
@@ -368,10 +355,29 @@ public class Main {
 
         ambiente.inicializarMapa();
 
-        Robo robo1 = new RoboBombardeiro(ambiente, "Bombardeiro", 5, 0, 10, 80, 10);
-        Robo robo2 = new RoboExplosivo(ambiente, "Explosivo", 0, 5, 20, 100, 5);
-        Robo robo3 = new RoboCombustivel(ambiente, "Combustivel", 10, 0, 30, 100);
-        Robo robo4 = new RoboSolar(ambiente, "Solar", 0, 10, 60, 40);
+        ModuloComunicacao com1 = new ModuloComunicacao(null);
+        ModuloComunicacao com2 = new ModuloComunicacao(null);
+        ModuloComunicacao com3 = new ModuloComunicacao(null);
+        ModuloComunicacao com4 = new ModuloComunicacao(null);
+
+        GerenciadorSensores gens1 = new GerenciadorSensores(null);
+        GerenciadorSensores gens2 = new GerenciadorSensores(null);
+        GerenciadorSensores gens3 = new GerenciadorSensores(null);
+        GerenciadorSensores gens4 = new GerenciadorSensores(null);
+
+        ControleMovimento control1 = new ControleMovimento(null);
+        ControleMovimento control2 = new ControleMovimento(null);
+        ControleMovimento control3 = new ControleMovimento(null);
+        ControleMovimento control4 = new ControleMovimento(null);
+
+        MissaoBuscarPonto Mbusca = new MissaoBuscarPonto(0, 0);
+        MissaoComunicar Mcom = new MissaoComunicar(null, null);
+        MissaoMonitorar Mmoni = new MissaoMonitorar();
+
+        Robo robo1 = new RoboBombardeiro(ambiente, "Bombardeiro", 5, 0, 10, 80, 10, com1, gens1, control1);
+        Robo robo2 = new RoboExplosivo(ambiente, "Explosivo", 0, 5, 20, 100, 5, com2, gens2, control2);
+        Robo robo3 = new RoboCombustivel(ambiente, "Combustivel", 10, 0, 30, 100, com2, gens2, control2);
+        Robo robo4 = new RoboSolar(ambiente, "Solar", 0, 10, 60, 40, com2, gens2, control2);
 
         Sensor sensorComum25 = new Sensor(25);
         SensorAltitude sensorAltitude60XY30 = new SensorAltitude(60, 30);
@@ -400,6 +406,7 @@ public class Main {
         int menu = 0;
         int comando = 0;
         int selecao = 0;
+        boolean missao = false;
         int newpos[] = {0, 0, 0};
         int d = 1;
         double norma = 0;
@@ -428,17 +435,18 @@ public class Main {
 
                     System.out.println(
                             "\nDigite o comando que será realizado:\n" +
-                                    "[1] - Status do ambiente\n" +                              //XXXXXXX terminado
-                                    "[2] - Vizualizar o mapa do ambiente\n" +                   //XXXXXXX terminado
-                                    "[3] - Alterar periodo do ambiente\n" +                     //XXXXXXX terminado
-                                    "[4] - Status do robo selecionado\n" +                      //XXXXXXX terminado
-                                    "[5] - Mover o robo selecionado\n" +                        //XXXXXXX terminado
-                                    "[6] - Escolher outras funcoes do robo selecionado\n" +     //XXXXXXX faltam os comandos
-                                    "[7] - Listar robos por tipo ou estado\n" +                 //XXXXXXX terminado
-                                    "[8] - Listar mensagens trocadas pelos robos\n" +           //XXXXXXX terminado
-                                    "[9] - Selecionar um novo robo\n" +                         //XXXXXXX terminado
-                                    "[10] - Finalizar o programa\n" +                           //XXXXXXX terminado
-                                    "[11] - Desativar/Ativar delays entre menus\n" +            //XXXXXXX terminado
+                                    "[1] - Status do ambiente\n" +
+                                    "[2] - Vizualizar o mapa do ambiente\n" +
+                                    "[3] - Alterar periodo do ambiente\n" +
+                                    "[4] - Status do robo selecionado\n" +
+                                    "[5] - Mover o robo selecionado\n" +
+                                    "[6] - Escolher e executar Missões\n" +
+                                    "[7] - Escolher outras funcoes do robo selecionado\n" +
+                                    "[8] - Listar robos por tipo ou estado\n" +
+                                    "[9] - Listar mensagens trocadas pelos robos\n" +
+                                    "[10] - Selecionar um novo robo\n" +
+                                    "[11] - Finalizar o programa\n" +
+                                    "[12] - Desativar/Ativar delays entre menus\n" +
                                     "Robo Selecionado: " + nomeRobo);
 
 
@@ -553,15 +561,19 @@ public class Main {
                             menu = 1;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (6):   // Escolher outras funcoes do robo selecionado
+                        case (6):   // Missões e relacionados
                             menu = 2;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (7):   // Listar robos por tipo ou estado
+                        case (7):   // Escolher outras funcoes do robo selecionado
                             menu = 3;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (8):   // Listar mensagens trocadas pelos robos
+                        case (8):   // Listar robos por tipo ou estado
+                            menu = 4;   // Vai para outro menu [proximo loop da main]
+                            break;
+
+                        case (9):   // Listar mensagens trocadas pelos robos
 
                             System.out.println("\nMensagens armazenadas na Central de Comunicação:");
                             CentralComunicacao.exibirMensagens();
@@ -571,16 +583,16 @@ public class Main {
 
                             break;
 
-                        case (9):   // Selecionar um novo robo
-                            menu = 4;   // Vai para outro menu [proximo loop da main]
+                        case (10):   // Selecionar um novo robo
+                            menu = 5;   // Vai para outro menu [proximo loop da main]
                             break;
 
-                        case (10):   // Finalizar o programa
+                        case (11):   // Finalizar o programa
                             System.out.println("\nFinalizando o programa...");
                             scanner.close();
                             return;
 
-                        case (11):
+                        case (12):
                             d = d == 1 ? 0 : 1;
                             break;
 
@@ -595,9 +607,13 @@ public class Main {
 
                 case (1):    // Mover robo selecionado
 
-                    System.out.println(
-                            "\n[O robo " + nomeRobo + " está em (" + robosel.getX() + "," + robosel.getY() + "," + robosel.getZ() + ")]\n" +
-                                    "Digite o valor da nova coordenada X do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getComprimento() + ")]");
+                    System.out.println("\n[O robo " + nomeRobo + " está em (" + robosel.getX() + "," + robosel.getY() + "," + robosel.getZ() + ")]");
+
+                    if (!missao) {
+                        System.out.println("Digite o valor da nova coordenada X do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getComprimento() + ")]");
+                    } else {
+                        System.out.println("Digite o valor da coordenada X de busca do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getComprimento() + ")]");
+                    }
 
                     while (scanner.hasNext("\n")) {
                         scanner.skip("\n");
@@ -614,6 +630,7 @@ public class Main {
                         System.out.println("\nOperação cancelada, retornando para o menu principal");
                         Thread.sleep(1000 * d);
                         menu = 0;
+                        missao = false;
                         break;
                     }
 
@@ -621,10 +638,15 @@ public class Main {
                         System.out.println("\nCoordenada fora dos limites do ambiente, cancelando a operação\n");
                         Thread.sleep(1000 * d);
                         menu = 0;
+                        missao = false;
                         break;
                     }
 
-                    System.out.println("\nDigite o valor da nova coordenada Y do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getLargura() + ")]");
+                    if (!missao) {
+                        System.out.println("\nDigite o valor da nova coordenada Y do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getLargura() + ")]");
+                    } else {
+                        System.out.println("\nDigite o valor da coordenada Y de busca do robo" + nomeRobo + "\n(ou '-1' para cancelar a operação) [Limites (0 a " + ambiente.getLargura() + ")]");
+                    }
 
                     while (scanner.hasNext("\n")) {
                         scanner.skip("\n");
@@ -641,6 +663,7 @@ public class Main {
                         System.out.println("\nOperação cancelada, retornando para o menu principal");
                         Thread.sleep(1000 * d);
                         menu = 0;
+                        missao = false;
                         break;
                     }
 
@@ -648,10 +671,11 @@ public class Main {
                         System.out.println("\nCoordenada fora dos limites do ambiente, cancelando a operação\n");
                         Thread.sleep(1000 * d);
                         menu = 0;
+                        missao = false;
                         break;
                     }
 
-                    if (robosel instanceof RoboTerrestre) {
+                    if (robosel instanceof RoboTerrestre || missao) {
                         newpos[2] = robosel.getZ();
                         comando = 1;
                         menu = 0;
@@ -690,7 +714,63 @@ public class Main {
 
                     break;
 
-                case (2):    // Escolher funcao do robo
+
+                case (2):    // Missão e relacionados
+
+                    System.out.println("\nEscolha a missão a ser executada:\n" +
+                            "[0] - Cancelar Operação\n" +
+                            "[1] - Buscar Ponto\n" +
+                            "[2] - Comunicar\n" +
+                            "[3] - Monitorar");
+
+
+                    while (scanner.hasNext("\n")) {
+                        scanner.skip("\n");
+                    }
+                    if (scanner.hasNextInt()) {
+                        selecao = scanner.nextInt();
+                    } else {
+                        selecao = -1;
+                        scanner.next();
+                    }
+                    scanner.nextLine();
+
+                    switch (selecao) {
+
+                        case (0):   // Cancelar Operação
+                            System.out.println("\nOperação cancelada");
+                            Thread.sleep(1000 * d);
+                            menu = 0;
+                            break;
+
+                        case (1):   // Buscar Ponto
+                            missao = true;  // Flag para indicar que está ocorrendo uma missao
+                            menu = 1;       // Redirecionamento para a interface de movimentação
+                            break;
+
+                        case (2):   // Comunicar
+                            missao = true;  // Flag para indicar que está ocorrendo uma missao
+                            comando = 6;    // Comando a ser realizado
+                            menu = -1;      // Um comando será realizado
+                            break;
+
+                        case (3):   // Monitorar
+                            missao = true;  // Flag para indicaar que está ocorrendo uma missao
+                            comando = 3;    // Comando a ser realizado
+                            menu = -1;      // Um comando será realizado
+                            break;
+
+                        default:
+                            System.out.println("\nComando inválido, selecione uma opção válida");
+                            Thread.sleep(1000 * d);
+                            break;
+
+                    }
+
+                    break;
+
+
+                case (3):    // Escolher funcao do robo
 
                     System.out.println("\nEscolha a função do robo selecionado:\n" +
                             "[0] - Cancelar Operação\n" +
@@ -843,7 +923,7 @@ public class Main {
 
                     break;
 
-                case (3):    // Listar robos por tipo/estado
+                case (4):    // Listar robos por tipo/estado
 
                     System.out.println("\nEscolha o filtro para a listagem dos robos:\n" +
                             "[0] - Cancelar Operação\n" +
@@ -963,7 +1043,7 @@ public class Main {
 
                     break;
 
-                case (4):
+                case (5):
 
                     System.out.println("\nQual robo será selecionado?\n" +
                             "[0] - Cancelar Operação");
@@ -1016,25 +1096,46 @@ public class Main {
                 case (0):
                     break;
 
-                case (1):    // Mover Robo
+                case (1):    // Mover Robo ou Missão Buscar Ponto
 
                     System.out.println("\nExecutando o movimento do robo " + nomeRobo + " para (" + newpos[0] + "," + newpos[1] + "," + newpos[2] + "):");
 
-                    try {
-                        robosel.moverPara(newpos[0], newpos[1], newpos[2]);
-                        System.out.println("Movimentação realizada com sucesso");
-                    } catch (ColisaoException e) {
-                        System.out.println(e.getMessage() + "\n\nMovimentação concluida");
-                        Thread.sleep(2000 * d);
+                    if (!missao) {
+                        try {
+                            robosel.moverPara(newpos[0], newpos[1], newpos[2]);
+                            System.out.println("Movimentação realizada com sucesso");
+                        } catch (ColisaoException e) {
+                            System.out.println(e.getMessage() + "\n\nMovimentação concluida");
+                            Thread.sleep(2000 * d);
 
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        Thread.sleep(2000 * d);
-                    } finally {
-                        Thread.sleep(2250 * d);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            Thread.sleep(2000 * d);
+                        } finally {
+                            Thread.sleep(2250 * d);
+                            comando = 0;
+                        }
+                    } else {
+                        try {
+                            Mbusca.setX(newpos[0]);
+                            Mbusca.setY(newpos[1]);
+                            ((AgenteInteligente) robosel).setMissao(Mbusca);
+                            ((AgenteInteligente) robosel).executarMissao();
+                            if (robosel.getX() == newpos[0] && robosel.getY() == newpos[1]) {
+                                System.out.println("Missão realizada com sucesso");
+                            } else {
+                                System.out.println("Houve uma colisão durante a Missão, missao finalizada em (" + robosel.getX() + ", " + robosel.getY() + ", " + robosel.getZ() + " )");
+                            }
+
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            Thread.sleep(2000 * d);
+                        } finally {
+                            Thread.sleep(2250 * d);
+                            comando = 0;
+                            missao = false;
+                        }
                     }
-
-                    comando = 0;
 
                     break;
 
@@ -1103,25 +1204,46 @@ public class Main {
 
                     break;
 
-                case (3):    // Acionar sensor
+                case (3):    // Acionar sensor ou Missão Monitorar
 
                     if (!(robosel instanceof Sensoreavel)) {
                         System.out.println("\nO robo selecionado não é Sensoreavel");
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
+                        missao = false;
                         break;
                     }
 
                     System.out.println("\nAcionando sensores do robo " + nomeRobo + ":");
-                    try {
-                        robosel.acionarSensores();
-                    } catch (RoboDesligadoException e) {
-                        System.out.println(e.getMessage());
-                    } finally {
-                        Thread.sleep(1000 * d);
-                        menu = 0;
-                        comando = 0;
+
+                    if (!missao) {
+                        try {
+                            robosel.acionarSensores();
+                        } catch (RoboDesligadoException e) {
+                            System.out.println(e.getMessage());
+                        } finally {
+                            Thread.sleep(1000 * d);
+                            menu = 0;
+                            comando = 0;
+                        }
+                    } else {
+                        try {
+                            ((AgenteInteligente) robosel).setMissao(Mmoni);
+                            ((AgenteInteligente) robosel).executarMissao();
+                            System.out.println("\nMissão realizada com Sucesso");
+                        } catch (RoboDesligadoException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("\nMissão Cancelada");
+                        } catch (SemAmbienteException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("\nMissão Cancelada");
+                        } finally {
+                            Thread.sleep(1000 * d);
+                            menu = 0;
+                            comando = 0;
+                            missao = false;
+                        }
                     }
 
                     break;
@@ -1142,13 +1264,14 @@ public class Main {
                     comando = 0;
                     break;
 
-                case (6):    // Enviar mensagem
+                case (6):    // Enviar mensagem ou Missão Comunicar
 
                     if (!(robosel instanceof Comunicavel)) {
                         System.out.println("\nO robo selecionado não é Comunicavel");
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
+                        missao = false;
                         break;
                     }
 
@@ -1157,6 +1280,7 @@ public class Main {
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
+                        missao = false;
                         break;
                     }
 
@@ -1192,6 +1316,7 @@ public class Main {
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
+                        missao = false;
                         break;
                     }
 
@@ -1200,6 +1325,7 @@ public class Main {
                         Thread.sleep(1000 * d);
                         menu = 0;
                         comando = 0;
+                        missao = false;
                         break;
 
                     }
@@ -1211,14 +1337,39 @@ public class Main {
                     System.out.println("\nDigite a mensagem que será enviada:");
 
                     mensagem = scanner.nextLine();
-                    try {
-                        robosel.enviarMensagem(robo, mensagem);
-                    } catch (ErroComunicacaoException e) {
-                        System.out.println(e.getMessage());
-                    } finally {
-                        Thread.sleep(1000 * d);
-                        menu = 0;
-                        comando = 0;
+
+                    if (!missao) {
+                        try {
+                            robosel.enviarMensagem(robo, mensagem);
+                        } catch (ErroComunicacaoException e) {
+                            System.out.println(e.getMessage());
+                        } finally {
+                            Thread.sleep(1000 * d);
+                            menu = 0;
+                            comando = 0;
+                        }
+                    } else {
+                        try {
+                            Mcom.setOutroRobo(robo);
+                            Mcom.setMensagem(mensagem);
+                            ((AgenteInteligente) robosel).setMissao(Mcom);
+                            ((AgenteInteligente) robosel).executarMissao();
+                            System.out.println("\nMissão realizada com Sucesso");
+                        } catch (ErroComunicacaoException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("\nMissão Cancelada");
+                        } catch (RoboDesligadoException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("\nMissão Cancelada");
+                        } catch (SemAmbienteException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("\nMissão Cancelada");
+                        } finally {
+                            Thread.sleep(1000 * d);
+                            menu = 0;
+                            comando = 0;
+                            missao = false;
+                        }
                     }
 
                     break;
@@ -1463,7 +1614,7 @@ public class Main {
 
             }
 
-        }*/
+        }
 
     }
 }

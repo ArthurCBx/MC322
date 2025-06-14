@@ -69,6 +69,7 @@ public class MissaoMonitorar implements  Missao{
                 e.printStackTrace();
             }
             System.out.println("O robô ainda não possui sensores para completar a missão. Adicione sensor(es) antes de executá-la novamente.");
+            return;
         }
 
         if (r instanceof AgenteInteligente) {

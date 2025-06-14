@@ -103,7 +103,6 @@ public class MissaoComunicar implements Missao{
             s.append("O robô ").append(r.getNome()).append(" começou a missão de comunicação em: ").append(LocalDateTime.now().format(formatter)).append("\n");
             r.enviarMensagem(outroRobo, mensagem);
             s.append("Ele enviou a mensagem: \n").append(mensagem).append(" para o robô ").append(outroRobo.getNome()).append("\n");
-            outroRobo.receberMensagem(mensagem);
             s.append("O robô ").append(r.getNome()).append(" finalizou a missão de comunicação em: ").append(LocalDateTime.now().format(formatter)).append("\n\n");
             ((AgenteInteligente) r).encerrarMissao();
         }else {
