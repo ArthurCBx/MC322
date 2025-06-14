@@ -25,7 +25,7 @@ public class MissaoMonitorar implements  Missao{
 
     public void executar(Robo r, Ambiente ambiente) {
 
-        String file = "lab05/log.txt";
+        String file = "semanais/src/lab05/log.txt";
         File logFile = new File(file);
 
         if(!logFile.exists() || !logFile.isFile()) {

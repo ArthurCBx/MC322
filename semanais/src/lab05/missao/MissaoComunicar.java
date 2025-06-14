@@ -50,7 +50,7 @@ public class MissaoComunicar implements Missao{
 
     @Override
     public void executar(Robo r, Ambiente a) {
-        String file = "lab05/log.txt";
+        String file = "semanais/src/lab05/log.txt";
         File logFile = new File(file);
 
         if(!logFile.exists() || !logFile.isFile()) {
@@ -108,13 +108,14 @@ public class MissaoComunicar implements Missao{
             ((AgenteInteligente) r).encerrarMissao();
         }else {
             s.append("O robô ").append(r.getNome()).append(" não é um Agente Inteligente e não pode executar a missão de comunicação.\n");
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                writer.write(s.toString());
-                writer.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
+        }
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+            writer.write(s.toString());
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
