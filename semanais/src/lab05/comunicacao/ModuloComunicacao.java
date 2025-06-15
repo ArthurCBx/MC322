@@ -17,10 +17,6 @@ public class ModuloComunicacao implements Comunicavel {
         this.robo = robo;
     }
 
-    public Robo getRobo() {
-        return robo;
-    }
-
     public void setRobo(Robo robo) {
         this.robo = robo;
     }
