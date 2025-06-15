@@ -12,7 +12,7 @@ Turma: A
 MC322
 ├── MC322.iml
 ├── README.md
-└── semanais
+├── semanais
     ├── semanais.iml
     └── src
         ├── lab01
@@ -62,6 +62,7 @@ MC322
         │   ├── comunicacao
         │   │   └── CentralComunicacao.java
         │   ├── diagrama_lab04.drawio
+        │   ├── diagrama_lab04.jpg
         │   ├── entidade
         │   │   ├── Entidade.java
         │   │   ├── TipoEntidade.java
@@ -95,7 +96,61 @@ MC322
         │       ├── Sensor.java
         │       ├── SensorAltitude.java
         │       └── SensorClasse.java
+        ├── lab05
+        │   ├── Ambiente.java
+        │   ├── Main.java
+        │   ├── README.md
+        │   ├── comunicacao
+        │   │   ├── CentralComunicacao.java
+        │   │   ├── Comunicavel.java
+        │   │   └── ModuloComunicacao.java
+        │   ├── diagrama_lab04.drawio
+        │   ├── diagrama_lab04.jpg
+        │   ├── entidade
+        │   │   ├── Entidade.java
+        │   │   ├── TipoEntidade.java
+        │   │   ├── obstaculos
+        │   │   │   ├── Obstaculo.java
+        │   │   │   └── TipoObstaculo.java
+        │   │   └── robos
+        │   │       ├── Autonomo.java
+        │   │       ├── ControleMovimento.java
+        │   │       ├── Estado.java
+        │   │       ├── Robo.java
+        │   │       ├── RoboAereo.java
+        │   │       ├── RoboTerrestre.java
+        │   │       ├── Sensoreavel.java
+        │   │       ├── agente_inteligente
+        │   │       │   ├── AgenteInteligente.java
+        │   │       │   └── AgenteTeste.java
+        │   │       ├── robos_aereos
+        │   │       │   ├── Explosivos.java
+        │   │       │   ├── RoboBombardeiro.java
+        │   │       │   └── RoboExplosivo.java
+        │   │       └── robos_terrestres
+        │   │           ├── Energizavel.java
+        │   │           ├── RoboCombustivel.java
+        │   │           └── RoboSolar.java
+        │   ├── excecoes
+        │   │   ├── ColisaoException.java
+        │   │   ├── ErroComunicacaoException.java
+        │   │   ├── ForaDosLimitesException.java
+        │   │   ├── RoboDesligadoException.java
+        │   │   ├── SemAmbienteException.java
+        │   │   └── SemCombustivelException.java
+        │   ├── log.txt
+        │   ├── missao
+        │   │   ├── Missao.java
+        │   │   ├── MissaoBuscarPonto.java
+        │   │   ├── MissaoComunicar.java
+        │   │   └── MissaoMonitorar.java
+        │   └── sensores
+        │       ├── GerenciadorSensores.java
+        │       ├── Sensor.java
+        │       ├── SensorAltitude.java
+        │       └── SensorClasse.java
         └── semanais.iml
+
 ```
 
 # Como compilar e executar nosso código
