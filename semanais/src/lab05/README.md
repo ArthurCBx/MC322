@@ -1,88 +1,35 @@
-Alterações feitas do lab03 para o lab04:
+# Alterações feitas do lab04 para o lab05:
 
-# Implementação de diversas interfaces:
+## Nova classe AgenteInteligente
+Essa classe é intermediária entre Robo e RoboAereo/Terrestre. Ela é abstrata e possibilita os seus descendentes lidarem com missões atribuídas a eles. Para isso, seus descendentes devem implementar o método abstrato `executarMissao()`, que apenas verifica se há missões atribuídas e as executa.
 
-### Entidade:
+## Interface Missao
+Classes que implementam essa interface possuem o método `executar(Robo r, Ambiente a)` e serão as missões que podem ser atribuídas aos robôs. Essa interface possibilita aos robôs que definem o método `executarMissao()` generalizar a chamada para qualquer classe de missão.
 
-- Disponibiliza métodos de caracterização básica dos componentes do ambiente, como getXYZ, descrição ou representação no mapa do ambiente;
-- Cria-se uma nova enumeração para definir o tipo de entidade, TipoEntidade (Robô, obstáculo, vazio...).
+## Missões 
+Todas as missões verificam inicialmente se serão lançadas exceções, como robô desligado ou robô sem ambiente, antes da execução ser iniciada. Caso alguma seja lançada, ela será escrita no arquivo log.txt definido dentro do diretório lab05.
+Além disso, todo missão bem executada escreverá o horário de início e o horário de fim de sua execução.
 
-### Sensoreavel:
+### MissaoBuscarPonto
+Robôs que possuem essa missão deverão se mover para o ponto (x, y) definido na construção da missão. Caso ocorra uma colisão no caminho, o texto correspondente será escrito no arquivo log.txt e uma exceção será lançada. Caso contrário, serão escritas as informações de missão bem executada.
 
-- Interface para robôs com sensores, lidando com a listagem e utilização de sensores de maneira padronizada.
+### MissaComunicar
+Robôs que possuem essa missão irão tentar se comunicar com algum outro robô. Ambas mensagem e outro robô serão definidos na construção da missão. Ademais, será escrito o conteúdo da mensagem e os robôs envolvidos na comunicação no arquivo log.txt. 
 
-### Comunicável e Central de comunicação:
+Para essa escrita ser bem sucedida, alteramos os métodos de monitorar nos sensores, que agora retornam um stringBuilder usado para escrita no arquivo.
 
-- Interface que habilita a comunicação entre robôs via a nova classe CentralComunicao, que, por sua vez, trata mensagens entre robôs e as armazena por meio de métodos estáticos.
 
-### Autônomo, Explosivo e Energizavel:
+### MissaoMonitorar
+Robôs que possuem essa missão deverão ativar seus sensores e descrever o que for percebido por cada sensor. As informações serão escritas no terminal e no arquivo log.txt caso o robô possua sensores ativos. Caso contrário, a missão não será executada, mas será escrito em log.txt que o robô não possui sensores.
 
-- Interfaces que disponibilizam métodos para funções autônomas, movimentações que envolvam algum tipo de energia e métodos que envolvem explosões que afetam outros componentes do ambiente.
+## Subsistemas internos dos robôs
+Agora robôs deverão ser construídos com 3 novas propriedades, que serão responsáveis por lidar com funções lidadas antes pelo próprio robô. São elas:
+- ControleMovimento, que possui apenas o método `moverPara(int x,int y,int z)`;
+- ModuloComunicacao, que possui os métodos `enviarMensagem(Comunicavel destinatario, String mensagem)` e `receberMensagem(String mensagem)`;
+- GerenciadorSensores, que possui os métodos `acionarSensores()`, `identificarRobosProximos()` e `identificarObstaculosProximos()`.
 
-# Alterações nas classes já presentes:
-
-Com as implementações das interfaces, foi-se necessario alterar a maior parte das classes presentes para acomodar tais mudanças:
-
-### Robo e subclasses:
-
-- Teve a implementação dos métodos de diversas interfaces (como descrito no diagrama do código);
-- Criação de diversas propriedades, como Estado (e sua enumeração), Id e TipoEntidade;
-- Classes Robô, Robô Terrestre e Robô Aéreo se tornaram classes abstratas na medida que não definem métodos da interface Entidade (getDescrição, por exemplo) e se cria um método não implementado executarTarefa();
-- Classes que herdam de Robô Terrestre e Robô Aéreo são concretas na medida que implementam todos os métodos necessários e constroem um executarTarefa() próprio e personalizado para cada robô;
-- Método mover(...) tornou-se moverPara(...) e é implementado em Robo com movimentação em XYZ e detecção de colisão entre robôs e obstáculos e robôs com robos, Robo Terrestre da override no método para limitar a movimentação em XY.
-
-### Ambiente:
-
-- Troca-se as listas de Robôs e obstáculos para uma lista polimórfica de Entidades, englobando quaisqueres componentes do ambiente;
-- Se alteram os métodos de adicionar robôs/obstáculos para lidar com entidades;
-- Se cria o mapa do ambiente, armazenando cada tipo de entidade em cada coordenada XYZ, além disso pode-se observar o mapa de uma visão aérea por meio do método vizualizarMapa();
-- Outros métodos para facilitar implementação de métodos mais complexos como moverPara(...), por exemplo, como estaOcupado(...), dentroDosLimites(...) ou verificarColisões(...).
-
-### Sensores:
-
-- Alterações mínimas para acomodar a interface Entidade.
-
-# Exceções:
-
-Foram implementadas diversas exceções durantes os métodos e alterações descritos acima para personalizar e facilitar o tratamento de casos únicos:
-
-  #### ColisaoException:
-  - verificarColisoes()[Ambiente] e moverPara(...)[Robo];
-  - Métodos que implementan moverPara(...):
-  - moverPara(...) herdados dos robos, moveAutomatico(...) e executarTarefa() para alguns robos.
-
-  #### ForaDosLimitesException:
-  - dentroDosLimites(...)[Ambiente];
-  - Métodos que implementam dentroDosLimites(...):
-  - moverPara(...) e os métodos citados acima, adicionarEntidade(...).
-
-  #### ErroComunicacaoException:
-  - enviarMensagem(...)[Robo].
-   
-  #### RoboDesligadoException:
-  - A maior parte dos métodos dos Robôs e suas subclasses;
-  - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
-
-  #### SemAmbienteException:
-  - A maior parte dos métodos dos Robôs e suas subclasses, similar a RoboDesligadoException;
-  - Exclui-se métodos getters e setters, de adicionar algum tipo de recurso (energia//bombas).
-
-  #### SemCombustivelException:
-  - moverPara(...) de robos que implementam a interface Energizavel (ambos robôs terrestres);
-  - Método executarTarefa() do robô combustível.
- 
-Além disso, o menu interativo apresenta tratamento considerável de todas as exceções (várias vezes constituindo do cancelamento da operação)
-
-# Menu Interativo e Main:
-
-- Foram reestruturados os testes na main para acomodar as mudanças descritas;
-- Novos testes criados para métodos e exceções novas (vizualizarAmbiente, ou movimentação quando desligado, por exemplo);
-- O Menu Interativo teve uma completa reescrita para a acomodação das diversas novas funções;
-- Se implementa um delay entre interfaces para a melhor leitura das saídas (pode-se desabilitar tal delay para rapidez nos testes).
-
-# Visualização do diagrama
-
-- Para acessar o diagrama que explicita as relações de herança, composição, agregação e dependência, basta baixar o arquivo "diagrama_lab04.jpg" e acessá-lo.
+## Visualização do diagrama
+- Para acessar o diagrama que explicita as relações de herança, composição, agregação e dependência, basta baixar o arquivo "diagrama_lab05.jpg" e acessá-lo.
 - (Acompanhe essa explicação visualizando o diagrama) Neste diagrama, classes que herdam de outras são apontadas por setas onde o início vem da classe mãe e o fim da flecha aponta para a classe filha, já a implementação de interfaces é definida por setas pontilhadas que começam na interface e terminam em quem a implementa.
 - A agregação de robôs e sensores foi representada por uma flecha na horizontal e foi indicado que 1 robô possui 1..* (1 ou mais) sensores. Da mesma forma, a representação foi feita entre entidades e ambiente, robô e ambiente, entre obstáculos e tipo de obstáculo, entre robôs e estados e entre entidades e tipos de entidades.
 - Cada caixa representa um componente do código, possui o nome e o tipo na primeira linha, em conjunção com a cor da caixa, com a legenda a seguir, na segunda linha os atributos e seus tipos e, por fim, uma sequência de métodos, bem como os atributos que eles pedem, são explicitados.
