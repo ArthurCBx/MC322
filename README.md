@@ -121,8 +121,7 @@ MC322
         │   │       ├── RoboTerrestre.java
         │   │       ├── Sensoreavel.java
         │   │       ├── agente_inteligente
-        │   │       │   ├── AgenteInteligente.java
-        │   │       │   └── AgenteTeste.java
+        │   │       │   └── AgenteInteligente.java
         │   │       ├── robos_aereos
         │   │       │   ├── Explosivos.java
         │   │       │   ├── RoboBombardeiro.java
